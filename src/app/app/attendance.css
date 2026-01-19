@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* Tailwind CSS v4 Dark Mode Configuration */
+/* REQUIRED: Enable class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Primary color configuration */
+@theme {
+  --color-primary: #E39A2E;
+  --color-primary-hover: #d18a1f;
+  --font-sans: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Ensure datepicker and dropdowns are always on top */
+.react-tailwindcss-datepicker,
+.react-tailwindcss-datepicker .datepicker-container,
+.react-tailwindcss-datepicker .datepicker-popup {
+  z-index: 10000 !important;
+}
+
