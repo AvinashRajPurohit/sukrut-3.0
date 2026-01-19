@@ -1,0 +1,24 @@
+{
+  "badge": "We Focus",
+  "title": "Websites Built for Performance.\nGrowth Delivered Globally.",
+  "items": [
+    {
+      "id": "product",
+      "title": "Product Engineering",
+      "description": "We design, build and deploy scalable products for any industry.",
+      "mockup": "product"
+    },
+    {
+      "id": "custom",
+      "title": "Custom Development Services",
+      "description": "Tailored web and application development aligned with your business.",
+      "mockup": "custom"
+    },
+    {
+      "id": "cloud",
+      "title": "Scalable Cloud Solutions",
+      "description": "Cloud-native architectures designed for performance and growth.",
+      "mockup": "cloud"
+    }
+  ]
+}

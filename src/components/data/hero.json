@@ -1,0 +1,27 @@
+{
+  "badge": "BUILT WITH INTENT",
+  "title": "Engineering Software\nfor Real-World Scale.",
+  "description": "From strategy to deployment, we build reliable systems that grow with your business.",
+  "cta": {
+    "label": "Start a Conversation",
+    "href": "/contact"
+  },
+  "sideNav": [
+    "Intro",
+    "Features",
+    "Core Technologies",
+    "Services",
+    "Contacts"
+  ],
+  "image": {
+    "src": "/cube.png",
+    "alt": "Scalable system architecture illustration",
+    "width": 920,
+    "height": 520
+  },
+  "supportSection": {
+    "title": "End-to-End Digital Engineering",
+    "description": "From strategy and design to development and cloud operations, we provide complete technology solutions tailored for real-world business needs.",
+    "icon": "/process_automate.png"
+  }
+}
