@@ -1,43 +1,65 @@
 "use client";
 
+import {
+  FiBox,
+  FiCode,
+  FiCloud,
+} from "react-icons/fi";
+
+const ICON_MAP = {
+  product: FiBox,
+  code: FiCode,
+  cloud: FiCloud,
+};
+
 export default function FocusPoints({ data, active, onChange }) {
   return (
-    <div className="space-y-8">
-      {/* Badge */}
-      <span className="inline-flex items-center gap-2 rounded-full bg-black/40 px-4 py-1 text-xs">
-        ⚡ {data.badge}
-      </span>
+    <div className="space-y-6 ">
+      {data.items.map((item) => {
+        const isActive = active === item.id;
+        const Icon = ICON_MAP[item.icon];
 
-      {/* Title */}
-      <h2 className="text-3xl font-semibold leading-snug">
-        {data.title.split("\n").map((line, i) => (
-          <span key={i} className="block">{line}</span>
-        ))}
-      </h2>
+        return (
+          <button
+            key={item.id}
+            onClick={() => onChange(item.id)}
+            className={`
+              relative w-full text-left  px-6 py-6
+              transition-all duration-300 cursor-pointer
+              ${isActive
+                ? "bg-[#3A3225] border border-[#E39A2E]"
+                : "bg-black/30 hover:bg-black/40"}
+            `}
+          >
+            {/* 🔥 ACTIVE LEFT LINE */}
+            {isActive && (
+              <span className="absolute left-0 top-0 h-full w-1 bg-[#E39A2E]" />
+            )}
 
-      {/* Points */}
-      <div className="space-y-3 pt-6">
-        {data.items.map((item) => {
-          const isActive = active === item.id;
+            <div className="flex items-center gap-4">
+              {/* ICON */}
+              <div
+                className={`
+                  flex h-12 w-12 items-center justify-center rounded-md
+                  ${isActive ? "bg-[#E39A2E]/20 text-[#E39A2E]" : "bg-white/10 text-gray-300"}
+                `}
+              >
+                <Icon size={22} />
+              </div>
 
-          return (
-            <button
-              key={item.id}
-              onClick={() => onChange(item.id)}
-              className={`w-full text-left rounded-xl p-4 transition-all
-                ${isActive
-                  ? "bg-[#3A3225] border border-[#E39A2E]"
-                  : "bg-black/30 hover:bg-black/40"}
-              `}
-            >
-              <h3 className="font-medium">{item.title}</h3>
-              <p className="text-sm text-gray-300 mt-1">
-                {item.description}
-              </p>
-            </button>
-          );
-        })}
-      </div>
+              {/* TEXT */}
+              <div>
+                <h3 className="font-medium text-lg text-white">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-gray-400 mt-1 leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+            </div>
+          </button>
+        );
+      })}
     </div>
   );
 }

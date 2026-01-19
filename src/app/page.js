@@ -1,5 +1,10 @@
+import FeatureCardsSection from "@/components/HomeSection/FeatureCardsSection";
 import FocusSection from "@/components/HomeSection/FocusSection";
 import Hero from "@/components/HomeSection/Hero";
+import ImpactSection from "@/components/HomeSection/ImpactSection";
+import ProcessSection from "@/components/HomeSection/ProcessSection";
+import TeamSection from "@/components/HomeSection/TeamSection";
+import WhyClientsSection from "@/components/HomeSection/WhyClientsSection";
 
 
 export default function Home() {
@@ -10,9 +15,17 @@ export default function Home() {
     >
       {/* HERO */}
       <Hero />
-
       {/* HOME – FOCUS SECTION */}
       <FocusSection />
+      {/* HOME – IMPACT SECTION */}
+      <ImpactSection />
+      {/* HOME – FEATURE SECTION */}
+      <FeatureCardsSection />
+      {/* HOME – WHY CLIENT SECTION */}
+      <WhyClientsSection />
+       {/* HOME – PROCESS SECTION */}
+      <ProcessSection/>
+      <TeamSection/>
     </main>
   );
 }

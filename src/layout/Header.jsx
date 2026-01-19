@@ -10,9 +10,6 @@ export default function Header() {
       role="banner"
     >
       <div className="mx-auto px-6 py-4 flex items-center justify-between">
-        
-        {/* Left Section: Logo + Menu */}
-        <div className="flex items-center md:gap-44">
           
           {/* Logo (Image) */}
           <Link
@@ -31,7 +28,6 @@ export default function Header() {
 
           {/* Menu */}
           <MenuAction data={menuData} />
-        </div>
 
         {/* Right Section: CTA */}
         <div>

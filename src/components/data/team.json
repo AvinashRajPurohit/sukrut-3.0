@@ -1,0 +1,75 @@
+{
+  "heading": "Our Team",
+  "members": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "role": "Project Manager",
+      "image": "/avatar1.png",
+      "bio": "Responsible for planning, executing, and delivering projects on time while aligning technical execution with business goals."
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "role": "Lead Engineer",
+      "image": "/avatar2.png",
+      "bio": "Leads system architecture and ensures scalability, performance, and long-term maintainability of products."
+    },
+    {
+      "id": 3,
+      "name": "Alex Brown",
+      "role": "UI/UX Designer",
+      "image": "/avatar3.png",
+      "bio": "Designs intuitive, user-centered interfaces that balance usability, aesthetics, and business objectives."
+    },
+    {
+      "id": 4,
+      "name": "Rahul Verma",
+      "role": "Frontend Engineer",
+      "image": "/avatar4.png",
+      "bio": "Builds high-performance, accessible web interfaces using modern frontend frameworks and best practices."
+    },
+    {
+      "id": 5,
+      "name": "Emily Carter",
+      "role": "Backend Engineer",
+      "image": "/avatar5.png",
+      "bio": "Develops robust backend systems, APIs, and data layers that power scalable digital products."
+    },
+    {
+      "id": 6,
+      "name": "Amit Sharma",
+      "role": "DevOps Engineer",
+      "image": "/avatar6.png",
+      "bio": "Manages cloud infrastructure, CI/CD pipelines, and system reliability to ensure smooth deployments."
+    },
+    {
+      "id": 7,
+      "name": "Sophia Lee",
+      "role": "Product Strategist",
+      "image": "/avatar7.png",
+      "bio": "Bridges business goals and technical execution through research, roadmapping, and product strategy."
+    },
+    {
+      "id": 8,
+      "name": "Daniel Kim",
+      "role": "QA & Automation Engineer",
+      "image": "/avatar8.png",
+      "bio": "Ensures product quality through automated testing, performance validation, and continuous monitoring."
+    },
+    {
+      "id": 9,
+      "name": "Neha Kapoor",
+      "role": "Growth & Analytics Lead",
+      "image": "/avatar9.png",
+      "bio": "Analyzes user behavior and product metrics to drive data-informed decisions and continuous improvement."
+    },
+    {
+      "id": 10,
+      "name": "Michael Rodriguez",
+      "role": "Security Engineer",
+      "image": "/avatar10.png",
+      "bio": "Focuses on application security, data protection, and building systems that are secure by default."
+    }
+  ]
+}

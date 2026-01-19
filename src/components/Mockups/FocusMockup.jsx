@@ -2,7 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ProductMockup } from "./ProductMockup";
+import { ProductMockup } from "./CustomMockup/ProductMockup";
+import CustomMockup from "./CustomMockup/ustomMockup";
+import CloudMockup from "./CustomMockup/CloudMockup";
 
 export default function FocusMockup({ active }) {
   const contentRef = useRef(null);
@@ -27,7 +29,7 @@ export default function FocusMockup({ active }) {
     <div className="relative">
       <div
         ref={contentRef}
-        className="rounded-2xl bg-white p-6 shadow-2xl min-h-[260px]"
+        className="rounded-2xl bg-white p-6 shadow-2xl min-h-[375px]"
       >
         {active === "product" && <ProductMockup />}
         {active === "custom" && <CustomMockup />}

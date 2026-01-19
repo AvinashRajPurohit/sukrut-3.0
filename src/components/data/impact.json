@@ -1,0 +1,22 @@
+{
+    "badge": "Our Impact",
+    "title": "Designed for clarity. Engineered for scale.",
+  "heading": {
+    "line1": "Transforming ideas into high-impact digital solutions.",
+    "line2": "We build custom software that elevates businesses and user experiences"
+  },
+  "stats": [
+    { "value": "10", "label": "years of expertise" },
+    { "value": "50+", "label": "Projects Delivered" },
+    { "value": "98%", "label": "Client Satisfaction" },
+    { "value": "40+", "label": "Team Members" }
+  ],
+  "orbitPoints": [
+    { "label": "Product Vision", "x": 360, "y": 70 },
+    { "label": "Technical Feasibility", "x": 300, "y": 160 },
+    { "label": "Scalability & Performance", "x": 260, "y": 260 },
+    { "label": "Reliability & Performance", "x": 210, "y": 350 },
+    { "label": "Deployment & Support & Growth", "x": 120, "y": 330 },
+    { "label": "Clean code & Modern Frameworks", "x": 160, "y": 240 }
+  ]
+}

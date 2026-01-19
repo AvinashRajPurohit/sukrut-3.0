@@ -6,19 +6,19 @@
       "id": "product",
       "title": "Product Engineering",
       "description": "We design, build and deploy scalable products for any industry.",
-      "mockup": "product"
+      "icon": "product"
     },
     {
       "id": "custom",
       "title": "Custom Development Services",
       "description": "Tailored web and application development aligned with your business.",
-      "mockup": "custom"
+      "icon": "code"
     },
     {
       "id": "cloud",
       "title": "Scalable Cloud Solutions",
       "description": "Cloud-native architectures designed for performance and growth.",
-      "mockup": "cloud"
+      "icon": "cloud"
     }
   ]
 }
