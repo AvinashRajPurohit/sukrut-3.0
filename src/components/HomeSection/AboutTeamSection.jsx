@@ -52,27 +52,27 @@ export default function AboutTeamSection() {
         {/* Header Section */}
         <div 
           ref={headerRef}
-          className={`text-center mb-16 lg:mb-20 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            headerVisible ? 'opacity-100 translate-y-0 scale-100 blur-0' : 'opacity-0 -translate-y-12 scale-105 blur-md'
+          className={`text-center mb-16 lg:mb-20 transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
         >
           <h2
             id="team-heading"
-            className={`text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-4 transition-all duration-800 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-              headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            className={`text-4xl lg:text-5xl xl:text-6xl font-semibold text-gray-900 mb-4 transition-all duration-700 ease-out ${
+              headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
             style={{ 
-              transitionDelay: '200ms',
-              backgroundSize: '200% auto',
-              animation: headerVisible ? 'gradient-shift 3s ease infinite' : 'none'
+              transitionDelay: '150ms',
+              lineHeight: '1.1',
+              paddingBottom: '0.25rem'
             }}
           >
             {team.title}
           </h2>
-          <p className={`text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto transition-all duration-800 ease-out ${
-            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          <p className={`text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
-          style={{ transitionDelay: '400ms' }}
+          style={{ transitionDelay: '300ms' }}
           >
             {team.subtitle}
           </p>
@@ -81,46 +81,38 @@ export default function AboutTeamSection() {
         {/* Team Members Grid - Responsive: 1 col mobile, 2 cols tablet, 4 cols desktop */}
         <div 
           ref={gridRef}
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 max-w-7xl mx-auto transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            shouldShowImages ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 max-w-7xl mx-auto transition-all duration-700 ease-out ${
+            shouldShowImages ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
           {team.members.map((member, index) => {
-            const positions = [
-              { x: '-translate-x-12', y: '-translate-y-8', rotate: '-rotate-6' },
-              { x: 'translate-x-12', y: '-translate-y-8', rotate: 'rotate-6' },
-              { x: '-translate-x-12', y: 'translate-y-8', rotate: '-rotate-6' },
-              { x: 'translate-x-12', y: 'translate-y-8', rotate: 'rotate-6' },
-            ];
-            const pos = positions[index % 4];
-            const floatDelay = index * 0.2;
-            const floatDuration = 4 + (index % 2) * 0.5;
+            const floatDelay = index * 0.15;
+            const floatDuration = 6 + (index % 2) * 0.5;
             
             return (
               <div
                 key={member.id}
-                className={`flex flex-col items-center group transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-3 ${
+                className={`flex flex-col items-center group transition-all duration-500 ease-out hover:-translate-y-1 ${
                   gridVisible 
-                    ? 'opacity-100 translate-x-0 translate-y-0 scale-100 rotate-0' 
-                    : `opacity-0 ${pos.x} ${pos.y} ${pos.rotate} scale-75`
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 translate-y-8'
                 }`}
                 style={{ 
-                  transitionDelay: `${index * 80}ms`,
-                  animation: gridVisible ? `float ${floatDuration}s ease-in-out infinite` : 'none',
+                  transitionDelay: `${index * 60}ms`,
+                  animation: gridVisible ? `float-delayed ${floatDuration}s ease-in-out infinite` : 'none',
                   animationDelay: `${floatDelay}s`
                 }}
               >
                 {/* Profile Image Container with Premium Effects */}
                 <div className="relative mb-6 w-full flex justify-center">
-                  {/* Glow effect - behind the image */}
+                  {/* Subtle glow effect */}
                   {shouldShowImages && (
                     <div 
-                      className="absolute inset-0 rounded-2xl blur-xl pointer-events-none"
+                      className="absolute inset-0 rounded-2xl blur-2xl pointer-events-none opacity-60"
                       style={{
-                        background: `linear-gradient(135deg, rgba(227, 154, 46, 0.3), rgba(227, 154, 46, 0.1))`,
-                        animation: `glow-pulse ${3 + index * 0.3}s ease-in-out infinite`,
-                        animationDelay: `${floatDelay + 0.5}s`,
-                        transform: 'scale(1.1)',
+                        background: `radial-gradient(circle, rgba(227, 154, 46, 0.15) 0%, transparent 70%)`,
+                        animation: `glow-pulse ${4 + index * 0.2}s ease-in-out infinite`,
+                        animationDelay: `${floatDelay + 0.3}s`,
                         zIndex: 0,
                         width: '260px',
                         height: '260px',
@@ -132,13 +124,14 @@ export default function AboutTeamSection() {
                     />
                   )}
                   
-                  {/* Profile Image - Perfect Square with rounded corners */}
+                  {/* Profile Image */}
                   <div 
-                    className="relative w-[260px] h-[260px] rounded-2xl overflow-hidden bg-gray-200 border-2 border-white/50 shadow-xl group-hover:shadow-2xl group-hover:border-amber-200/50"
+                    className="relative w-[260px] h-[260px] rounded-2xl overflow-hidden bg-gray-200 border-2 border-white/50 shadow-lg group-hover:shadow-xl transition-all duration-500"
                     style={{ 
                       zIndex: 1,
-                      animation: shouldShowImages ? `float-delayed ${floatDuration + 0.3}s ease-in-out infinite` : 'none',
-                      animationDelay: `${floatDelay + 0.2}s`,
+                      opacity: shouldShowImages ? 1 : 0,
+                      transform: shouldShowImages ? 'scale(1)' : 'scale(0.95)',
+                      transition: 'all 600ms ease-out',
                     }}
                   >
                     <Image
@@ -146,36 +139,26 @@ export default function AboutTeamSection() {
                       alt={`${member.name} - ${member.role}`}
                       width={260}
                       height={260}
-                      className="object-cover transition-transform duration-700 group-hover:scale-110 w-full h-full"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105 w-full h-full"
                       priority={index < 4}
-                    />
-                    {/* Shimmer overlay - on top but transparent until hover */}
-                    <div 
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                      style={{
-                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
-                        backgroundSize: '200% 100%',
-                        animation: 'shimmer 2s infinite',
-                        zIndex: 2,
-                      }}
                     />
                   </div>
                 </div>
 
                 {/* Name */}
-                <h3 className={`text-xl lg:text-2xl font-bold text-gray-900 text-center mb-2 transition-all duration-600 ease-out group-hover:text-amber-600 ${
+                <h3 className={`text-xl lg:text-2xl font-semibold text-gray-900 text-center mb-2 transition-all duration-500 ease-out group-hover:text-gray-800 ${
                   shouldShowImages ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                 }`}
-                style={{ transitionDelay: `${index * 80 + 300}ms` }}
+                style={{ transitionDelay: `${index * 60 + 200}ms` }}
                 >
                   {member.name}
                 </h3>
 
                 {/* Role */}
-                <p className={`text-base lg:text-lg text-gray-600 text-center font-medium transition-all duration-600 ease-out group-hover:text-gray-800 ${
+                <p className={`text-base lg:text-lg text-gray-600 text-center transition-all duration-500 ease-out ${
                   shouldShowImages ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                 }`}
-                style={{ transitionDelay: `${index * 80 + 400}ms` }}
+                style={{ transitionDelay: `${index * 60 + 250}ms` }}
                 >
                   {member.role}
                 </p>

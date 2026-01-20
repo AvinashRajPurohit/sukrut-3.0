@@ -47,25 +47,25 @@ export default function CTASection() {
       <div className="relative mx-auto max-w-4xl px-6">
         <div 
           ref={contentRef}
-          className={`text-center space-y-6 lg:space-y-8 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            contentVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
+          className={`text-center space-y-6 lg:space-y-8 transition-all duration-700 ease-out ${
+            contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
           {/* Main Title */}
           <h2
             id="cta-heading"
-            className={`text-4xl lg:text-5xl xl:text-6xl font-semibold text-gray-900 leading-tight transition-all duration-1000 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-              contentVisible ? 'opacity-100 translate-y-0 scale-100 blur-0' : 'opacity-0 -translate-y-12 scale-105 blur-md'
+            className={`text-4xl lg:text-5xl xl:text-6xl font-semibold text-gray-900 leading-tight transition-all duration-700 ease-out ${
+              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
-            style={{ transitionDelay: '200ms' }}
+            style={{ transitionDelay: '150ms' }}
           >
             {cta.title.split('\n').map((line, i) => (
               <span 
                 key={i} 
-                className={`block transition-all duration-800 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                  contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                className={`block transition-all duration-600 ease-out ${
+                  contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                 }`}
-                style={{ transitionDelay: `${300 + i * 150}ms` }}
+                style={{ transitionDelay: `${200 + i * 100}ms` }}
               >
                 {line}
               </span>
@@ -73,19 +73,19 @@ export default function CTASection() {
           </h2>
 
           {/* Description */}
-          <p className={`text-lg lg:text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            contentVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
+          <p className={`text-lg lg:text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed transition-all duration-700 ease-out ${
+            contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
-          style={{ transitionDelay: '600ms' }}
+          style={{ transitionDelay: '400ms' }}
           >
             {cta.description}
           </p>
 
           {/* CTA Button */}
-          <div className={`pt-4 transition-all duration-1000 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-            contentVisible ? 'opacity-100 translate-y-0 scale-100 rotate-0' : 'opacity-0 translate-y-12 scale-75 rotate-[-5deg]'
+          <div className={`pt-4 transition-all duration-700 ease-out ${
+            contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
-          style={{ transitionDelay: '800ms' }}
+          style={{ transitionDelay: '500ms' }}
           >
             <Link
               href={cta.button.href}

@@ -26,23 +26,19 @@ export default function ValuesMissionSection() {
         {/* Mission & Vision */}
         <div 
           ref={missionVisionRef}
-          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-16 lg:mb-20 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            missionVisionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-16 lg:mb-20 transition-all duration-700 ease-out ${
+            missionVisionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
           {/* Mission */}
-          <div className={`bg-white border border-gray-200 rounded-2xl p-8 lg:p-10 transition-all duration-800 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1 hover:shadow-xl ${
+          <div className={`bg-white border border-gray-200 rounded-2xl p-8 lg:p-10 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-md ${
             missionVisionVisible 
-              ? 'opacity-100 translate-x-0 translate-y-0 scale-100 rotate-0' 
-              : 'opacity-0 -translate-x-16 -translate-y-8 scale-90 rotate-[-8deg]'
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
           }`}
-          style={{ transitionDelay: '200ms' }}
+          style={{ transitionDelay: '150ms' }}
           >
-            <div className={`flex items-center gap-4 mb-6 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-              missionVisionVisible ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-8 scale-0'
-            }`}
-            style={{ transitionDelay: '400ms' }}
-            >
+            <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 rounded-full bg-gray-900 flex items-center justify-center">
                 <Target className="w-6 h-6 text-gray-100" />
               </div>
@@ -50,28 +46,20 @@ export default function ValuesMissionSection() {
                 {valuesMission.mission.title}
               </h3>
             </div>
-            <p className={`text-base lg:text-lg text-gray-600 leading-relaxed transition-all duration-700 ease-out ${
-              missionVisionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-            style={{ transitionDelay: '600ms' }}
-            >
+            <p className="text-base lg:text-lg text-gray-600 leading-relaxed">
               {valuesMission.mission.description}
             </p>
           </div>
 
           {/* Vision */}
-          <div className={`bg-white border border-gray-200 rounded-2xl p-8 lg:p-10 transition-all duration-800 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1 hover:shadow-xl ${
+          <div className={`bg-white border border-gray-200 rounded-2xl p-8 lg:p-10 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-md ${
             missionVisionVisible 
-              ? 'opacity-100 translate-x-0 translate-y-0 scale-100 rotate-0' 
-              : 'opacity-0 translate-x-16 -translate-y-8 scale-90 rotate-[8deg]'
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
           }`}
-          style={{ transitionDelay: '300ms' }}
+          style={{ transitionDelay: '200ms' }}
           >
-            <div className={`flex items-center gap-4 mb-6 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-              missionVisionVisible ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-8 scale-0'
-            }`}
-            style={{ transitionDelay: '500ms' }}
-            >
+            <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 rounded-full bg-gray-900 flex items-center justify-center">
                 <Eye className="w-6 h-6 text-gray-100" />
               </div>
@@ -79,11 +67,7 @@ export default function ValuesMissionSection() {
                 {valuesMission.vision.title}
               </h3>
             </div>
-            <p className={`text-base lg:text-lg text-gray-600 leading-relaxed transition-all duration-700 ease-out ${
-              missionVisionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-            style={{ transitionDelay: '700ms' }}
-            >
+            <p className="text-base lg:text-lg text-gray-600 leading-relaxed">
               {valuesMission.vision.description}
             </p>
           </div>
@@ -94,42 +78,35 @@ export default function ValuesMissionSection() {
           <h2
             ref={valuesHeaderRef}
             id="values-mission-heading"
-            className={`text-3xl lg:text-4xl font-semibold text-gray-900 text-center mb-12 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              valuesHeaderVisible ? 'opacity-100 translate-y-0 scale-100 blur-0' : 'opacity-0 -translate-y-12 scale-105 blur-md'
+            className={`text-3xl lg:text-4xl font-semibold text-gray-900 text-center mb-12 transition-all duration-700 ease-out ${
+              valuesHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
           >
             Our Core Values
           </h2>
           <div 
             ref={valuesGridRef}
-            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              valuesGridVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 transition-all duration-700 ease-out ${
+              valuesGridVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
             {valuesMission.values.map((value, index) => {
               const IconComponent = iconMap[value.title] || Lightbulb;
-              const rotations = ['0deg', '5deg', '-5deg', '3deg'];
-              const scales = [0.8, 0.85, 0.9, 0.85];
               return (
                 <div
                   key={value.id}
-                  className={`bg-white border border-gray-200 rounded-xl p-6 lg:p-8 hover:shadow-xl transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-2 hover:rotate-1 ${
+                  className={`bg-white border border-gray-200 rounded-xl p-6 lg:p-8 hover:shadow-md transition-all duration-500 ease-out hover:-translate-y-1 ${
                     valuesGridVisible 
-                      ? 'opacity-100 translate-y-0 scale-100 rotate-0' 
-                      : 'opacity-0 translate-y-12'
+                      ? 'opacity-100 translate-y-0' 
+                      : 'opacity-0 translate-y-8'
                   }`}
-                  style={{ 
-                    transitionDelay: `${index * 120}ms`,
-                    transform: valuesGridVisible 
-                      ? 'translateY(0) scale(1) rotate(0deg)' 
-                      : `translateY(48px) scale(${scales[index]}) rotate(${rotations[index]})`
-                  }}
+                  style={{ transitionDelay: `${index * 80}ms` }}
                 >
                   {/* Icon */}
-                  <div className={`w-12 h-12 rounded-full bg-gray-900 flex items-center justify-center mb-4 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                    valuesGridVisible ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 rotate-180'
+                  <div className={`w-12 h-12 rounded-full bg-gray-900 flex items-center justify-center mb-4 transition-all duration-600 ease-out ${
+                    valuesGridVisible ? 'opacity-100' : 'opacity-0'
                   }`}
-                  style={{ transitionDelay: `${index * 120 + 200}ms` }}
+                  style={{ transitionDelay: `${index * 80 + 100}ms` }}
                   >
                     <IconComponent className="w-6 h-6 text-gray-100" />
                   </div>

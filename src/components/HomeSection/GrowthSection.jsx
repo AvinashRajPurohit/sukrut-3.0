@@ -24,35 +24,35 @@ export default function GrowthSection() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div 
           ref={contentRef}
-          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center transition-all duration-700 ease-out ${
+            contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
           {/* Left Side - Image */}
-          <div className={`relative aspect-[4/3] rounded-3xl overflow-hidden shadow-xl transition-all duration-1000 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+          <div className={`relative aspect-[4/3] rounded-3xl overflow-hidden shadow-xl transition-all duration-700 ease-out ${
             contentVisible 
-              ? 'opacity-100 translate-x-0 translate-y-0 scale-100 rotate-0' 
-              : 'opacity-0 -translate-x-16 -translate-y-8 scale-90 rotate-[-8deg]'
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
           }`}
-          style={{ transitionDelay: '200ms' }}
+          style={{ transitionDelay: '150ms' }}
           >
             <Image
               src={growth.image.src}
               alt={growth.image.alt}
               fill
-              className="object-cover transition-transform duration-700 hover:scale-110"
+              className="object-cover transition-transform duration-500 hover:scale-105"
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority
             />
           </div>
 
           {/* Right Side - Text Content */}
-          <div className={`space-y-8 lg:space-y-10 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          <div className={`space-y-8 lg:space-y-10 transition-all duration-700 ease-out ${
             contentVisible 
-              ? 'opacity-100 translate-x-0 translate-y-0' 
-              : 'opacity-0 translate-x-16 translate-y-8'
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
           }`}
-          style={{ transitionDelay: '400ms' }}
+          style={{ transitionDelay: '250ms' }}
           >
             {/* Main Heading */}
             <h2
@@ -67,35 +67,15 @@ export default function GrowthSection() {
             </h2>
 
             {/* Quote */}
-            <div className={`space-y-8 transition-all duration-800 ease-out ${
-              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-            style={{ transitionDelay: '600ms' }}
-            >
+            <div className="space-y-8">
               <blockquote className="relative text-lg lg:text-xl xl:text-2xl text-gray-700 leading-relaxed font-light italic">
-                <span className={`absolute -left-4 -top-2 text-5xl lg:text-6xl text-gray-300 leading-none font-serif transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                  contentVisible ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 rotate-180'
-                }`}
-                style={{ transitionDelay: '700ms' }}
-                >"</span>
-                <span className={`relative z-10 pl-6 transition-all duration-800 ease-out ${
-                  contentVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
-                }`}
-                style={{ transitionDelay: '800ms' }}
-                >{growth.quote}</span>
-                <span className={`text-5xl lg:text-6xl text-gray-300 leading-none font-serif align-top ml-2 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                  contentVisible ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 -rotate-180'
-                }`}
-                style={{ transitionDelay: '900ms' }}
-                >"</span>
+                <span className="absolute -left-4 -top-2 text-5xl lg:text-6xl text-gray-300 leading-none font-serif">"</span>
+                <span className="relative z-10 pl-6">{growth.quote}</span>
+                <span className="text-5xl lg:text-6xl text-gray-300 leading-none font-serif align-top ml-2">"</span>
               </blockquote>
 
               {/* Attribution */}
-              <div className={`pt-6 border-t border-gray-200/60 transition-all duration-800 ease-out ${
-                contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-              style={{ transitionDelay: '1000ms' }}
-              >
+              <div className="pt-6 border-t border-gray-200/60">
                 <p className="text-xl lg:text-2xl font-semibold text-gray-900 tracking-tight">
                   {growth.author.name}
                 </p>

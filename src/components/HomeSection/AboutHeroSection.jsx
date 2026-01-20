@@ -24,25 +24,25 @@ export default function AboutHeroSection() {
         {/* Header Section */}
         <div 
           ref={headerRef}
-          className={`text-center mb-16 lg:mb-24 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`text-center mb-16 lg:mb-24 transition-all duration-700 ease-out ${
             headerVisible 
-              ? 'opacity-100 translate-y-0 scale-100 blur-0' 
-              : 'opacity-0 translate-y-12 scale-105 blur-sm'
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
           }`}
         >
           <h1
             id="about-heading"
-            className={`text-4xl lg:text-6xl font-semibold text-gray-900 mb-6 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            className={`text-4xl lg:text-6xl font-semibold text-gray-900 mb-6 transition-all duration-700 ease-out ${
+              headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
-            style={{ transitionDelay: '200ms' }}
+            style={{ transitionDelay: '150ms' }}
           >
             {hero.title}
           </h1>
-          <p className={`text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          <p className={`text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
-          style={{ transitionDelay: '400ms' }}
+          style={{ transitionDelay: '300ms' }}
           >
             {hero.description}
           </p>
@@ -51,17 +51,17 @@ export default function AboutHeroSection() {
         {/* Grid Layout - Centered featured card spanning 2 rows */}
         <div 
           ref={gridRef}
-          className={`grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 auto-rows-fr transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 auto-rows-fr transition-all duration-700 ease-out ${
             gridVisible 
-              ? 'opacity-100 translate-y-0 scale-100' 
-              : 'opacity-0 translate-y-12 scale-95'
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
           }`}
         >
           {/* Top Left Image */}
-          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-800 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
             gridVisible 
-              ? 'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100' 
-              : 'opacity-0 -translate-x-12 translate-y-8 rotate-[-5deg] scale-90'
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
           }`}
           style={{ transitionDelay: '100ms' }}
           >
@@ -69,19 +69,19 @@ export default function AboutHeroSection() {
               src={hero.images[0].src}
               alt={hero.images[0].alt}
               fill
-              className="object-cover transition-transform duration-700 hover:scale-110"
+              className="object-cover transition-transform duration-500 hover:scale-105"
               sizes="(max-width: 768px) 100vw, 33vw"
               priority
             />
           </div>
 
           {/* Featured Card - Centered, spans 2 rows */}
-          <div className={`relative md:row-span-2 rounded-2xl overflow-hidden flex flex-col justify-center p-8 lg:p-12 min-h-[400px] md:min-h-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          <div className={`relative md:row-span-2 rounded-2xl overflow-hidden flex flex-col justify-center p-8 lg:p-12 min-h-[400px] md:min-h-0 transition-all duration-700 ease-out ${
             gridVisible 
-              ? 'opacity-100 translate-y-0 scale-100 rotate-0' 
-              : 'opacity-0 translate-y-12 scale-90 rotate-[-2deg]'
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
           }`}
-          style={{ transitionDelay: '300ms' }}
+          style={{ transitionDelay: '200ms' }}
           >
             {/* Premium background with grid pattern */}
             <div 
@@ -122,76 +122,64 @@ export default function AboutHeroSection() {
             />
 
             {/* Content */}
-            <div className={`relative z-10 transition-all duration-800 ease-out ${
-              gridVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            <div className={`relative z-10 transition-all duration-700 ease-out ${
+              gridVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
-            style={{ transitionDelay: '500ms' }}
+            style={{ transitionDelay: '300ms' }}
             >
-              <div className={`mb-6 text-white transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                gridVisible ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 rotate-180'
-              }`}
-              style={{ transitionDelay: '600ms' }}
-              >
+              <div className="mb-6 text-white transition-all duration-600 ease-out">
                 <IconComponent className="w-10 h-10 lg:w-12 lg:h-12" />
               </div>
-              <h2 className={`text-2xl lg:text-3xl xl:text-4xl font-semibold text-white mb-6 leading-tight transition-all duration-800 ease-out ${
-                gridVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
-              }`}
-              style={{ transitionDelay: '700ms' }}
-              >
+              <h2 className="text-2xl lg:text-3xl xl:text-4xl font-semibold text-white mb-6 leading-tight">
                 {hero.featuredBox.title}
               </h2>
-              <p className={`text-base lg:text-lg text-gray-200 leading-relaxed transition-all duration-800 ease-out ${
-                gridVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-              style={{ transitionDelay: '800ms' }}
-              >
+              <p className="text-base lg:text-lg text-gray-200 leading-relaxed">
                 {hero.featuredBox.description}
               </p>
             </div>
           </div>
 
           {/* Top Right Image */}
-          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-800 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
             gridVisible 
-              ? 'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100' 
-              : 'opacity-0 translate-x-12 translate-y-8 rotate-[5deg] scale-90'
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
           }`}
-          style={{ transitionDelay: '200ms' }}
+          style={{ transitionDelay: '150ms' }}
           >
             <Image
               src={hero.images[1].src}
               alt={hero.images[1].alt}
               fill
-              className="object-cover transition-transform duration-700 hover:scale-110"
+              className="object-cover transition-transform duration-500 hover:scale-105"
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           </div>
 
           {/* Bottom Left Image */}
-          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-800 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
             gridVisible 
-              ? 'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100' 
-              : 'opacity-0 -translate-x-12 translate-y-8 rotate-[-5deg] scale-90'
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
           }`}
-          style={{ transitionDelay: '400ms' }}
+          style={{ transitionDelay: '250ms' }}
           >
             <Image
               src={hero.images[2].src}
               alt={hero.images[2].alt}
               fill
-              className="object-cover transition-transform duration-700 hover:scale-110"
+              className="object-cover transition-transform duration-500 hover:scale-105"
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           </div>
 
           {/* Bottom Right Image */}
-          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-800 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
             gridVisible 
-              ? 'opacity-100 translate-x-0 translate-y-0 rotate-0 scale-100' 
-              : 'opacity-0 translate-x-12 translate-y-8 rotate-[5deg] scale-90'
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
           }`}
-          style={{ transitionDelay: '500ms' }}
+          style={{ transitionDelay: '300ms' }}
           >
             <Image
               src={hero.images[3].src}

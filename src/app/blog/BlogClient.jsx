@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, ArrowRight, CheckCircle2, Star, FileText, Building, Zap } from 'lucide-react';
 import { format } from 'date-fns';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 const categories = [
   { value: 'All Articles', label: 'All Blogs', icon: FileText },
@@ -71,36 +72,214 @@ export default function BlogClient({ initialBlogs = [], initialPagination = { to
     return cat ? cat.icon : FileText;
   };
 
+  const [headerRef, headerVisible] = useScrollAnimation();
+  const [filtersRef, filtersVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [gridRef, gridVisible] = useScrollAnimation({ threshold: 0.1 });
+
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gradient-to-b from-white via-gray-50/30 to-white">
+        {/* Premium background effects */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+          <div 
+            className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-amber-200/20 via-amber-100/10 to-transparent rounded-full blur-3xl animate-float-slow"
+            style={{ animationDuration: '8s' }}
+          />
+          <div 
+            className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-tl from-amber-200/20 via-amber-100/10 to-transparent rounded-full blur-3xl animate-float-slow"
+            style={{ animationDuration: '10s', animationDelay: '2s' }}
+          />
+        </div>
+
         {/* Header Section */}
-        <section className="bg-white py-8 sm:py-12 md:py-16 px-4 sm:px-6">
-          <div className="max-w-7xl mx-auto text-center">
-            <p className="text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4 uppercase tracking-wide">
+        <section className="relative bg-white py-16 sm:py-20 md:py-24 px-4 sm:px-6 z-10 overflow-hidden">
+          {/* Light Background with Visible Shapes */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Very subtle gradient overlay */}
+            <div 
+              className="absolute top-0 left-0 w-full h-full"
+              style={{
+                background: `
+                  radial-gradient(circle at 20% 30%, rgba(227, 154, 46, 0.03) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(227, 154, 46, 0.02) 0%, transparent 50%)
+                `,
+              }}
+            />
+            
+            {/* Visible geometric shapes - Circles */}
+            <div className="absolute top-20 right-20 w-24 h-24">
+              <div 
+                className="w-full h-full rounded-full border-2 border-amber-200/40"
+                style={{ animation: 'float-slow 8s ease-in-out infinite' }}
+              />
+            </div>
+            <div className="absolute bottom-32 left-16 w-16 h-16">
+              <div 
+                className="w-full h-full rounded-full border-2 border-amber-300/40"
+                style={{ animation: 'float-slow 10s ease-in-out infinite', animationDelay: '2s' }}
+              />
+            </div>
+            <div className="absolute top-1/2 right-1/3 w-20 h-20">
+              <div 
+                className="w-full h-full rounded-full border-2 border-amber-200/35"
+                style={{ animation: 'float-slow 9s ease-in-out infinite', animationDelay: '1s' }}
+              />
+            </div>
+            
+            {/* Visible geometric shapes - Triangles */}
+            <div className="absolute top-32 left-24 w-0 h-0">
+              <div 
+                className="border-l-[30px] border-l-transparent border-r-[30px] border-r-transparent border-b-[52px] border-b-amber-200/30"
+                style={{ animation: 'float-slow 7s ease-in-out infinite' }}
+              />
+            </div>
+            <div className="absolute bottom-20 right-32 w-0 h-0">
+              <div 
+                className="border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-b-[35px] border-b-amber-300/30"
+                style={{ animation: 'float-slow 11s ease-in-out infinite', animationDelay: '1.5s' }}
+              />
+            </div>
+            
+            {/* Visible geometric shapes - Squares/Diamonds */}
+            <div className="absolute top-1/3 left-1/4 w-16 h-16">
+              <div 
+                className="w-full h-full border-2 border-amber-200/35 transform rotate-45"
+                style={{ animation: 'float-slow 8.5s ease-in-out infinite', animationDelay: '0.5s' }}
+              />
+            </div>
+            <div className="absolute bottom-1/4 right-1/4 w-12 h-12">
+              <div 
+                className="w-full h-full border-2 border-amber-300/35 transform rotate-45"
+                style={{ animation: 'float-slow 9.5s ease-in-out infinite', animationDelay: '2.5s' }}
+              />
+            </div>
+            
+            {/* Visible hexagon shapes */}
+            <div className="absolute top-24 left-1/2 w-20 h-20 -translate-x-1/2">
+              <div 
+                className="w-full h-full"
+                style={{
+                  clipPath: 'polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%)',
+                  border: '2px solid rgba(227, 154, 46, 0.3)',
+                  animation: 'float-slow 10s ease-in-out infinite',
+                }}
+              />
+            </div>
+            <div className="absolute bottom-28 right-1/3 w-14 h-14">
+              <div 
+                className="w-full h-full"
+                style={{
+                  clipPath: 'polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%)',
+                  border: '2px solid rgba(227, 154, 46, 0.25)',
+                  animation: 'float-slow 8s ease-in-out infinite',
+                  animationDelay: '1s',
+                }}
+              />
+            </div>
+            
+            {/* Visible lines pattern - subtle grid */}
+            <div 
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `
+                  linear-gradient(rgba(227, 154, 46, 0.08) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(227, 154, 46, 0.08) 1px, transparent 1px)
+                `,
+                backgroundSize: '80px 80px',
+              }}
+            />
+            
+            {/* Visible diagonal lines */}
+            <div 
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `
+                  repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 60px,
+                    rgba(227, 154, 46, 0.06) 60px,
+                    rgba(227, 154, 46, 0.06) 61px
+                  )
+                `,
+              }}
+            />
+            
+            {/* Visible dots pattern */}
+            <div 
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `radial-gradient(circle, rgba(227, 154, 46, 0.15) 1.5px, transparent 1.5px)`,
+                backgroundSize: '40px 40px',
+              }}
+            />
+          </div>
+
+          <div 
+            ref={headerRef}
+            className={`relative max-w-7xl mx-auto text-center transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              headerVisible ? 'opacity-100 translate-y-0 scale-100 blur-0' : 'opacity-0 -translate-y-12 scale-105 blur-md'
+            }`}
+          >
+            <p className={`text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4 uppercase tracking-wide transition-all duration-800 ease-out ${
+              headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
+            style={{ transitionDelay: '200ms' }}
+            >
               Blog
             </p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 mb-3 sm:mb-4 px-4">
+            <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-3 sm:mb-4 px-4 transition-all duration-1000 ease-[cubic-bezier(0.34,1.56,0.64,1)] leading-tight ${
+              headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
+            style={{ 
+              transitionDelay: '400ms',
+              backgroundSize: '200% auto',
+              animation: headerVisible ? 'gradient-shift 3s ease infinite' : 'none',
+              lineHeight: '1.1',
+              paddingBottom: '0.25rem'
+            }}
+            >
               Insight and Updates
             </h1>
-            <p className="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto px-4">
-              A collection of hand-picked blogs for freelancers, by freelancers. Deep dives, insights, and honest advice to navigate the freelance landscape.
+            <p className={`text-base sm:text-lg text-slate-600 max-w-3xl mx-auto px-4 transition-all duration-1000 ease-out ${
+              headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
+            style={{ transitionDelay: '600ms' }}
+            >
+              Explore our curated collection of articles on software development, digital innovation, and technology trends. Insights, best practices, and expert perspectives to help you navigate the evolving tech landscape.
             </p>
           </div>
         </section>
 
         {/* All Blogs Section */}
-        <section className="bg-white py-8 sm:py-12 px-4 sm:px-6">
+        <section className="relative bg-white py-8 sm:py-12 px-4 sm:px-6 z-10">
           <div className="max-w-7xl mx-auto">
-            <div className="mb-6 sm:mb-8">
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3 sm:mb-4">
+            <div 
+              ref={filtersRef}
+              className={`mb-6 sm:mb-8 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                filtersVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+              }`}
+            >
+              <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 sm:mb-4 transition-all duration-800 ease-out ${
+                filtersVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ transitionDelay: '200ms' }}
+              >
                 All Blogs
               </h2>
-              <p className="text-sm sm:text-base text-slate-600 mb-4 sm:mb-6">
+              <p className={`text-sm sm:text-base text-slate-600 mb-4 sm:mb-6 transition-all duration-800 ease-out ${
+                filtersVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ transitionDelay: '400ms' }}
+              >
                 Find or list tools that will help designers build to test. Simplify design with our comprehensive and carefully edited library from the start.
               </p>
 
             {/* Search and Filters */}
-            <div className="flex flex-col md:flex-row gap-3 sm:gap-4 mb-6">
+            <div className={`flex flex-col md:flex-row gap-3 sm:gap-4 mb-6 transition-all duration-800 ease-out ${
+              filtersVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
+            style={{ transitionDelay: '600ms' }}
+            >
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
                 <input
@@ -144,25 +323,44 @@ export default function BlogClient({ initialBlogs = [], initialPagination = { to
               <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-4 border-slate-200 border-t-[#E39A2E]"></div>
             </div>
           ) : blogs.length === 0 ? (
-            <div className="text-center py-12 sm:py-20">
+            <div className={`text-center py-12 sm:py-20 transition-all duration-800 ease-out ${
+              filtersVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
+            style={{ transitionDelay: '800ms' }}
+            >
               <FileText className="w-12 h-12 sm:w-16 sm:h-16 text-slate-400 mx-auto mb-3 sm:mb-4" />
               <p className="text-base sm:text-lg font-medium text-slate-900 mb-2">No blogs found</p>
               <p className="text-sm sm:text-base text-slate-600">Try adjusting your search or filters</p>
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
+              <div 
+                ref={gridRef}
+                className={`grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                  gridVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+                }`}
+              >
                 {blogs.map((blog, index) => {
                   const CategoryIcon = getCategoryIcon(blog.category);
                   return (
                     <Link
                       key={blog.id || index}
                       href={`/blog/${blog.slug}`}
-                      className="group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer block"
+                      className={`group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-2 cursor-pointer block ${
+                        gridVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+                      }`}
+                      style={{ transitionDelay: `${index * 100}ms` }}
                     >
                       {/* Placeholder for thumbnail - using gradient background */}
-                      <div className="h-40 sm:h-48 bg-gradient-to-br from-[#E39A2E]/20 to-slate-200 flex items-center justify-center">
-                        <CategoryIcon className="w-12 h-12 sm:w-16 sm:h-16 text-[#E39A2E]/30" />
+                      <div className="relative h-40 sm:h-48 bg-gradient-to-br from-[#E39A2E]/20 via-amber-100/10 to-slate-200 flex items-center justify-center overflow-hidden group-hover:from-[#E39A2E]/30 transition-all duration-500">
+                        <CategoryIcon className="w-12 h-12 sm:w-16 sm:h-16 text-[#E39A2E]/30 group-hover:text-[#E39A2E]/50 transition-all duration-500 group-hover:scale-110" />
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                          style={{
+                            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+                            backgroundSize: '200% 100%',
+                            animation: 'shimmer 2s infinite',
+                          }}
+                        />
                       </div>
                       
                       <div className="p-4 sm:p-6">
@@ -198,11 +396,15 @@ export default function BlogClient({ initialBlogs = [], initialPagination = { to
 
               {/* Load More Button */}
               {pagination.pages > currentPage && (
-                <div className="text-center">
+                <div className={`text-center transition-all duration-800 ease-out ${
+                  gridVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                }`}
+                style={{ transitionDelay: `${blogs.length * 50}ms` }}
+                >
                   <button
                     onClick={handleLoadMore}
                     disabled={loading}
-                    className="px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-[#E39A2E] text-white font-medium rounded-lg hover:bg-[#d18a1f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                    className="px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-[#E39A2E] to-[#d18a1f] text-white font-medium rounded-lg hover:from-[#d18a1f] hover:to-[#E39A2E] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
                     {loading ? 'Loading...' : 'View More'}
                   </button>

@@ -2,8 +2,8 @@ import BlogClient from './BlogClient';
 
 export const metadata = {
   title: 'Blog | Insight and Updates',
-  description: 'A collection of hand-picked blogs for freelancers, by freelancers. Deep dives, insights, and honest advice to navigate the freelance landscape.',
-  keywords: ['blog', 'blogs', 'freelancers', 'insights', 'updates', 'productivity', 'company news', 'freelance advice', 'freelance tips'],
+  description: 'Explore our curated collection of articles on software development, digital innovation, and technology trends. Insights, best practices, and expert perspectives to help you navigate the evolving tech landscape.',
+  keywords: ['blog', 'blogs', 'software development', 'technology insights', 'digital innovation', 'tech trends', 'programming', 'IT solutions', 'software engineering', 'company news'],
   authors: [{ name: 'Sukrut' }],
   creator: 'Sukrut',
   publisher: 'Sukrut',
@@ -20,7 +20,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Blog | Insight and Updates',
-    description: 'A collection of hand-picked blogs for freelancers, by freelancers.',
+    description: 'Explore our curated collection of articles on software development, digital innovation, and technology trends.',
     type: 'website',
     siteName: 'Sukrut',
     locale: 'en_US',
@@ -28,7 +28,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Blog | Insight and Updates',
-    description: 'A collection of hand-picked blogs for freelancers, by freelancers.',
+    description: 'Explore our curated collection of articles on software development, digital innovation, and technology trends.',
     creator: '@sukrut',
   },
   alternates: {
@@ -89,7 +89,7 @@ export default async function BlogPage({ searchParams }) {
     '@context': 'https://schema.org',
     '@type': 'Blog',
     name: 'Sukrut Blog',
-    description: 'A collection of hand-picked blogs for freelancers, by freelancers. Deep dives, insights, and honest advice to navigate the freelance landscape.',
+    description: 'Explore our curated collection of articles on software development, digital innovation, and technology trends. Insights, best practices, and expert perspectives to help you navigate the evolving tech landscape.',
     url: '/blog',
     publisher: {
       '@type': 'Organization',
