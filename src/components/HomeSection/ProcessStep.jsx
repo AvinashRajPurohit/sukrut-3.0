@@ -10,11 +10,17 @@ export default function ProcessStep({ step, active, onClick }) {
     >
       {/* DOT */}
       <div
-        className={`
-          w-4 h-4 rounded-full z-10 transition-colors duration-300
-          ${active ? "bg-[#E39A2E]" : "bg-gray-300 group-hover:bg-gray-400"}
-        `}
-      />
+  className={`
+    w-4 h-4 rounded-full z-10
+    transition-all duration-500 ease-out
+    ${
+      active
+        ? "bg-[#E39A2E] scale-125 shadow-[0_0_0_6px_rgba(227,154,46,0.15)]"
+        : "bg-gray-300 scale-100 group-hover:bg-gray-400"
+    }
+  `}
+/>
+
 
       {/* TEXT */}
       <div className="mt-6 transition-colors duration-300">

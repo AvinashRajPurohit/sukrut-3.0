@@ -1,44 +1,28 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
 import TeamCard from "./TeamCard";
 
 export default function TeamCarousel({ members }) {
-  const [activeId, setActiveId] = useState(null);
-  const outerRef = useRef(null);
-
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (outerRef.current && !outerRef.current.contains(e.target)) {
-        setActiveId(null);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   return (
-    <section className="py-24">
-     
+    <section className="py-10">
+      <div className="mx-auto max-w-full">
 
-      {/* VIEWPORT */}
-      <div
-        ref={outerRef}
-        className="mx-auto max-w-[90%] overflow-hidden"
-      >
-        {/* SCROLL ROW */}
-        <div className="flex gap-10 space-y-10 overflow-x-auto no-scrollbar px-4">
-          {members.map((member) => (
-            <TeamCard
-              key={member.id}
-              member={member}
-              active={activeId === member.id}
-              onClick={() => setActiveId(member.id)}
-            />
-          ))}
+        {/* X SCROLL ONLY */}
+        <div
+          className="
+            overflow-x-scroll
+            overflow-y-visible
+            scrollbar-hide
+          "
+        >
+          {/* INNER ROW */}
+          <div className="flex gap-10 px-8 pt-44 pb-44 pl-20">
+            {members.map((member) => (
+              <TeamCard key={member.id} member={member} />
+            ))}
+          </div>
         </div>
+
       </div>
     </section>
   );

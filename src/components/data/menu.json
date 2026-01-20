@@ -1,11 +1,10 @@
 {
   "label": "Menu",
   "items": [
-    { "id": 1, "title": "About", "href": "/about" },
-    { "id": 2, "title": "Case Studies", "href": "/case-studies" },
-    { "id": 3, "title": "Testimonials", "href": "/testimonials" },
-    { "id": 4, "title": "Price", "href": "/price" },
-    { "id": 5, "title": "Contacts", "href": "/contacts" },
-    { "id": 6, "title": "FAQ", "href": "/faq" }
+    { "id": 1, "title": "Home", "href": "/" },
+    { "id": 2, "title": "About", "href": "/about" },
+    { "id": 3, "title": "Blog", "href": "/blog" },
+    { "id": 4, "title": "Contact", "href": "/contact" },
+    { "id": 5, "title": "FAQ", "href": "/faq" }
   ]
 }

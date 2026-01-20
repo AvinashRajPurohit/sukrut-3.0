@@ -1,5 +1,5 @@
 {
-  "badge": "OUR VALUE",
+  "badge": "Our Value",
   "heading": "WHY CLIENTS CHOOSE US",
   "items": [
     {
@@ -13,11 +13,6 @@
     },
     {
       "id": 2,
-      "type": "video",
-      "poster": "/poster.png"
-    },
-    {
-      "id": 3,
       "title": "Trusted by Businesses Worldwide",
       "quote": "The team delivered exactly what we needed — a fast, modern website that represents our brand globally.",
       "author": "Sarah L.",

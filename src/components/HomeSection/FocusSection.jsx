@@ -8,7 +8,7 @@ export default function FocusSection() {
   const [active, setActive] = useState(focusData.items[0].id);
 
   return (
-    <section className="py-24">
+    <section className="py-44">
       <div className="mx-auto max-w-[90%] rounded-3xl bg-[#2B2B2B]  p-14">
 
         {/* 🔥 CENTER HEADER */}
@@ -25,7 +25,7 @@ export default function FocusSection() {
         </div>
 
         {/* 🔥 CONTENT GRID */}
-        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-16 items-center py-10">
 
           {/* LEFT MOCKUP */}
           <FocusMockup active={active} />

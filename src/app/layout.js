@@ -1,5 +1,6 @@
 import "./globals.css";
 import ConditionalHeader from "@/components/shared/ConditionalHeader";
+import ContactFooterSection from "@/layout/Contact&FooterSection";
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -10,9 +11,14 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  title: "Sukrut",
+  title: "Sukrut Associates",
   description: "Engineering scalable digital systems",
+  icons: {
+    icon: "/sukrut_dark_mode_without_text_logo.png",
+    apple: "/sukrut_dark_mode_without_text_logo.png",
+  },
 };
+
 
 export default function RootLayout({ children }) {
   return (
@@ -46,6 +52,7 @@ export default function RootLayout({ children }) {
       <body className={plusJakartaSans.className}>
         <ConditionalHeader />
         {children}
+        <ContactFooterSection />
       </body>
     </html>
   );

@@ -7,7 +7,7 @@ import HeroMockup from "../Mockups/HeroMockup";
 export default function Hero() {
   return (
     <section
-      className="relative w-full bg-white"
+      className="relative w-full bg-white py-24"
       aria-labelledby="hero-heading"
     >
       <div className="mx-auto px-6  pb-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">

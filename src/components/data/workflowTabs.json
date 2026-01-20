@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "title": "STRATEGY & UX DESIGN",
+    "metric": "40%",
+    "metricLabel": "Faster Website Performance",
+    "description": "We begin with research-driven strategy and UX planning to reduce friction and create intuitive digital experiences.",
+    "image": "/strategy.png"
+  },
+  {
+    "id": 2,
+    "title": "WEBSITE DEVELOPMENT",
+    "metric": "99.9%",
+    "metricLabel": "Reliable & Scalable Builds",
+    "description": "Using modern frameworks and clean architecture, we build secure, scalable, and future-ready websites.",
+    "image": "/development.png"
+  },
+  {
+    "id": 3,
+    "title": "GLOBAL PERFORMANCE OPTIMIZATION",
+    "metric": "60%",
+    "metricLabel": "Faster Load Times Worldwide",
+    "description": "From asset optimization to CDN strategies, we ensure consistent performance across all geographies.",
+    "image": "/performance.png"
+  },
+  {
+    "id": 4,
+    "title": "ONGOING SUPPORT & MANAGEMENT",
+    "metric": "24/7",
+    "metricLabel": "Monitoring & Support",
+    "description": "Continuous monitoring, updates, and proactive support keep your platform secure and high-performing.",
+    "image": "/support.png"
+  },
+  {
+    "id": 5,
+    "title": "CONTINUOUS IMPROVEMENT & INSIGHTS",
+    "metric": "30%",
+    "metricLabel": "Conversion Growth",
+    "description": "We analyze user behavior and performance data to continuously refine and improve your digital experience.",
+    "image": "/insights.png"
+  }
+]

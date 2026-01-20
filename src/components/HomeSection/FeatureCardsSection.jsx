@@ -3,7 +3,7 @@ import cards from "@/components/data/featureCards.json";
 
 export default function FeatureCardsSection() {
   return (
-    <section className="py-24">
+    <section className="py-44">
       {/* ===== CENTER HEADER ===== */}
       <div className="mx-auto  text-center mb-20">
         <span className="inline-flex items-center gap-2 rounded-full border border-[#E39A2E] px-4 py-2 text-sm text-[#E39A2E]">

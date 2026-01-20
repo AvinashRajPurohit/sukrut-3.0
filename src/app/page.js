@@ -1,3 +1,4 @@
+import CTASection from "@/components/HomeSection/CTASection";
 import FeatureCardsSection from "@/components/HomeSection/FeatureCardsSection";
 import FocusSection from "@/components/HomeSection/FocusSection";
 import Hero from "@/components/HomeSection/Hero";
@@ -5,13 +6,14 @@ import ImpactSection from "@/components/HomeSection/ImpactSection";
 import ProcessSection from "@/components/HomeSection/ProcessSection";
 import TeamSection from "@/components/HomeSection/TeamSection";
 import WhyClientsSection from "@/components/HomeSection/WhyClientsSection";
+import WorkflowSection from "@/components/HomeSection/WorkflowSection";
 
 
 export default function Home() {
   return (
     <main
       role="main"
-      className="mx-auto px-6 py-20 space-y-32"
+      className="mx-auto"
     >
       {/* HERO */}
       <Hero />
@@ -23,9 +25,12 @@ export default function Home() {
       <FeatureCardsSection />
       {/* HOME – WHY CLIENT SECTION */}
       <WhyClientsSection />
+      <WorkflowSection/>
        {/* HOME – PROCESS SECTION */}
       <ProcessSection/>
       <TeamSection/>
+      <CTASection/>
+
     </main>
   );
 }

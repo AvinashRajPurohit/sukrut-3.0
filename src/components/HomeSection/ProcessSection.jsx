@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function ProcessSection() {
   return (
-    <section className="py-28 bg-white shadow-md rounded-4xl">
+    <section className="py-64 bg-white">
       <div className="mx-auto max-w-[90%] px-6">
 
         {/* TOP GRID */}

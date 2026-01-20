@@ -1,5 +1,5 @@
 import impactData from "@/components/data/impact.json";
-import OrbitCircles from "./OrbitGraphic";
+import OrbitCircles from "../Mockups/OrbitGraphic";
 
 export default function ImpactSection() {
   return (

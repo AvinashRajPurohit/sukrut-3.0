@@ -24,7 +24,7 @@ export default function FocusPoints({ data, active, onChange }) {
             key={item.id}
             onClick={() => onChange(item.id)}
             className={`
-              relative w-full text-left  px-6 py-6
+              relative w-full text-left  px-6 py-8
               transition-all duration-300 cursor-pointer
               ${isActive
                 ? "bg-[#3A3225] border border-[#E39A2E]"
