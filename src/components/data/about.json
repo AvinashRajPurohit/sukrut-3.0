@@ -1,0 +1,159 @@
+{
+  "hero": {
+    "title": "About Sukrut",
+    "description": "We craft digital solutions that transform how businesses operate, scale, and connect with their customers. Every line of code we write serves a purpose beyond technology.",
+    "featuredBox": {
+      "icon": "Users",
+      "title": "Building Tomorrow's Digital Infrastructure",
+      "description": "Our team combines technical expertise with business acumen to deliver systems that don't just work—they evolve. We understand that great software is built through collaboration, iteration, and a deep commitment to solving real-world challenges."
+    },
+    "images": [
+      {
+        "src": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop",
+        "alt": "Diverse team members collaborating in a modern office environment"
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop",
+        "alt": "Team members engaged in a collaborative discussion around a table"
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=600&fit=crop",
+        "alt": "Team members in a relaxed office lounge setting"
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800&h=600&fit=crop",
+        "alt": "Team members presenting and discussing data visualizations"
+      }
+    ]
+  },
+  "principles": {
+    "title": "What Drives Us\nForward",
+    "description": "These core beliefs guide our approach to building software and working with clients. They're not just words—they're the foundation of how we operate.",
+    "items": [
+      {
+        "id": 1,
+        "icon": "User",
+        "title": "Human-Centered Design",
+        "description": "Technology exists to serve people. We prioritize user experience and human needs in every solution we architect."
+      },
+      {
+        "id": 2,
+        "icon": "Heart",
+        "title": "Thoughtful Problem Solving",
+        "description": "We take time to understand the root cause before building solutions. Deep understanding leads to better outcomes."
+      },
+      {
+        "id": 3,
+        "icon": "CheckCircle",
+        "title": "Continuous Evolution",
+        "description": "The best systems adapt. We build with flexibility and future growth in mind, ensuring your technology scales with your vision."
+      }
+    ]
+  },
+  "growth": {
+    "title": "Partnership Beyond\nProjects",
+    "quote": "Success isn't measured by code alone—it's measured by the impact we create together. When you choose Sukrut, you're not just getting a vendor. You're gaining a partner committed to your long-term success, ready to navigate challenges and celebrate victories alongside you.",
+    "author": {
+      "name": "Deepak Rajpurohit",
+      "role": "Chief Executive Officer"
+    },
+    "image": {
+      "src": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=800&fit=crop",
+      "alt": "Diverse team members collaborating around a table with laptops in a modern office"
+    }
+  },
+  "team": {
+    "title": "Meet the Minds Building Sukrut",
+    "subtitle": "A collective of engineers, designers, and strategists who bring diverse perspectives to every challenge.",
+    "members": [
+      {
+        "id": 1,
+        "name": "Deepak Rajpurohit",
+        "role": "Chief Executive Officer",
+        "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"
+      },
+      {
+        "id": 2,
+        "name": "Isabella Schmidt",
+        "role": "Head of Product",
+        "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop"
+      },
+      {
+        "id": 3,
+        "name": "Matteo Rossi",
+        "role": "Engineering Lead",
+        "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop"
+      },
+      {
+        "id": 4,
+        "name": "Elena Fischer",
+        "role": "Marketing Strategist",
+        "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop"
+      },
+      {
+        "id": 5,
+        "name": "Alex Chen",
+        "role": "Lead Designer",
+        "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop"
+      },
+      {
+        "id": 6,
+        "name": "Sarah Johnson",
+        "role": "Operations Manager",
+        "image": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=400&fit=crop"
+      },
+      {
+        "id": 7,
+        "name": "Michael Brown",
+        "role": "Senior Developer",
+        "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop"
+      },
+      {
+        "id": 8,
+        "name": "Priya Patel",
+        "role": "Business Analyst",
+        "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop"
+      }
+    ]
+  },
+  "valuesMission": {
+    "mission": {
+      "title": "Our Mission",
+      "description": "To bridge the gap between complex technology and business needs, creating digital solutions that are both powerful and intuitive. We transform technical challenges into competitive advantages."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "To become the go-to technology partner for forward-thinking businesses, where every project sets a new standard for what's possible when engineering meets imagination."
+    },
+    "values": [
+      {
+        "id": 1,
+        "title": "Technical Mastery",
+        "description": "We stay ahead of the curve, mastering emerging technologies while maintaining expertise in proven frameworks."
+      },
+      {
+        "id": 2,
+        "title": "Quality Obsession",
+        "description": "Every detail matters. We write clean, maintainable code and build systems designed to last."
+      },
+      {
+        "id": 3,
+        "title": "Transparent Communication",
+        "description": "Honest dialogue builds stronger partnerships. We keep you informed every step of the way."
+      },
+      {
+        "id": 4,
+        "title": "Results-Driven Approach",
+        "description": "We measure success by the value we deliver—not just the features we ship, but the problems we solve."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Let's Build Something\nExtraordinary Together",
+    "description": "Every great project starts with a conversation. Reach out and let's explore how we can turn your vision into reality with technology that works for you.",
+    "button": {
+      "label": "Contact Us",
+      "href": "/contact"
+    }
+  }
+}
