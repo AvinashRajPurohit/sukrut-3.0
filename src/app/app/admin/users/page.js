@@ -11,6 +11,7 @@ import { Plus, Pencil, Trash2, Users, User, ShieldCheck, Power, Lock } from 'luc
 import { useNavbarActions } from '@/components/shared/NavbarActionsContext';
 import ConfirmationModal from '@/components/shared/ConfirmationModal';
 import ChangePasswordModal from '@/components/shared/ChangePasswordModal';
+import Alert from '@/components/shared/Alert';
 
 export default function UsersPage() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
-  const [formData, setFormData] = useState({ email: '', password: '', name: '', role: 'user', isActive: true });
+  const [formData, setFormData] = useState({ email: '', password: '', name: '', designation: '', role: 'user', isActive: true });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -36,7 +37,7 @@ export default function UsersPage() {
         variant="outline"
         onClick={() => {
           setEditingUser(null);
-          setFormData({ email: '', password: '', name: '', role: 'user', isActive: true });
+          setFormData({ email: '', password: '', name: '', designation: '', role: 'user', isActive: true });
           setShowModal(true);
         }}
       >
@@ -54,7 +55,12 @@ export default function UsersPage() {
       const res = await fetch('/app/api/admin/users');
       const data = await res.json();
       if (data.success) {
-        setUsers(data.users || []);
+        // Ensure all users have normalized IDs
+        const normalizedUsers = (data.users || []).map(user => ({
+          ...user,
+          id: user.id || user._id?.toString() || user._id
+        }));
+        setUsers(normalizedUsers);
       } else {
         setError(data.error || 'Failed to fetch users');
       }
@@ -73,6 +79,12 @@ export default function UsersPage() {
     setSubmitting(true);
 
     try {
+      if (editingUser && !editingUser.id) {
+        setError('Invalid user ID. Please try again.');
+        setSubmitting(false);
+        return;
+      }
+
       const url = editingUser 
         ? `/app/api/admin/users/${editingUser.id}`
         : '/app/api/admin/users';
@@ -88,11 +100,28 @@ export default function UsersPage() {
         delete submitData.password;
       }
 
+      // Ensure designation is included (even if empty string)
+      if (submitData.designation === undefined) {
+        submitData.designation = '';
+      }
+
+      console.log('Submitting user data:', { ...submitData, password: submitData.password ? '***' : undefined });
+
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submitData)
       });
+
+      // Check if response is JSON
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
+        setError('Server returned an invalid response. Please try again.');
+        setSubmitting(false);
+        return;
+      }
 
       const data = await res.json();
 
@@ -105,7 +134,7 @@ export default function UsersPage() {
       setSuccess(editingUser ? 'User updated successfully!' : 'User created successfully!');
       setShowModal(false);
       setEditingUser(null);
-      setFormData({ email: '', password: '', name: '', role: 'user', isActive: true });
+      setFormData({ email: '', password: '', name: '', designation: '', role: 'user', isActive: true });
       await fetchUsers();
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
@@ -117,11 +146,20 @@ export default function UsersPage() {
   };
 
   const handleEdit = (user) => {
-    setEditingUser({ id: user.id });
+    const userId = user.id || user._id?.toString() || user._id;
+    if (!userId) {
+      setError('Invalid user data. User ID is missing.');
+      console.error('User object:', user);
+      return;
+    }
+    // Ensure ID is a string
+    const normalizedId = userId.toString();
+    setEditingUser({ id: normalizedId });
     setFormData({
       email: user.email,
       password: '',
       name: user.name,
+      designation: user.designation || '',
       role: user.role,
       isActive: user.isActive !== undefined ? user.isActive : true
     });
@@ -131,6 +169,7 @@ export default function UsersPage() {
   const handleToggleActive = (user) => {
     const newStatus = !user.isActive;
     const action = newStatus ? 'activate' : 'deactivate';
+    const userId = user.id || user._id;
     
     setConfirmationModal({
       isOpen: true,
@@ -141,7 +180,7 @@ export default function UsersPage() {
       onConfirm: async () => {
         setConfirmationModal(prev => ({ ...prev, loading: true, error: '' }));
         try {
-          const res = await fetch(`/app/api/admin/users/${user.id}`, {
+          const res = await fetch(`/app/api/admin/users/${userId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ isActive: newStatus })
@@ -165,6 +204,7 @@ export default function UsersPage() {
   };
 
   const handleDelete = (user) => {
+    const userId = user.id || user._id;
     setConfirmationModal({
       isOpen: true,
       type: 'delete',
@@ -174,7 +214,7 @@ export default function UsersPage() {
       onConfirm: async () => {
         setConfirmationModal(prev => ({ ...prev, loading: true, error: '' }));
         try {
-          const res = await fetch(`/app/api/admin/users/${user.id}`, {
+          const res = await fetch(`/app/api/admin/users/${userId}`, {
             method: 'DELETE'
           });
 
@@ -196,9 +236,10 @@ export default function UsersPage() {
   };
 
   const handleChangePassword = (user) => {
+    const userId = user.id || user._id;
     setChangePasswordModal({
       isOpen: true,
-      userId: user.id,
+      userId: userId,
       userName: user.name
     });
   };
@@ -215,14 +256,10 @@ export default function UsersPage() {
     <>
       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {error && !showModal && (
-          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600 dark:text-red-400">
-            {error}
-          </div>
+          <Alert type="error" message={error} onDismiss={() => setError('')} />
         )}
         {success && (
-          <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg text-sm text-emerald-600 dark:text-emerald-400">
-            {success}
-          </div>
+          <Alert type="success" message={success} onDismiss={() => setSuccess('')} />
         )}
 
         <Card>
@@ -238,9 +275,11 @@ export default function UsersPage() {
             <div className="overflow-x-auto">
               <div className="min-w-full">
                 <div className="grid grid-cols-1 gap-3 pt-1">
-                  {users.map((user, index) => (
+                  {users.map((user, index) => {
+                    const userId = user.id || user._id;
+                    return (
                     <div
-                      key={user.id || user._id || index}
+                      key={userId || index}
                       className={`
                         group p-5 rounded-xl border-2 transition-all duration-300
                         bg-gradient-to-r from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/50
@@ -264,6 +303,11 @@ export default function UsersPage() {
                             <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1 truncate">
                               {user.name}
                             </h3>
+                            {user.designation && typeof user.designation === 'string' && user.designation.trim() && (
+                              <p className="text-sm text-slate-600 dark:text-slate-400 font-medium mb-1 truncate">
+                                {user.designation}
+                              </p>
+                            )}
                             <p className="text-sm text-slate-600 dark:text-slate-400 truncate">
                               {user.email}
                             </p>
@@ -325,7 +369,8 @@ export default function UsersPage() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -338,16 +383,14 @@ export default function UsersPage() {
         onClose={() => {
           setShowModal(false);
           setEditingUser(null);
-          setFormData({ email: '', password: '', name: '', role: 'user', isActive: true });
+          setFormData({ email: '', password: '', name: '', designation: '', role: 'user', isActive: true });
           setError('');
         }}
         title={editingUser ? 'Edit User' : 'Add User'}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-            </div>
+            <Alert type="error" message={error} onDismiss={() => setError('')} />
           )}
 
           <Input
@@ -356,6 +399,13 @@ export default function UsersPage() {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Enter full name"
             required
+          />
+
+          <Input
+            label="Designation"
+            value={formData.designation}
+            onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+            placeholder="Enter designation (e.g., Software Engineer, Manager)"
           />
 
           <Input

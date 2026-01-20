@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { verifyAccessToken } from './tokens';
+import { verifyAccessToken, shouldLogoutDueToDailyTime } from './tokens';
 import connectDB from '@/lib/db/connection';
 import User from '@/lib/db/models/User';
 
@@ -9,6 +9,11 @@ import User from '@/lib/db/models/User';
  */
 export async function getAuthenticatedUser() {
   try {
+    // Check if daily logout time has passed
+    if (shouldLogoutDueToDailyTime()) {
+      return null;
+    }
+
     const cookieStore = await cookies();
     const accessToken = cookieStore.get('accessToken')?.value;
 
@@ -32,6 +37,7 @@ export async function getAuthenticatedUser() {
       id: user._id.toString(),
       email: user.email,
       name: user.name,
+      designation: user.designation || null,
       role: user.role
     };
   } catch (error) {

@@ -8,6 +8,7 @@ import Input from '@/components/shared/Input';
 import { Plus, Pencil, Trash2, CheckCircle2, XCircle } from 'lucide-react';
 import { useNavbarActions } from '@/components/shared/NavbarActionsContext';
 import ConfirmationModal from '@/components/shared/ConfirmationModal';
+import Alert from '@/components/shared/Alert';
 
 export default function IPsPage() {
   const { setActions } = useNavbarActions();
@@ -47,6 +48,17 @@ export default function IPsPage() {
     setError('');
     try {
       const res = await fetch('/app/api/admin/ips');
+      
+      // Check if response is JSON
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
+        setError('Server returned an invalid response. Please try again.');
+        setLoading(false);
+        return;
+      }
+
       const data = await res.json();
       if (data.success) {
         setIPs(data.ips || []);
@@ -78,6 +90,16 @@ export default function IPsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
+
+      // Check if response is JSON
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
+        setError('Server returned an invalid response. Please try again.');
+        setSubmitting(false);
+        return;
+      }
 
       const data = await res.json();
 
@@ -118,6 +140,16 @@ export default function IPsPage() {
         body: JSON.stringify({ isActive: !ip.isActive })
       });
 
+      // Check if response is JSON
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
+        setError('Server returned an invalid response. Please try again.');
+        setTimeout(() => setError(''), 3000);
+        return;
+      }
+
       const data = await res.json();
       if (res.ok && data.success) {
         setSuccess(`IP ${ip.isActive ? 'deactivated' : 'activated'} successfully!`);
@@ -148,6 +180,15 @@ export default function IPsPage() {
             method: 'DELETE'
           });
 
+          // Check if response is JSON
+          const contentType = res.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            const text = await res.text();
+            console.error('Non-JSON response:', text.substring(0, 200));
+            setConfirmationModal(prev => ({ ...prev, loading: false, error: 'Server returned an invalid response. Please try again.' }));
+            return;
+          }
+
           const data = await res.json();
           if (res.ok && data.success) {
             setSuccess('IP deleted successfully!');
@@ -177,14 +218,10 @@ export default function IPsPage() {
     <>
       <div className="space-y-6">
         {error && !showModal && (
-          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600 dark:text-red-400">
-            {error}
-          </div>
+          <Alert type="error" message={error} onDismiss={() => setError('')} />
         )}
         {success && (
-          <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg text-sm text-emerald-600 dark:text-emerald-400">
-            {success}
-          </div>
+          <Alert type="success" message={success} onDismiss={() => setSuccess('')} />
         )}
 
         <Card>

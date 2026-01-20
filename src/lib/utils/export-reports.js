@@ -13,7 +13,7 @@ const getLeaveTypeLabel = (type) => {
   return labels[type] || type;
 };
 
-export function exportToPDF(records, fileName = 'reports') {
+export function exportToPDF(records, fileName = 'reports', visibleColumns = null, summary = null) {
   const doc = new jsPDF();
   
   // Title
@@ -24,175 +24,348 @@ export function exportToPDF(records, fileName = 'reports') {
   doc.setFontSize(10);
   doc.text(`Generated on: ${format(new Date(), 'MMM d, yyyy HH:mm')}`, 14, 30);
   
-  // Prepare table data
-  const tableData = records.map(record => {
-    if (record.type === 'attendance') {
-      const report = record.data;
-      const user = report.userId || {};
-      const punchIn = new Date(report.punchInTime);
-      const punchOut = report.punchOutTime ? new Date(report.punchOutTime) : null;
-      const hours = punchOut 
-        ? ((punchOut.getTime() - punchIn.getTime()) / (1000 * 60 * 60)).toFixed(2)
-        : '-';
-      
-      return [
-        format(record.date, 'MMM d, yyyy'),
-        user.name || 'Unknown',
-        'Attendance',
-        format(punchIn, 'HH:mm:ss'),
-        punchOut ? format(punchOut, 'HH:mm:ss') : '-',
-        hours !== '-' ? `${hours}h` : '-',
-        report.punchInLateReason || '-',
-        report.punchOutEarlyReason || '-',
-        punchOut ? 'Completed' : 'In Progress',
-        '-',
-        '-',
-        '-',
-        '-',
-        '-',
-        '-',
-        '-'
-      ];
-    } else {
-      const leave = record.data;
-      const user = leave.userId || {};
-      
-      return [
-        format(record.date, 'MMM d, yyyy'),
-        user.name || 'Unknown',
-        'Leave',
-        '-',
-        '-',
-        '-',
-        '-',
-        '-',
-        '-',
-        getLeaveTypeLabel(leave.leaveType),
-        leave.type === 'full-day' ? 'Full Day' : `Half Day (${leave.halfDayType === 'first-half' ? 'First Half' : 'Second Half'})`,
-        `${format(new Date(leave.startDate), 'MMM d')} - ${format(new Date(leave.endDate), 'MMM d, yyyy')}`,
-        leave.reason || '-',
-        leave.status.charAt(0).toUpperCase() + leave.status.slice(1),
-        leave.reviewedBy?.name || '-',
-        leave.rejectionReason || '-'
-      ];
-    }
-  });
-  
-  // Table headers
-  const headers = [
-    ['Date', 'User', 'Record Type', 'Punch In', 'Punch Out', 'Hours', 'Late Reason', 'Early Reason', 'Status', 
-     'Leave Type', 'Leave Duration', 'Leave Period', 'Leave Reason', 'Leave Status', 'Reviewed By', 'Rejection Reason']
+  // Define column mapping - order matters for data extraction
+  const columnMap = [
+    { id: 'date', label: 'Date', getValue: (record, type) => {
+      if (type === 'attendance') return format(record.date, 'MMM d, yyyy');
+      return format(record.date, 'MMM d, yyyy');
+    }},
+    { id: 'user', label: 'User', getValue: (record, type) => {
+      const user = type === 'attendance' ? record.data.userId || {} : record.data.userId || {};
+      return user.name || 'Unknown';
+    }},
+    { id: 'recordType', label: 'Record Type', getValue: (record, type) => {
+      return type === 'attendance' ? 'Attendance' : 'Leave';
+    }},
+    { id: 'punchIn', label: 'Punch In', getValue: (record, type) => {
+      if (type === 'attendance') {
+        const punchIn = new Date(record.data.punchInTime);
+        return format(punchIn, 'HH:mm:ss');
+      }
+      return '-';
+    }},
+    { id: 'punchOut', label: 'Punch Out', getValue: (record, type) => {
+      if (type === 'attendance' && record.data.punchOutTime) {
+        const punchOut = new Date(record.data.punchOutTime);
+        return format(punchOut, 'HH:mm:ss');
+      }
+      return '-';
+    }},
+    { id: 'hours', label: 'Hours', getValue: (record, type) => {
+      if (type === 'attendance' && record.data.punchOutTime) {
+        const punchIn = new Date(record.data.punchInTime);
+        const punchOut = new Date(record.data.punchOutTime);
+        const hours = ((punchOut.getTime() - punchIn.getTime()) / (1000 * 60 * 60)).toFixed(2);
+        return `${hours}h`;
+      }
+      return '-';
+    }},
+    { id: 'lateReason', label: 'Late Reason', getValue: (record, type) => {
+      return type === 'attendance' ? (record.data.punchInLateReason || '-') : '-';
+    }},
+    { id: 'earlyReason', label: 'Early Reason', getValue: (record, type) => {
+      return type === 'attendance' ? (record.data.punchOutEarlyReason || '-') : '-';
+    }},
+    { id: 'status', label: 'Status', getValue: (record, type) => {
+      if (type === 'attendance') {
+        return record.data.punchOutTime ? 'Completed' : 'In Progress';
+      }
+      return '-';
+    }},
+    { id: 'leaveType', label: 'Leave Type', getValue: (record, type) => {
+      return type === 'leave' ? getLeaveTypeLabel(record.data.leaveType) : '-';
+    }},
+    { id: 'leaveDuration', label: 'Leave Duration', getValue: (record, type) => {
+      if (type === 'leave') {
+        const leave = record.data;
+        return leave.type === 'full-day' ? 'Full Day' : `Half Day (${leave.halfDayType === 'first-half' ? 'First Half' : 'Second Half'})`;
+      }
+      return '-';
+    }},
+    { id: 'leavePeriod', label: 'Leave Period', getValue: (record, type) => {
+      if (type === 'leave') {
+        const leave = record.data;
+        return `${format(new Date(leave.startDate), 'MMM d')} - ${format(new Date(leave.endDate), 'MMM d, yyyy')}`;
+      }
+      return '-';
+    }},
+    { id: 'leaveReason', label: 'Leave Reason', getValue: (record, type) => {
+      return type === 'leave' ? (record.data.reason || '-') : '-';
+    }},
+    { id: 'leaveStatus', label: 'Leave Status', getValue: (record, type) => {
+      return type === 'leave' ? (record.data.status.charAt(0).toUpperCase() + record.data.status.slice(1)) : '-';
+    }},
+    { id: 'reviewedBy', label: 'Reviewed By', getValue: (record, type) => {
+      return type === 'leave' ? (record.data.reviewedBy?.name || '-') : '-';
+    }},
+    { id: 'rejectionReason', label: 'Rejection Reason', getValue: (record, type) => {
+      return type === 'leave' ? (record.data.rejectionReason || '-') : '-';
+    }}
   ];
   
+  // Filter columns based on visibility (if provided, otherwise show all)
+  const visibleColumnMap = visibleColumns 
+    ? columnMap.filter(col => visibleColumns[col.id] === true)
+    : columnMap;
+  
+  // Prepare table data with only visible columns
+  const tableData = records.map(record => {
+    const type = record.type;
+    return visibleColumnMap.map(col => col.getValue(record, type));
+  });
+  
+  // Table headers for visible columns only
+  const headers = [visibleColumnMap.map(col => col.label)];
+  
+  // Calculate column widths dynamically
+  const columnStyles = {};
+  const baseWidth = 180 / visibleColumnMap.length; // Distribute width across visible columns
+  visibleColumnMap.forEach((col, index) => {
+    // Adjust width based on column type
+    let width = baseWidth;
+    if (col.id === 'date') width = 25;
+    else if (col.id === 'user') width = 25;
+    else if (col.id === 'recordType') width = 20;
+    else if (col.id === 'punchIn' || col.id === 'punchOut') width = 18;
+    else if (col.id === 'hours') width = 15;
+    else if (col.id === 'lateReason' || col.id === 'earlyReason' || col.id === 'leaveReason') width = 30;
+    else if (col.id === 'leavePeriod') width = 35;
+    else if (col.id === 'rejectionReason') width = 30;
+    else width = 20;
+    
+    columnStyles[index] = { cellWidth: width };
+  });
+  
+  let startY = 35;
+  
+  // Add summary section if provided
+  if (summary) {
+    doc.setFontSize(12);
+    doc.text('Summary', 14, startY);
+    startY += 8;
+    
+    const summaryData = [
+      ['Metric', 'Value'],
+      ['Late Arrivals', summary.lateArrivals.toString()],
+      ['Early Leaves', summary.earlyLeaves.toString()],
+      ['Sick Leave', `${summary.sickLeave.toFixed(1)} days`],
+      ['Paid Leave', `${summary.paidLeave.toFixed(1)} days`],
+      ['Unpaid Leave', `${summary.unpaidLeave.toFixed(1)} days`],
+      ['Work From Home', `${summary.workFromHome.toFixed(1)} days`]
+    ];
+    
+    autoTable(doc, {
+      head: [summaryData[0]],
+      body: summaryData.slice(1),
+      startY: startY,
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [100, 100, 100] },
+      columnStyles: {
+        0: { cellWidth: 60 },
+        1: { cellWidth: 50 }
+      }
+    });
+    
+    startY = doc.lastAutoTable.finalY + 10;
+  }
+  
+  // Add main data table
   autoTable(doc, {
     head: headers,
     body: tableData,
-    startY: 35,
+    startY: startY,
     styles: { fontSize: 8 },
-    headStyles: { fillColor: [227, 154, 46] },
-    columnStyles: {
-      0: { cellWidth: 25 },
-      1: { cellWidth: 20 },
-      2: { cellWidth: 20 },
-      3: { cellWidth: 20 },
-      4: { cellWidth: 15 },
-      5: { cellWidth: 30 },
-      6: { cellWidth: 30 },
-      7: { cellWidth: 20 },
-      8: { cellWidth: 25 },
-      9: { cellWidth: 25 },
-      10: { cellWidth: 30 },
-      11: { cellWidth: 40 },
-      12: { cellWidth: 20 },
-      13: { cellWidth: 25 },
-      14: { cellWidth: 30 }
-    }
+    headStyles: { fillColor: [100, 100, 100] }, // Neutral gray color instead of primary
+    columnStyles: columnStyles
   });
   
   doc.save(`${fileName}_${format(new Date(), 'yyyy-MM-dd')}.pdf`);
 }
 
-export function exportToExcel(records, fileName = 'reports') {
-  // Prepare data
+export function exportToExcel(records, fileName = 'reports', visibleColumns = null, summary = null) {
+  // Define column mapping for Excel export
+  const columnMap = [
+    { id: 'date', label: 'Date', getValue: (record, type) => {
+      return format(record.date, 'MMM d, yyyy');
+    }},
+    { id: 'user', label: 'User Name', getValue: (record, type) => {
+      const user = type === 'attendance' ? record.data.userId || {} : record.data.userId || {};
+      return user.name || 'Unknown';
+    }},
+    { id: 'userEmail', label: 'User Email', getValue: (record, type) => {
+      const user = type === 'attendance' ? record.data.userId || {} : record.data.userId || {};
+      return user.email || '-';
+    }},
+    { id: 'recordType', label: 'Record Type', getValue: (record, type) => {
+      return type === 'attendance' ? 'Attendance' : 'Leave';
+    }},
+    { id: 'punchIn', label: 'Punch In', getValue: (record, type) => {
+      if (type === 'attendance') {
+        const punchIn = new Date(record.data.punchInTime);
+        return format(punchIn, 'HH:mm:ss');
+      }
+      return '-';
+    }},
+    { id: 'punchOut', label: 'Punch Out', getValue: (record, type) => {
+      if (type === 'attendance' && record.data.punchOutTime) {
+        const punchOut = new Date(record.data.punchOutTime);
+        return format(punchOut, 'HH:mm:ss');
+      }
+      return '-';
+    }},
+    { id: 'hours', label: 'Hours', getValue: (record, type) => {
+      if (type === 'attendance' && record.data.punchOutTime) {
+        const punchIn = new Date(record.data.punchInTime);
+        const punchOut = new Date(record.data.punchOutTime);
+        const hours = ((punchOut.getTime() - punchIn.getTime()) / (1000 * 60 * 60)).toFixed(2);
+        return `${hours}h`;
+      }
+      return '-';
+    }},
+    { id: 'lateReason', label: 'Late Reason', getValue: (record, type) => {
+      return type === 'attendance' ? (record.data.punchInLateReason || '-') : '-';
+    }},
+    { id: 'earlyReason', label: 'Early Reason', getValue: (record, type) => {
+      return type === 'attendance' ? (record.data.punchOutEarlyReason || '-') : '-';
+    }},
+    { id: 'status', label: 'Status', getValue: (record, type) => {
+      if (type === 'attendance') {
+        return record.data.punchOutTime ? 'Completed' : 'In Progress';
+      }
+      return '-';
+    }},
+    { id: 'leaveType', label: 'Leave Type', getValue: (record, type) => {
+      return type === 'leave' ? getLeaveTypeLabel(record.data.leaveType) : '-';
+    }},
+    { id: 'leaveDuration', label: 'Leave Duration', getValue: (record, type) => {
+      if (type === 'leave') {
+        const leave = record.data;
+        return leave.type === 'full-day' ? 'Full Day' : `Half Day (${leave.halfDayType === 'first-half' ? 'First Half' : 'Second Half'})`;
+      }
+      return '-';
+    }},
+    { id: 'leavePeriod', label: 'Leave Period', getValue: (record, type) => {
+      if (type === 'leave') {
+        const leave = record.data;
+        return `${format(new Date(leave.startDate), 'MMM d')} - ${format(new Date(leave.endDate), 'MMM d, yyyy')}`;
+      }
+      return '-';
+    }},
+    { id: 'leaveReason', label: 'Leave Reason', getValue: (record, type) => {
+      return type === 'leave' ? (record.data.reason || '-') : '-';
+    }},
+    { id: 'leaveStatus', label: 'Leave Status', getValue: (record, type) => {
+      return type === 'leave' ? (record.data.status.charAt(0).toUpperCase() + record.data.status.slice(1)) : '-';
+    }},
+    { id: 'reviewedBy', label: 'Reviewed By', getValue: (record, type) => {
+      return type === 'leave' ? (record.data.reviewedBy?.name || '-') : '-';
+    }},
+    { id: 'rejectionReason', label: 'Rejection Reason', getValue: (record, type) => {
+      return type === 'leave' ? (record.data.rejectionReason || '-') : '-';
+    }}
+  ];
+  
+  // Filter columns based on visibility (if provided, otherwise show all)
+  // For Excel, we always include userEmail if user is visible, and handle user column separately
+  let visibleColumnMap = visibleColumns 
+    ? columnMap.filter(col => {
+        if (col.id === 'userEmail') {
+          // Include email if user column is visible (for admin reports)
+          return visibleColumns['user'] === true;
+        }
+        return visibleColumns[col.id] === true;
+      })
+    : columnMap;
+  
+  // Prepare data with only visible columns
   const excelData = records.map(record => {
-    if (record.type === 'attendance') {
-      const report = record.data;
-      const user = report.userId || {};
-      const punchIn = new Date(report.punchInTime);
-      const punchOut = report.punchOutTime ? new Date(report.punchOutTime) : null;
-      const hours = punchOut 
-        ? ((punchOut.getTime() - punchIn.getTime()) / (1000 * 60 * 60)).toFixed(2)
-        : '-';
-      
-      return {
-        'Date': format(record.date, 'MMM d, yyyy'),
-        'Record Type': 'Attendance',
-        'User Name': user.name || '-',
-        'User Email': user.email || '-',
-        'Punch In': format(punchIn, 'HH:mm:ss'),
-        'Punch Out': punchOut ? format(punchOut, 'HH:mm:ss') : '-',
-        'Hours': hours !== '-' ? `${hours}h` : '-',
-        'Late Reason': report.punchInLateReason || '-',
-        'Early Reason': report.punchOutEarlyReason || '-',
-        'Status': punchOut ? 'Completed' : 'In Progress',
-        'Leave Type': '-',
-        'Leave Duration': '-',
-        'Leave Period': '-',
-        'Leave Reason': '-',
-        'Leave Status': '-',
-        'Reviewed By': '-',
-        'Rejection Reason': '-'
-      };
-    } else {
-      const leave = record.data;
-      const user = leave.userId || {};
-      
-      return {
-        'Date': format(record.date, 'MMM d, yyyy'),
-        'Record Type': 'Leave',
-        'User Name': user.name || '-',
-        'User Email': user.email || '-',
-        'Punch In': '-',
-        'Punch Out': '-',
-        'Hours': '-',
-        'Late Reason': '-',
-        'Early Reason': '-',
-        'Status': '-',
-        'Leave Type': getLeaveTypeLabel(leave.leaveType),
-        'Leave Duration': leave.type === 'full-day' ? 'Full Day' : `Half Day (${leave.halfDayType === 'first-half' ? 'First Half' : 'Second Half'})`,
-        'Leave Period': `${format(new Date(leave.startDate), 'MMM d')} - ${format(new Date(leave.endDate), 'MMM d, yyyy')}`,
-        'Leave Reason': leave.reason || '-',
-        'Leave Status': leave.status.charAt(0).toUpperCase() + leave.status.slice(1),
-        'Reviewed By': leave.reviewedBy?.name || '-',
-        'Rejection Reason': leave.rejectionReason || '-'
-      };
-    }
+    const type = record.type;
+    const row = {};
+    visibleColumnMap.forEach(col => {
+      row[col.label] = col.getValue(record, type);
+    });
+    return row;
   });
   
-  // Create workbook and worksheet
+  // Create workbook
   const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet(excelData);
+  
+  // Calculate number of columns needed
+  const numCols = visibleColumnMap.length;
+  
+  // Helper function to pad row to required column count
+  const padRow = (row) => {
+    const padded = [...row];
+    while (padded.length < numCols) {
+      padded.push('');
+    }
+    return padded;
+  };
+  
+  // Prepare complete worksheet data array
+  const worksheetData = [];
+  
+  // Add summary section if provided
+  if (summary && typeof summary === 'object') {
+    // Ensure summary has all required properties with defaults
+    const safeSummary = {
+      lateArrivals: summary.lateArrivals || 0,
+      earlyLeaves: summary.earlyLeaves || 0,
+      sickLeave: summary.sickLeave || 0,
+      paidLeave: summary.paidLeave || 0,
+      unpaidLeave: summary.unpaidLeave || 0,
+      workFromHome: summary.workFromHome || 0
+    };
+    
+    // Add summary rows (all padded to numCols)
+    worksheetData.push(padRow(['Summary']));
+    worksheetData.push(padRow([]));
+    worksheetData.push(padRow(['Metric', 'Value']));
+    worksheetData.push(padRow(['Late Arrivals', safeSummary.lateArrivals]));
+    worksheetData.push(padRow(['Early Leaves', safeSummary.earlyLeaves]));
+    worksheetData.push(padRow(['Sick Leave', `${safeSummary.sickLeave.toFixed(1)} days`]));
+    worksheetData.push(padRow(['Paid Leave', `${safeSummary.paidLeave.toFixed(1)} days`]));
+    worksheetData.push(padRow(['Unpaid Leave', `${safeSummary.unpaidLeave.toFixed(1)} days`]));
+    worksheetData.push(padRow(['Work From Home', `${safeSummary.workFromHome.toFixed(1)} days`]));
+    worksheetData.push(padRow([]));
+    worksheetData.push(padRow([]));
+  }
+  
+  // Add headers
+  const headers = visibleColumnMap.map(col => col.label);
+  worksheetData.push(headers);
+  
+  // Add data rows
+  excelData.forEach(row => {
+    const dataRow = visibleColumnMap.map(col => row[col.label]);
+    worksheetData.push(dataRow);
+  });
+  
+  // Create worksheet from complete data
+  const ws = XLSX.utils.aoa_to_sheet(worksheetData);
+  
+  // Set column widths for data columns
+  const colWidths = visibleColumnMap.map(col => {
+    if (col.id === 'date') return { wch: 15 };
+    else if (col.id === 'user' || col.id === 'userEmail') return { wch: 25 };
+    else if (col.id === 'recordType') return { wch: 15 };
+    else if (col.id === 'punchIn' || col.id === 'punchOut') return { wch: 12 };
+    else if (col.id === 'hours') return { wch: 10 };
+    else if (col.id === 'lateReason' || col.id === 'earlyReason' || col.id === 'leaveReason') return { wch: 30 };
+    else if (col.id === 'leavePeriod') return { wch: 35 };
+    else if (col.id === 'rejectionReason') return { wch: 30 };
+    else return { wch: 20 };
+  });
+  
+  // If summary exists, merge the title row and set column widths
+  if (summary && typeof summary === 'object') {
+    ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: numCols - 1 } } // Merge summary title row across all columns
+    ];
+  }
   
   // Set column widths
-  ws['!cols'] = [
-    { wch: 15 }, // Date
-    { wch: 15 }, // Record Type
-    { wch: 20 }, // User Name
-    { wch: 25 }, // User Email
-    { wch: 12 }, // Punch In
-    { wch: 12 }, // Punch Out
-    { wch: 10 }, // Hours
-    { wch: 30 }, // Late Reason
-    { wch: 30 }, // Early Reason
-    { wch: 15 }, // Status
-    { wch: 20 }, // Leave Type
-    { wch: 25 }, // Leave Duration
-    { wch: 30 }, // Leave Period
-    { wch: 40 }, // Leave Reason
-    { wch: 15 }, // Leave Status
-    { wch: 20 }, // Reviewed By
-    { wch: 30 }  // Rejection Reason
-  ];
+  ws['!cols'] = colWidths;
   
   XLSX.utils.book_append_sheet(wb, ws, 'Reports');
   XLSX.writeFile(wb, `${fileName}_${format(new Date(), 'yyyy-MM-dd')}.xlsx`);

@@ -301,6 +301,7 @@ export default function DatePicker({
               text-slate-900 dark:text-slate-100
               focus:outline-none focus:ring-2 focus:ring-[#E39A2E] focus:border-[#E39A2E]
               transition-all duration-200
+              cursor-pointer
               disabled:opacity-50 disabled:cursor-not-allowed
               ${error ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}
               ${isOpen ? 'ring-2 ring-[#E39A2E] border-[#E39A2E]' : ''}

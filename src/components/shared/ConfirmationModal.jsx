@@ -14,7 +14,8 @@ export default function ConfirmationModal({
   cancelText = 'Cancel',
   variant = 'danger', // 'danger', 'warning', 'info'
   icon: CustomIcon,
-  loading = false
+  loading = false,
+  error = ''
 }) {
   const variants = {
     danger: {
@@ -58,6 +59,12 @@ export default function ConfirmationModal({
         <div className="text-sm text-slate-600 dark:text-slate-400 mb-6">
           {typeof message === 'string' ? <p>{message}</p> : message}
         </div>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600 dark:text-red-400">
+            {error}
+          </div>
+        )}
 
         <div className="flex gap-3 justify-center">
           <Button

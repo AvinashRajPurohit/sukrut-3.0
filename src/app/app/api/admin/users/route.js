@@ -3,12 +3,14 @@ import connectDB from '@/lib/db/connection';
 import User from '@/lib/db/models/User';
 import { requireAdmin } from '@/lib/auth/middleware';
 import { hashPassword } from '@/lib/auth/password';
+import { createAdminNotification } from '@/lib/utils/notifications';
 import { z } from 'zod';
 
 const userSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   name: z.string().min(1, 'Name is required'),
+  designation: z.string().optional(),
   role: z.enum(['admin', 'user']).default('user')
 });
 
@@ -19,9 +21,21 @@ export async function GET(request) {
 
     const users = await User.find({}).select('-password').sort({ createdAt: -1 });
 
+    // Normalize user objects to use 'id' instead of '_id'
+    const normalizedUsers = users.map(user => ({
+      id: user._id.toString(),
+      email: user.email,
+      name: user.name,
+      designation: user.designation || null,
+      role: user.role,
+      isActive: user.isActive,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    }));
+
     return NextResponse.json({
       success: true,
-      users
+      users: normalizedUsers
     });
   } catch (error) {
     if (error.message === 'Unauthorized' || error.message.includes('Forbidden')) {
@@ -53,7 +67,7 @@ export async function POST(request) {
       );
     }
 
-    const { email, password, name, role } = validation.data;
+    const { email, password, name, designation, role } = validation.data;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email: email.toLowerCase() });
@@ -72,7 +86,22 @@ export async function POST(request) {
       email: email.toLowerCase(),
       password: hashedPassword,
       name,
+      designation: designation || '',
       role: role || 'user'
+    });
+
+    // Create admin notification for user registration
+    await createAdminNotification({
+      type: 'user_registered',
+      title: 'New User Registered',
+      message: `New ${role || 'user'} account created: ${name} (${email.toLowerCase()})`,
+      data: {
+        userId: user._id.toString(),
+        userName: name,
+        userEmail: email.toLowerCase(),
+        role: role || 'user'
+      },
+      priority: 'medium'
     });
 
     return NextResponse.json({
@@ -81,6 +110,7 @@ export async function POST(request) {
         id: user._id.toString(),
         email: user.email,
         name: user.name,
+        designation: user.designation,
         role: user.role,
         isActive: user.isActive
       }

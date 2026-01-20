@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { hasPassedLogoutTime } from '@/lib/utils/timezone';
 
 export function middleware(request) {
   const { pathname } = request.nextUrl;
@@ -6,8 +7,22 @@ export function middleware(request) {
   // Only protect /app routes
   if (pathname.startsWith('/app')) {
     // Allow API routes and login page
-    if (pathname.startsWith('/app/api/auth/login') || pathname === '/app/login') {
+    if (pathname.startsWith('/app/api/auth/login') || pathname.startsWith('/app/api/auth/refresh')) {
       return NextResponse.next();
+    }
+    
+    if (pathname === '/app/login') {
+      return NextResponse.next();
+    }
+
+    // Check if daily logout time has passed (using UTC)
+    const logoutTime = process.env.DAILY_LOGOUT_TIME || '12:00';
+    if (hasPassedLogoutTime(logoutTime, 'UTC')) {
+      // Clear cookies and redirect to login
+      const response = NextResponse.redirect(new URL('/app/login', request.url));
+      response.cookies.delete('accessToken');
+      response.cookies.delete('refreshToken');
+      return response;
     }
 
     // Check for access token

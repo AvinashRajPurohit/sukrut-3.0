@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db/connection';
 import AllowedIP from '@/lib/db/models/AllowedIP';
 import { requireAdmin } from '@/lib/auth/middleware';
+import { createAdminNotification } from '@/lib/utils/notifications';
 import { z } from 'zod';
 
 const ipSchema = z.object({
@@ -64,6 +65,19 @@ export async function POST(request) {
     const ip = await AllowedIP.create({
       ipAddress: ipAddress.trim(),
       description: description?.trim() || ''
+    });
+
+    // Create admin notification for IP addition
+    await createAdminNotification({
+      type: 'ip_added',
+      title: 'IP Address Added',
+      message: `New IP address added: ${ipAddress.trim()}${description ? ` - ${description}` : ''}`,
+      data: {
+        ipId: ip._id.toString(),
+        ipAddress: ipAddress.trim(),
+        description: description?.trim() || ''
+      },
+      priority: 'low'
     });
 
     return NextResponse.json({

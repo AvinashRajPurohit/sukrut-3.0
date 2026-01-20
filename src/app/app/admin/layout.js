@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import AdminSidebar from '@/components/admin/AdminSidebar';
+import NotificationBell from '@/components/admin/NotificationBell';
 import { NavbarActionsProvider, useNavbarActions } from '@/components/shared/NavbarActionsContext';
 
 const pageTitles = {
@@ -24,17 +25,16 @@ function AdminLayoutContent({ children }) {
       <AdminSidebar />
       <main className="flex-1 overflow-y-auto w-full flex flex-col">
         <div className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-          <div className="px-8 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">{pageInfo.title}</h1>
-                {pageInfo.subtitle && (
-                  <p className="text-sm text-slate-600 dark:text-slate-400">{pageInfo.subtitle}</p>
-                )}
-              </div>
-              <div className="flex items-center gap-4">
-                {actions}
-              </div>
+          <div className="px-8 flex items-center justify-between" style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', minHeight: 'calc(1.5rem * 2 + 2rem + 0.25rem + 1.25rem)' }}>
+            <div className="flex-1">
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">{pageInfo.title}</h1>
+              {pageInfo.subtitle && (
+                <p className="text-sm text-slate-600 dark:text-slate-400">{pageInfo.subtitle}</p>
+              )}
+            </div>
+            <div className="flex items-center gap-4">
+              <NotificationBell />
+              {actions}
             </div>
           </div>
         </div>

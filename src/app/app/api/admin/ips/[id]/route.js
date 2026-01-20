@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db/connection';
 import AllowedIP from '@/lib/db/models/AllowedIP';
 import { requireAdmin } from '@/lib/auth/middleware';
+import { createAdminNotification } from '@/lib/utils/notifications';
 import { z } from 'zod';
 
 const updateIPSchema = z.object({
@@ -15,6 +16,26 @@ export async function PUT(request, { params }) {
     await connectDB();
     await requireAdmin();
 
+    // Handle params as Promise (Next.js 15+) or object (older versions)
+    let ipId;
+    try {
+      const resolvedParams = params instanceof Promise ? await params : params;
+      ipId = resolvedParams?.id;
+    } catch (paramError) {
+      console.error('Error resolving params:', paramError);
+      return NextResponse.json(
+        { error: 'Invalid route parameters' },
+        { status: 400 }
+      );
+    }
+
+    if (!ipId) {
+      return NextResponse.json(
+        { error: 'IP ID is required' },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
     const validation = updateIPSchema.safeParse(body);
 
@@ -25,7 +46,7 @@ export async function PUT(request, { params }) {
       );
     }
 
-    const ip = await AllowedIP.findById(params.id);
+    const ip = await AllowedIP.findById(ipId);
     if (!ip) {
       return NextResponse.json(
         { error: 'IP not found' },
@@ -82,7 +103,27 @@ export async function DELETE(request, { params }) {
     await connectDB();
     await requireAdmin();
 
-    const ip = await AllowedIP.findById(params.id);
+    // Handle params as Promise (Next.js 15+) or object (older versions)
+    let ipId;
+    try {
+      const resolvedParams = params instanceof Promise ? await params : params;
+      ipId = resolvedParams?.id;
+    } catch (paramError) {
+      console.error('Error resolving params:', paramError);
+      return NextResponse.json(
+        { error: 'Invalid route parameters' },
+        { status: 400 }
+      );
+    }
+
+    if (!ipId) {
+      return NextResponse.json(
+        { error: 'IP ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const ip = await AllowedIP.findById(ipId);
     if (!ip) {
       return NextResponse.json(
         { error: 'IP not found' },
@@ -90,7 +131,20 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    await AllowedIP.deleteOne({ _id: params.id });
+    const ipAddress = ip.ipAddress;
+    await AllowedIP.deleteOne({ _id: ipId });
+
+    // Create notification for IP removal
+    await createAdminNotification({
+      type: 'ip_removed',
+      title: 'IP Address Removed',
+      message: `IP address removed: ${ipAddress}${ip.description ? ` - ${ip.description}` : ''}`,
+      data: {
+        ipAddress: ipAddress,
+        description: ip.description || ''
+      },
+      priority: 'low'
+    });
 
     return NextResponse.json({
       success: true,

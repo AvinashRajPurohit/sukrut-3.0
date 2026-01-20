@@ -65,7 +65,15 @@ export default function ProfileMenu() {
         </div>
         <div className="flex-1 text-left min-w-0">
           <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">{user.name}</p>
-          <p className="text-xs text-slate-600 dark:text-slate-400 truncate">{user.role === 'admin' ? 'Administrator' : 'User'}</p>
+          {user.designation && typeof user.designation === 'string' && user.designation.trim() ? (
+            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium truncate">
+              {user.designation}
+            </p>
+          ) : (
+            <p className="text-xs text-slate-600 dark:text-slate-400 truncate">
+              {user.role === 'admin' ? 'Administrator' : 'User'}
+            </p>
+          )}
         </div>
         <ChevronDown className={`w-4 h-4 text-slate-600 dark:text-slate-400 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
@@ -74,6 +82,11 @@ export default function ProfileMenu() {
         <div className="absolute bottom-full left-0 mb-2 w-full bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-2 z-50 animate-in fade-in slide-in-from-bottom-2">
           <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700">
             <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{user.name}</p>
+            {user.designation && typeof user.designation === 'string' && user.designation.trim() && (
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-1 truncate">
+                {user.designation}
+              </p>
+            )}
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 truncate">{user.email}</p>
             <span className={`inline-flex items-center mt-2 px-2 py-1 rounded-full text-xs font-medium ${
               user.role === 'admin' 

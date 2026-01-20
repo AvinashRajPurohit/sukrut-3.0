@@ -18,7 +18,26 @@ export async function PUT(request, { params }) {
     await connectDB();
     await requireAdmin();
 
-    const { id } = params;
+    // Handle params as Promise (Next.js 15+) or object (older versions)
+    let id;
+    try {
+      const resolvedParams = params instanceof Promise ? await params : params;
+      id = resolvedParams?.id;
+    } catch (paramError) {
+      console.error('Error resolving params:', paramError);
+      return NextResponse.json(
+        { error: 'Invalid route parameters' },
+        { status: 400 }
+      );
+    }
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Holiday ID is required' },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
     const validated = holidaySchema.parse(body);
 
@@ -70,7 +89,26 @@ export async function DELETE(request, { params }) {
     await connectDB();
     await requireAdmin();
 
-    const { id } = params;
+    // Handle params as Promise (Next.js 15+) or object (older versions)
+    let id;
+    try {
+      const resolvedParams = params instanceof Promise ? await params : params;
+      id = resolvedParams?.id;
+    } catch (paramError) {
+      console.error('Error resolving params:', paramError);
+      return NextResponse.json(
+        { error: 'Invalid route parameters' },
+        { status: 400 }
+      );
+    }
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Holiday ID is required' },
+        { status: 400 }
+      );
+    }
+
     const holiday = await Holiday.findByIdAndDelete(id);
 
     if (!holiday) {

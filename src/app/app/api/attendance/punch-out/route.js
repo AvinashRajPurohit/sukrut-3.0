@@ -2,11 +2,14 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db/connection';
 import AttendanceRecord from '@/lib/db/models/AttendanceRecord';
 import AttendanceConfig from '@/lib/db/models/AttendanceConfig';
+import User from '@/lib/db/models/User';
 import { requireAuth } from '@/lib/auth/middleware';
-import { validateIP, getClientIP } from '@/lib/utils/ip-validation';
+import { validateIPForPunch, getClientIP } from '@/lib/utils/ip-validation';
 import { isEarlyPunchOut } from '@/lib/utils/time-validation';
 import { canPunchOnDate } from '@/lib/utils/attendance-validation';
+import { createAdminNotification } from '@/lib/utils/notifications';
 import { startOfDay } from 'date-fns';
+import { format } from 'date-fns';
 
 export async function POST(request) {
   try {
@@ -14,11 +17,15 @@ export async function POST(request) {
 
     const user = await requireAuth();
 
-    // Validate IP
-    const ipValidation = await validateIP(request);
+    // Validate IP for punch in/out (strict - only configured IPs allowed)
+    const ipValidation = await validateIPForPunch(request);
     if (!ipValidation.valid) {
       return NextResponse.json(
-        { error: ipValidation.message },
+        { 
+          error: ipValidation.message,
+          requiresAllowedIP: true,
+          currentIP: getClientIP(request)
+        },
         { status: 403 }
       );
     }
@@ -88,6 +95,37 @@ export async function POST(request) {
     record.punchOutIP = clientIP;
     record.punchOutEarlyReason = earlyReason;
     await record.save();
+
+    // Create admin notification
+    const userDetails = await User.findById(user.id).select('name email');
+    if (isEarly) {
+      await createAdminNotification({
+        type: 'early_departure',
+        title: 'Early Departure',
+        message: `${userDetails?.name || 'User'} punched out early at ${format(now, 'HH:mm')}${earlyReason ? ` - ${earlyReason}` : ''}`,
+        data: {
+          userId: user.id,
+          userName: userDetails?.name,
+          userEmail: userDetails?.email,
+          punchOutTime: now,
+          reason: earlyReason
+        },
+        priority: 'high'
+      });
+    } else {
+      await createAdminNotification({
+        type: 'punch_out',
+        title: 'Punch Out',
+        message: `${userDetails?.name || 'User'} punched out at ${format(now, 'HH:mm')}`,
+        data: {
+          userId: user.id,
+          userName: userDetails?.name,
+          userEmail: userDetails?.email,
+          punchOutTime: now
+        },
+        priority: 'medium'
+      });
+    }
 
     return NextResponse.json({
       success: true,

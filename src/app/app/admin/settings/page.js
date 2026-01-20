@@ -8,6 +8,7 @@ import TimePicker from '@/components/shared/TimePicker';
 import Tabs from '@/components/shared/Tabs';
 import Select from '@/components/shared/Select';
 import { Clock, Calendar, Settings as SettingsIcon } from 'lucide-react';
+import Alert from '@/components/shared/Alert';
 
 export default function SettingsPage() {
   const [config, setConfig] = useState(null);
@@ -29,6 +30,8 @@ export default function SettingsPage() {
   }, []);
 
   const fetchConfig = async () => {
+    setLoading(true);
+    setError('');
     try {
       const [configRes, weekendRes, leaveConfigRes] = await Promise.all([
         fetch('/app/api/admin/config'),
@@ -36,14 +39,21 @@ export default function SettingsPage() {
         fetch('/app/api/admin/leave-config')
       ]);
 
+      // Check content types
+      const configContentType = configRes.headers.get('content-type');
+      const weekendContentType = weekendRes.headers.get('content-type');
+      const leaveConfigContentType = leaveConfigRes.headers.get('content-type');
+
       const [configData, weekendData, leaveConfigData] = await Promise.all([
-        configRes.json(),
-        weekendRes.json(),
-        leaveConfigRes.json()
+        configContentType && configContentType.includes('application/json') ? configRes.json() : { success: false, error: 'Invalid response' },
+        weekendContentType && weekendContentType.includes('application/json') ? weekendRes.json() : { success: false, error: 'Invalid response' },
+        leaveConfigContentType && leaveConfigContentType.includes('application/json') ? leaveConfigRes.json() : { success: false, error: 'Invalid response' }
       ]);
 
       if (configData.success) {
         setConfig(configData.config);
+      } else {
+        setError(configData.error || 'Failed to load configuration');
       }
       if (weekendData.success) {
         setWeekendConfig(weekendData.config);
@@ -53,6 +63,7 @@ export default function SettingsPage() {
       }
     } catch (error) {
       console.error('Error fetching config:', error);
+      setError('Failed to load configuration. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -166,15 +177,11 @@ export default function SettingsPage() {
         <Card>
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-              </div>
+              <Alert type="error" message={error} onDismiss={() => setError('')} />
             )}
 
             {success && (
-              <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg">
-                <p className="text-sm text-emerald-600 dark:text-emerald-400">{success}</p>
-              </div>
+              <Alert type="success" message={success} onDismiss={() => setSuccess('')} />
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -267,15 +274,11 @@ export default function SettingsPage() {
           <Card>
             <form onSubmit={handleLeaveConfigSubmit} className="space-y-6">
               {error && (
-                <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                  <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-                </div>
+                <Alert type="error" message={error} onDismiss={() => setError('')} />
               )}
 
               {success && (
-                <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg">
-                  <p className="text-sm text-emerald-600 dark:text-emerald-400">{success}</p>
-                </div>
+                <Alert type="success" message={success} onDismiss={() => setSuccess('')} />
               )}
 
               <div className="space-y-6">

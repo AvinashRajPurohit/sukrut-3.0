@@ -41,7 +41,7 @@ const leaveRequestSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'approved', 'rejected'],
+    enum: ['pending', 'approved', 'rejected', 'cancelled'],
     default: 'pending',
     index: true
   },
@@ -66,9 +66,13 @@ const leaveRequestSchema = new mongoose.Schema({
   }
 });
 
-leaveRequestSchema.pre('save', function(next) {
-  this.updatedAt = Date.now();
-  next();
+leaveRequestSchema.pre('save', async function() {
+  this.updatedAt = new Date();
 });
 
-export default mongoose.models.LeaveRequest || mongoose.model('LeaveRequest', leaveRequestSchema);
+// Delete the model if it exists to force recompilation with new schema
+if (mongoose.models.LeaveRequest) {
+  delete mongoose.models.LeaveRequest;
+}
+
+export default mongoose.model('LeaveRequest', leaveRequestSchema);

@@ -63,9 +63,8 @@ const LeaveConfigSchema = new mongoose.Schema({
   },
 });
 
-LeaveConfigSchema.pre('save', function(next) {
-  this.updatedAt = Date.now();
-  next();
+LeaveConfigSchema.pre('save', async function() {
+  this.updatedAt = new Date();
 });
 
 export default mongoose.models.LeaveConfig || mongoose.model('LeaveConfig', LeaveConfigSchema);

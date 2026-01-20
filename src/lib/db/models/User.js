@@ -18,6 +18,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  designation: {
+    type: String,
+    trim: true,
+    default: null,
+    sparse: true
+  },
   role: {
     type: String,
     enum: ['admin', 'user'],
@@ -32,4 +38,9 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-export default mongoose.models.User || mongoose.model('User', userSchema);
+// Delete the model if it exists to force recompilation with new schema
+if (mongoose.models.User) {
+  delete mongoose.models.User;
+}
+
+export default mongoose.model('User', userSchema);

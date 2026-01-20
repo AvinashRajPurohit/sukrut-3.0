@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db/connection';
 import LeaveRequest from '@/lib/db/models/LeaveRequest';
+import User from '@/lib/db/models/User';
 import { requireAuth } from '@/lib/auth/middleware';
 import { canApplyLeave } from '@/lib/utils/leave-validation';
+import { createAdminNotification } from '@/lib/utils/notifications';
 import { z } from 'zod';
-import { startOfDay, endOfDay } from 'date-fns';
+import { startOfDay, endOfDay, format } from 'date-fns';
 
 const leaveRequestSchema = z.object({
   leaveType: z.enum(['sick-leave', 'paid-leave', 'unpaid-leave', 'work-from-home']),
@@ -32,7 +34,7 @@ export async function GET(request) {
     const year = searchParams.get('year');
     const month = searchParams.get('month');
 
-    const query = { userId: user.userId };
+    const query = { userId: user.id };
     if (year) {
       const startDate = new Date(parseInt(year), month ? parseInt(month) - 1 : 0, 1);
       const endDate = new Date(parseInt(year), month ? parseInt(month) : 11, 31, 23, 59, 59);
@@ -83,7 +85,7 @@ export async function POST(request) {
 
     // Validate leave limits
     const leaveValidation = await canApplyLeave(
-      user.userId,
+      user.id,
       validated.leaveType,
       startDate,
       endDate,
@@ -99,7 +101,7 @@ export async function POST(request) {
 
     // Check for overlapping leave requests
     const overlapping = await LeaveRequest.findOne({
-      userId: user.userId,
+      userId: user.id,
       status: { $in: ['pending', 'approved'] },
       $or: [
         { startDate: { $lte: endDate }, endDate: { $gte: startDate } }
@@ -115,9 +117,35 @@ export async function POST(request) {
 
     const leaveRequest = await LeaveRequest.create({
       ...validated,
-      userId: user.userId,
+      userId: user.id,
       startDate,
       endDate
+    });
+
+    // Create admin notification for new leave request
+    const userDetails = await User.findById(user.id).select('name email');
+    const leaveTypeLabels = {
+      'sick-leave': 'Sick Leave',
+      'paid-leave': 'Paid Leave',
+      'unpaid-leave': 'Unpaid Leave',
+      'work-from-home': 'Work From Home'
+    };
+    
+    await createAdminNotification({
+      type: 'leave_request',
+      title: 'New Leave Request',
+      message: `${userDetails?.name || 'User'} requested ${leaveTypeLabels[validated.leaveType] || validated.leaveType} from ${format(startDate, 'MMM d')} to ${format(endDate, 'MMM d, yyyy')}`,
+      data: {
+        leaveRequestId: leaveRequest._id.toString(),
+        userId: user.id,
+        userName: userDetails?.name,
+        userEmail: userDetails?.email,
+        leaveType: validated.leaveType,
+        startDate,
+        endDate,
+        reason: validated.reason
+      },
+      priority: 'high'
     });
 
     return NextResponse.json({

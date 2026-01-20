@@ -87,6 +87,20 @@ export default function UserReportsPage() {
       }
 
       const res = await fetch(`/app/api/user/reports?page=${pageNum}&limit=${LIMIT}`);
+      
+      // Check if response is JSON
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
+        if (isInitial) {
+          setLoading(false);
+        } else {
+          setLoadingMore(false);
+        }
+        return;
+      }
+
       const data = await res.json();
       
       if (data.success) {
@@ -126,7 +140,9 @@ export default function UserReportsPage() {
         setHasMore(data.pagination?.hasMore || false);
         setPage(pageNum);
       } else {
-        router.push('/app/login');
+        if (data.error === 'Unauthorized') {
+          router.push('/app/login');
+        }
       }
     } catch (error) {
       console.error('Error fetching reports:', error);
@@ -224,7 +240,7 @@ export default function UserReportsPage() {
         }));
       })
     ].sort((a, b) => b.date.getTime() - a.date.getTime());
-    exportToPDF(allRecords, 'my-reports');
+    exportToPDF(allRecords, 'my-reports', visibleColumns, summary);
   };
 
   const handleExportExcel = () => {
@@ -246,7 +262,7 @@ export default function UserReportsPage() {
         }));
       })
     ].sort((a, b) => b.date.getTime() - a.date.getTime());
-    exportToExcel(allRecords, 'my-reports');
+    exportToExcel(allRecords, 'my-reports', visibleColumns, summary);
   };
 
   const toggleColumn = (columnId) => {
@@ -359,7 +375,7 @@ export default function UserReportsPage() {
                     e.stopPropagation();
                     toggleColumn(column.id);
                   }}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
                     visibleColumns[column.id] ? 'bg-[#E39A2E]' : 'bg-slate-300 dark:bg-slate-600'
                   }`}
                 >
@@ -381,8 +397,9 @@ export default function UserReportsPage() {
             <p className="text-sm text-slate-500 dark:text-slate-500">Start punching in or apply for leave to see your records here</p>
           </div>
         ) : (
-          <div className="relative">
-            <div className="overflow-x-auto" style={{ maxHeight: 'calc(100vh - 400px)', overflowY: 'auto' }}>
+          <div className="flex flex-col" style={{ maxHeight: 'calc(100vh - 400px)' }}>
+            {/* Table Container with Single Horizontal Scroll */}
+            <div className="flex-1 flex flex-col min-h-0 overflow-x-auto overflow-y-auto">
               <table className="w-full" style={{ minWidth: '1600px' }}>
                 <thead className="sticky top-0 bg-white dark:bg-slate-900 z-10">
                   <tr className="border-b border-slate-200 dark:border-slate-700">
@@ -570,15 +587,12 @@ export default function UserReportsPage() {
                 </tbody>
               </table>
             </div>
-          </div>
-        )}
-
-        {/* Summary Section - Fixed at bottom, no horizontal scroll */}
-        {displayedRecords.length > 0 && (
-          <div className="sticky bottom-0 mt-4 z-20">
-            <Card className="border-t-2 border-slate-300 dark:border-slate-600">
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4">Summary</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            
+            {/* Summary Section - Fixed at bottom of table container */}
+            {displayedRecords.length > 0 && (
+              <div className="shrink-0 border-t-2 border-slate-300 dark:border-slate-600 pt-4 mt-4">
+                <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4">Summary</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 pb-2">
                 <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
                   <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Late Arrivals</p>
                   <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{summary.lateArrivals}</p>
@@ -604,7 +618,8 @@ export default function UserReportsPage() {
                   <p className="text-lg font-bold text-purple-600 dark:text-purple-400">{summary.workFromHome.toFixed(1)} days</p>
                 </div>
               </div>
-            </Card>
+            </div>
+          )}
           </div>
         )}
       </Card>

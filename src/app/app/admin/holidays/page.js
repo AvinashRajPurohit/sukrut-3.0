@@ -183,14 +183,10 @@ export default function HolidaysPage() {
   return (
     <div className="space-y-6">
       {error && !showModal && (
-        <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600 dark:text-red-400">
-          {error}
-        </div>
+        <Alert type="error" message={error} onDismiss={() => setError('')} />
       )}
       {success && (
-        <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg text-sm text-emerald-600 dark:text-emerald-400">
-          {success}
-        </div>
+        <Alert type="success" message={success} onDismiss={() => setSuccess('')} />
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -205,7 +201,7 @@ export default function HolidaysPage() {
 
         {/* Holidays List */}
         <Card>
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between gap-4 mb-6">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Holidays</h2>
             <Select
               value={currentYear.toString()}
@@ -283,9 +279,7 @@ export default function HolidaysPage() {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600 dark:text-red-400">
-              {error}
-            </div>
+            <Alert type="error" message={error} onDismiss={() => setError('')} />
           )}
           <Input
             label="Holiday Name"

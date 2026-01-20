@@ -90,6 +90,14 @@ export default function ReportsPage() {
     });
   }, []);
 
+  // Refetch reports when filters change
+  useEffect(() => {
+    // Skip initial mount to avoid double fetch
+    if (users.length === 0) return;
+    
+    fetchReports(1, true);
+  }, [selectedUserId, startDate, endDate]);
+
   const fetchReports = async (pageNum = 1, isInitial = false) => {
     try {
       if (isInitial) {
@@ -106,6 +114,20 @@ export default function ReportsPage() {
       params.append('limit', LIMIT);
 
       const res = await fetch(`/app/api/admin/reports?${params}`);
+      
+      // Check if response is JSON
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
+        if (isInitial) {
+          setLoading(false);
+        } else {
+          setLoadingMore(false);
+        }
+        return;
+      }
+
       const data = await res.json();
       
       if (data.success) {
@@ -243,7 +265,7 @@ export default function ReportsPage() {
         observer.unobserve(currentTarget);
       }
     };
-  }, [hasMore, loadingMore, page, startDate, endDate, selectedUserId]);
+  }, [hasMore, loadingMore, page]);
 
   const handleFilter = () => {
     fetchReports(1, true);
@@ -299,7 +321,7 @@ export default function ReportsPage() {
       }
     });
     
-    exportToPDF(filtered, 'admin-reports');
+    exportToPDF(filtered, 'admin-reports', visibleColumns, summary);
   };
 
   const handleExportExcel = () => {
@@ -344,7 +366,7 @@ export default function ReportsPage() {
       }
     });
     
-    exportToExcel(filtered, 'admin-reports');
+    exportToExcel(filtered, 'admin-reports', visibleColumns, summary);
   };
 
   const toggleColumn = (columnId) => {
@@ -381,7 +403,7 @@ export default function ReportsPage() {
                 onChange={(value) => setSelectedUserId(value)}
                 options={[
                   { value: '', label: 'All Users', icon: Users },
-                  ...users.map(user => ({ value: user._id, label: user.name, icon: Users }))
+                  ...users.map(user => ({ value: user.id || user._id, label: user.name, icon: Users }))
                 ]}
                 placeholder="Select user"
                 icon={Users}
@@ -481,7 +503,7 @@ export default function ReportsPage() {
                     e.stopPropagation();
                     toggleColumn(column.id);
                   }}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
                     visibleColumns[column.id] ? 'bg-[#E39A2E]' : 'bg-slate-300 dark:bg-slate-600'
                   }`}
                 >
@@ -503,8 +525,9 @@ export default function ReportsPage() {
             <p className="text-sm text-slate-500 dark:text-slate-500">Try adjusting your filters</p>
           </div>
         ) : (
-          <div className="relative">
-            <div className="overflow-x-auto" style={{ maxHeight: 'calc(100vh - 400px)', overflowY: 'auto' }}>
+          <div className="flex flex-col" style={{ maxHeight: 'calc(100vh - 400px)' }}>
+            {/* Table Container with Single Horizontal Scroll */}
+            <div className="flex-1 flex flex-col min-h-0 overflow-x-auto overflow-y-auto">
               <table className="w-full" style={{ minWidth: '1700px' }}>
                 <thead className="sticky top-0 bg-white dark:bg-slate-900 z-10">
                   <tr className="border-b border-slate-200 dark:border-slate-700">
@@ -711,41 +734,39 @@ export default function ReportsPage() {
                 </tbody>
               </table>
             </div>
-          </div>
-        )}
-
-        {/* Summary Section - Fixed at bottom, no horizontal scroll */}
-        {filteredRecords.length > 0 && (
-          <div className="sticky bottom-0 mt-4 z-20">
-            <Card className="border-t-2 border-slate-300 dark:border-slate-600">
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4">Summary</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Late Arrivals</p>
-                  <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{summary.lateArrivals}</p>
-                </div>
-                <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Early Leaves</p>
-                  <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{summary.earlyLeaves}</p>
-                </div>
-                <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Sick Leave</p>
-                  <p className="text-lg font-bold text-red-600 dark:text-red-400">{summary.sickLeave.toFixed(1)} days</p>
-                </div>
-                <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Paid Leave</p>
-                  <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{summary.paidLeave.toFixed(1)} days</p>
-                </div>
-                <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Unpaid Leave</p>
-                  <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{summary.unpaidLeave.toFixed(1)} days</p>
-                </div>
-                <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Work From Home</p>
-                  <p className="text-lg font-bold text-purple-600 dark:text-purple-400">{summary.workFromHome.toFixed(1)} days</p>
+            
+            {/* Summary Section - Fixed at bottom of table container */}
+            {filteredRecords.length > 0 && (
+              <div className="shrink-0 border-t-2 border-slate-300 dark:border-slate-600 pt-4 mt-4">
+                <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4">Summary</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 pb-2">
+                  <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Late Arrivals</p>
+                    <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{summary.lateArrivals}</p>
+                  </div>
+                  <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Early Leaves</p>
+                    <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{summary.earlyLeaves}</p>
+                  </div>
+                  <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Sick Leave</p>
+                    <p className="text-lg font-bold text-red-600 dark:text-red-400">{summary.sickLeave.toFixed(1)} days</p>
+                  </div>
+                  <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Paid Leave</p>
+                    <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{summary.paidLeave.toFixed(1)} days</p>
+                  </div>
+                  <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Unpaid Leave</p>
+                    <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{summary.unpaidLeave.toFixed(1)} days</p>
+                  </div>
+                  <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Work From Home</p>
+                    <p className="text-lg font-bold text-purple-600 dark:text-purple-400">{summary.workFromHome.toFixed(1)} days</p>
+                  </div>
                 </div>
               </div>
-            </Card>
+            )}
           </div>
         )}
       </Card>

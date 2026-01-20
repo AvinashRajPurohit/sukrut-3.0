@@ -2,8 +2,9 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db/connection';
 import Holiday from '@/lib/db/models/Holiday';
 import { requireAdmin } from '@/lib/auth/middleware';
+import { createAdminNotification } from '@/lib/utils/notifications';
 import { z } from 'zod';
-import { startOfDay } from 'date-fns';
+import { startOfDay, format } from 'date-fns';
 
 const holidaySchema = z.object({
   name: z.string().min(1, 'Holiday name is required'),
@@ -61,6 +62,21 @@ export async function POST(request) {
     const holiday = await Holiday.create({
       ...validated,
       date: startOfDay(new Date(validated.date))
+    });
+
+    // Create admin notification for holiday addition
+    await createAdminNotification({
+      type: 'holiday_added',
+      title: 'Holiday Added',
+      message: `New ${validated.type === 'holiday' ? 'holiday' : 'weekend'} added: ${validated.name} on ${format(holiday.date, 'MMM d, yyyy')}${validated.isRecurring ? ' (Recurring)' : ''}`,
+      data: {
+        holidayId: holiday._id.toString(),
+        holidayName: validated.name,
+        date: holiday.date,
+        type: validated.type,
+        isRecurring: validated.isRecurring
+      },
+      priority: 'low'
     });
 
     return NextResponse.json({

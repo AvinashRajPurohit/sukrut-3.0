@@ -21,9 +21,8 @@ const weekendConfigSchema = new mongoose.Schema({
   }
 });
 
-weekendConfigSchema.pre('save', function(next) {
-  this.updatedAt = Date.now();
-  next();
+weekendConfigSchema.pre('save', async function() {
+  this.updatedAt = new Date();
 });
 
 export default mongoose.models.WeekendConfig || mongoose.model('WeekendConfig', weekendConfigSchema);

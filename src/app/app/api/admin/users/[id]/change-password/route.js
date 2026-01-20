@@ -15,6 +15,26 @@ export async function PUT(request, { params }) {
     await connectDB();
     await requireAdmin();
 
+    // Handle params as Promise (Next.js 15+) or object (older versions)
+    let userId;
+    try {
+      const resolvedParams = params instanceof Promise ? await params : params;
+      userId = resolvedParams?.id;
+    } catch (paramError) {
+      console.error('Error resolving params:', paramError);
+      return NextResponse.json(
+        { error: 'Invalid route parameters' },
+        { status: 400 }
+      );
+    }
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
     const validation = changePasswordSchema.safeParse(body);
 
@@ -25,7 +45,7 @@ export async function PUT(request, { params }) {
       );
     }
 
-    const user = await User.findById(params.id);
+    const user = await User.findById(userId);
     if (!user) {
       return NextResponse.json(
         { error: 'User not found' },

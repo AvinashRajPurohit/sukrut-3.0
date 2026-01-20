@@ -7,6 +7,7 @@ import Modal from '@/components/shared/Modal';
 import Input from '@/components/shared/Input';
 import { format } from 'date-fns';
 import { Clock, LogIn, LogOut, CheckCircle2, Calendar } from 'lucide-react';
+import Alert from '@/components/shared/Alert';
 
 export default function PunchCard() {
   const [status, setStatus] = useState(null);
@@ -17,9 +18,13 @@ export default function PunchCard() {
   const [reason, setReason] = useState('');
   const [reasonError, setReasonError] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [ipStatus, setIpStatus] = useState({ isAllowed: true, currentIP: null, message: null });
+  const [punchError, setPunchError] = useState('');
+  const [punchSuccess, setPunchSuccess] = useState('');
 
   useEffect(() => {
     fetchStatus();
+    checkIPStatus();
     const interval = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(interval);
   }, []);
@@ -35,6 +40,24 @@ export default function PunchCard() {
       console.error('Error fetching status:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkIPStatus = async () => {
+    try {
+      const res = await fetch('/app/api/attendance/check-ip');
+      const data = await res.json();
+      if (data.success) {
+        setIpStatus({
+          isAllowed: data.isAllowed,
+          currentIP: data.currentIP,
+          message: data.message
+        });
+      }
+    } catch (error) {
+      console.error('Error checking IP status:', error);
+      // Default to allowed if check fails (don't block user)
+      setIpStatus({ isAllowed: true, currentIP: null, message: null });
     }
   };
 
@@ -56,17 +79,28 @@ export default function PunchCard() {
           setPunchLoading(false);
           return;
         }
-        alert(data.error || 'Failed to punch in');
+        // Handle IP validation error with better UX
+        if (data.requiresAllowedIP) {
+          setPunchError(`${data.error}. Your current IP: ${data.currentIP || 'Unknown'}. Please contact your administrator to add your IP address to the allowed list, or connect to an allowed network.`);
+        } else {
+          setPunchError(data.error || 'Failed to punch in');
+        }
         setPunchLoading(false);
+        setTimeout(() => setPunchError(''), 5000);
         return;
       }
 
+      setPunchSuccess('Punched in successfully!');
       await fetchStatus();
+      await checkIPStatus();
       setShowReasonModal(false);
       setReason('');
       setReasonError('');
+      setTimeout(() => setPunchSuccess(''), 3000);
     } catch (error) {
-      alert('An error occurred. Please try again.');
+      console.error('Error punching in:', error);
+      setPunchError('An error occurred. Please try again.');
+      setTimeout(() => setPunchError(''), 5000);
     } finally {
       setPunchLoading(false);
     }
@@ -90,17 +124,28 @@ export default function PunchCard() {
           setPunchLoading(false);
           return;
         }
-        alert(data.error || 'Failed to punch out');
+        // Handle IP validation error with better UX
+        if (data.requiresAllowedIP) {
+          setPunchError(`${data.error}. Your current IP: ${data.currentIP || 'Unknown'}. Please contact your administrator to add your IP address to the allowed list, or connect to an allowed network.`);
+        } else {
+          setPunchError(data.error || 'Failed to punch out');
+        }
         setPunchLoading(false);
+        setTimeout(() => setPunchError(''), 5000);
         return;
       }
 
+      setPunchSuccess('Punched out successfully!');
       await fetchStatus();
+      await checkIPStatus();
       setShowReasonModal(false);
       setReason('');
       setReasonError('');
+      setTimeout(() => setPunchSuccess(''), 3000);
     } catch (error) {
-      alert('An error occurred. Please try again.');
+      console.error('Error punching out:', error);
+      setPunchError('An error occurred. Please try again.');
+      setTimeout(() => setPunchError(''), 5000);
     } finally {
       setPunchLoading(false);
     }
@@ -141,6 +186,16 @@ export default function PunchCard() {
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#E39A2E]/10 to-transparent rounded-full blur-3xl opacity-50 group-hover:opacity-75 transition-opacity" />
         
         <div className="relative">
+          {punchError && (
+            <div className="mb-4">
+              <Alert type="error" message={punchError} onDismiss={() => setPunchError('')} />
+            </div>
+          )}
+          {punchSuccess && (
+            <div className="mb-4">
+              <Alert type="success" message={punchSuccess} onDismiss={() => setPunchSuccess('')} />
+            </div>
+          )}
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
@@ -172,6 +227,30 @@ export default function PunchCard() {
             </div>
           </div>
 
+          {/* IP Warning */}
+          {!ipStatus.isAllowed && (
+            <div className="mb-6 p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-200 dark:border-amber-800">
+              <div className="flex items-start gap-3">
+                <div className="p-1.5 rounded-lg bg-amber-100 dark:bg-amber-900/40">
+                  <Clock className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">
+                    IP Address Not Allowed
+                  </p>
+                  <p className="text-xs text-amber-700 dark:text-amber-400 mb-2">
+                    {ipStatus.message || 'Punch in/out is only allowed from configured IP addresses.'}
+                  </p>
+                  {ipStatus.currentIP && (
+                    <p className="text-xs text-amber-600 dark:text-amber-500 font-mono">
+                      Your IP: {ipStatus.currentIP}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Status Content */}
           {status?.status === 'not_punched_in' && (
             <div className="space-y-6">
@@ -189,8 +268,9 @@ export default function PunchCard() {
               <Button
                 onClick={() => handlePunchIn()}
                 loading={punchLoading}
+                disabled={!ipStatus.isAllowed}
                 size="lg"
-                className="w-full h-14 text-lg font-semibold shadow-lg shadow-[#E39A2E]/20 hover:shadow-xl hover:shadow-[#E39A2E]/30 transition-all"
+                className="w-full h-14 text-lg font-semibold shadow-lg shadow-[#E39A2E]/20 hover:shadow-xl hover:shadow-[#E39A2E]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <LogIn className="w-6 h-6 mr-2" />
                 Punch In
@@ -226,9 +306,10 @@ export default function PunchCard() {
               <Button
                 onClick={() => handlePunchOut()}
                 loading={punchLoading}
+                disabled={!ipStatus.isAllowed}
                 variant="danger"
                 size="lg"
-                className="w-full h-14 text-lg font-semibold shadow-lg shadow-red-500/20 hover:shadow-xl hover:shadow-red-500/30 transition-all"
+                className="w-full h-14 text-lg font-semibold shadow-lg shadow-red-500/20 hover:shadow-xl hover:shadow-red-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <LogOut className="w-6 h-6 mr-2" />
                 Punch Out

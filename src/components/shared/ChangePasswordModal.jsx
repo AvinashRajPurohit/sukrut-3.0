@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Modal from './Modal';
 import Button from './Button';
 import Input from './Input';
+import Alert from './Alert';
 import { Lock, Eye, EyeOff } from 'lucide-react';
 
 export default function ChangePasswordModal({
@@ -105,9 +106,7 @@ export default function ChangePasswordModal({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600 dark:text-red-400">
-            {error}
-          </div>
+          <Alert type="error" message={error} onDismiss={() => setError('')} />
         )}
 
         {requireCurrentPassword && (

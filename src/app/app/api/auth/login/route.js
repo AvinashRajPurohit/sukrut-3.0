@@ -3,8 +3,8 @@ import connectDB from '@/lib/db/connection';
 import User from '@/lib/db/models/User';
 import RefreshToken from '@/lib/db/models/RefreshToken';
 import { hashPassword, comparePassword } from '@/lib/auth/password';
-import { generateAccessToken, generateRefreshToken } from '@/lib/auth/tokens';
-import { validateIP, getClientIP } from '@/lib/utils/ip-validation';
+import { generateAccessToken, generateRefreshToken, REFRESH_TOKEN_EXPIRY, expirationToSeconds, getExpirationDate, shouldLogoutDueToDailyTime } from '@/lib/auth/tokens';
+import { getClientIP } from '@/lib/utils/ip-validation';
 import { z } from 'zod';
 
 const loginSchema = z.object({
@@ -28,14 +28,8 @@ export async function POST(request) {
 
     const { email, password } = validation.data;
 
-    // Validate IP
-    const ipValidation = await validateIP(request);
-    if (!ipValidation.valid) {
-      return NextResponse.json(
-        { error: ipValidation.message },
-        { status: 403 }
-      );
-    }
+    // Get client IP (for logging purposes only - login doesn't require IP validation)
+    const clientIP = getClientIP(request);
 
     // Find user
     const user = await User.findOne({ email: email.toLowerCase() });
@@ -73,13 +67,19 @@ export async function POST(request) {
     const accessToken = generateAccessToken(tokenPayload);
     const refreshToken = generateRefreshToken(tokenPayload);
 
+    // Check if daily logout time has passed - don't allow login after logout time
+    if (shouldLogoutDueToDailyTime()) {
+      return NextResponse.json(
+        { error: 'Daily session has ended. Please try again tomorrow.' },
+        { status: 403 }
+      );
+    }
+
     // Get client info
-    const clientIP = ipValidation.ip;
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
-    // Calculate expiry date (7 days)
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7);
+    // Calculate expiry date from REFRESH_TOKEN_EXPIRY (will be capped at daily logout time)
+    const expiresAt = getExpirationDate(REFRESH_TOKEN_EXPIRY, true);
 
     // Store refresh token
     await RefreshToken.create({
@@ -101,20 +101,22 @@ export async function POST(request) {
       }
     });
 
-    // Set access token cookie (15 min)
+    // Set access token cookie (uses ACCESS_TOKEN_EXPIRY from .env)
+    const accessTokenMaxAge = expirationToSeconds(process.env.ACCESS_TOKEN_EXPIRY || '15m');
     response.cookies.set('accessToken', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 15 * 60 // 15 minutes
+      maxAge: accessTokenMaxAge
     });
 
-    // Set refresh token cookie (7 days)
+    // Set refresh token cookie (uses REFRESH_TOKEN_EXPIRY from .env)
+    const refreshTokenMaxAge = expirationToSeconds(REFRESH_TOKEN_EXPIRY);
     response.cookies.set('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 // 7 days
+      maxAge: refreshTokenMaxAge
     });
 
     return response;

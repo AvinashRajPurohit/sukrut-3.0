@@ -6,11 +6,13 @@ import Button from '@/components/shared/Button';
 import Modal from '@/components/shared/Modal';
 import Input from '@/components/shared/Input';
 import Calendar from '@/components/shared/Calendar';
-import { Plus, Calendar as CalendarIcon, CheckCircle2, XCircle, Clock, FileText, Heart, DollarSign, Home, AlertCircle } from 'lucide-react';
+import { Plus, Calendar as CalendarIcon, CheckCircle2, XCircle, Clock, FileText, Heart, DollarSign, Home, AlertCircle, X } from 'lucide-react';
 import DatePicker from '@/components/shared/DatePicker';
 import Select from '@/components/shared/Select';
 import { format } from 'date-fns';
 import { useNavbarActions } from '@/components/shared/NavbarActionsContext';
+import Alert from '@/components/shared/Alert';
+import ConfirmationModal from '@/components/shared/ConfirmationModal';
 
 export default function LeavesPage() {
   const { setActions } = useNavbarActions();
@@ -32,6 +34,7 @@ export default function LeavesPage() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [leaveBalances, setLeaveBalances] = useState(null);
+  const [confirmationModal, setConfirmationModal] = useState({ isOpen: false, leaveId: null, onConfirm: null, loading: false, error: '' });
 
   useEffect(() => {
     fetchData();
@@ -155,6 +158,7 @@ export default function LeavesPage() {
   const pendingLeaves = leaves.filter(l => l.status === 'pending');
   const approvedLeaves = leaves.filter(l => l.status === 'approved');
   const rejectedLeaves = leaves.filter(l => l.status === 'rejected');
+  const cancelledLeaves = leaves.filter(l => l.status === 'cancelled');
 
   const leaveTypeOptions = [
     { value: 'sick-leave', label: 'Sick Leave', icon: Heart },
@@ -173,14 +177,10 @@ export default function LeavesPage() {
   return (
     <div className="space-y-6">
       {error && (
-        <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600 dark:text-red-400">
-          {error}
-        </div>
+        <Alert type="error" message={error} onDismiss={() => setError('')} />
       )}
       {success && (
-        <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg text-sm text-emerald-600 dark:text-emerald-400">
-          {success}
-        </div>
+        <Alert type="success" message={success} onDismiss={() => setSuccess('')} />
       )}
 
       {/* Leave Balances */}
@@ -409,17 +409,33 @@ export default function LeavesPage() {
                         ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800'
                         : leave.status === 'rejected'
                         ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'
+                        : leave.status === 'cancelled'
+                        ? 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'
                         : 'bg-amber-50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800'
                     }`}
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
+                        {leave.status === 'pending' && (
+                          <div className="flex justify-end mb-2">
+                            <button
+                              onClick={() => handleCancelLeave(leave)}
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors cursor-pointer"
+                              title="Cancel leave request"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                              Cancel
+                            </button>
+                          </div>
+                        )}
                         <div className="flex items-center gap-2 mb-2 flex-wrap">
                           <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                             leave.status === 'approved'
                               ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400'
                               : leave.status === 'rejected'
                               ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                              : leave.status === 'cancelled'
+                              ? 'bg-slate-100 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400'
                               : 'bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400'
                           }`}>
                             {leave.status.charAt(0).toUpperCase() + leave.status.slice(1)}
@@ -578,6 +594,20 @@ export default function LeavesPage() {
           </div>
         </form>
       </Modal>
+
+      {/* Cancel Leave Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmationModal.isOpen}
+        onClose={() => setConfirmationModal({ isOpen: false, leaveId: null, onConfirm: null, loading: false, error: '' })}
+        onConfirm={confirmationModal.onConfirm}
+        title="Cancel Leave Request"
+        message="Are you sure you want to cancel this leave request? This action cannot be undone."
+        confirmText="Cancel Leave"
+        cancelText="Keep Request"
+        loading={confirmationModal.loading}
+        error={confirmationModal.error}
+        variant="danger"
+      />
     </div>
   );
 }

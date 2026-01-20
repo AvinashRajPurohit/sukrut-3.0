@@ -6,6 +6,7 @@ import Input from '@/components/shared/Input';
 import Button from '@/components/shared/Button';
 import ThemeToggle from '@/components/shared/ThemeToggle';
 import Logo from '@/components/shared/Logo';
+import Alert from '@/components/shared/Alert';
 
 function LoginContent() {
   const router = useRouter();
@@ -77,9 +78,7 @@ function LoginContent() {
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-              </div>
+              <Alert type="error" message={error} onDismiss={() => setError('')} />
             )}
 
             <Input

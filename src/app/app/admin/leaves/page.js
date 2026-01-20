@@ -7,6 +7,7 @@ import Modal from '@/components/shared/Modal';
 import Calendar from '@/components/shared/Calendar';
 import { Calendar as CalendarIcon, CheckCircle2, XCircle, Clock, Users, Filter, FileText, Heart, DollarSign, Home, AlertCircle } from 'lucide-react';
 import Select from '@/components/shared/Select';
+import Input from '@/components/shared/Input';
 import { format } from 'date-fns';
 
 export default function LeavesPage() {
@@ -14,6 +15,9 @@ export default function LeavesPage() {
   const [holidays, setHolidays] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [reviewLoading, setReviewLoading] = useState(false);
   const [selectedLeave, setSelectedLeave] = useState(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewStatus, setReviewStatus] = useState('approved');
@@ -26,10 +30,11 @@ export default function LeavesPage() {
 
   useEffect(() => {
     fetchData();
-  }, [filters.year]);
+  }, [filters.year, filters.userId, filters.status]);
 
   const fetchData = async () => {
     setLoading(true);
+    setError('');
     try {
       const params = new URLSearchParams();
       if (filters.userId) params.append('userId', filters.userId);
@@ -42,14 +47,21 @@ export default function LeavesPage() {
         fetch('/app/api/admin/users')
       ]);
 
+      // Check content types
+      const leavesContentType = leavesRes.headers.get('content-type');
+      const holidaysContentType = holidaysRes.headers.get('content-type');
+      const usersContentType = usersRes.headers.get('content-type');
+
       const [leavesData, holidaysData, usersData] = await Promise.all([
-        leavesRes.json(),
-        holidaysRes.json(),
-        usersRes.json()
+        leavesContentType && leavesContentType.includes('application/json') ? leavesRes.json() : { success: false, error: 'Invalid response' },
+        holidaysContentType && holidaysContentType.includes('application/json') ? holidaysRes.json() : { success: false, error: 'Invalid response' },
+        usersContentType && usersContentType.includes('application/json') ? usersRes.json() : { success: false, error: 'Invalid response' }
       ]);
 
       if (leavesData.success) {
         setLeaves(leavesData.leaves || []);
+      } else {
+        setError(leavesData.error || 'Failed to load leave requests');
       }
       if (holidaysData.success) {
         setHolidays(holidaysData.holidays || []);
@@ -59,12 +71,16 @@ export default function LeavesPage() {
       }
     } catch (error) {
       console.error('Error fetching data:', error);
+      setError('Failed to load data. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   const handleReview = async () => {
+    setReviewLoading(true);
+    setError('');
+    setSuccess('');
     try {
       const res = await fetch(`/app/api/admin/leaves/${selectedLeave._id}`, {
         method: 'PUT',
@@ -75,17 +91,32 @@ export default function LeavesPage() {
         })
       });
 
+      // Check if response is JSON
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
+        setError('Server returned an invalid response. Please try again.');
+        setReviewLoading(false);
+        return;
+      }
+
       const data = await res.json();
       if (data.success) {
+        setSuccess(`Leave request ${reviewStatus} successfully!`);
         await fetchData();
         setShowReviewModal(false);
         setSelectedLeave(null);
         setRejectionReason('');
+        setTimeout(() => setSuccess(''), 3000);
       } else {
-        alert(data.error || 'Failed to review leave request');
+        setError(data.error || 'Failed to review leave request');
       }
     } catch (error) {
-      alert('An error occurred');
+      console.error('Error reviewing leave:', error);
+      setError('An error occurred while reviewing leave request');
+    } finally {
+      setReviewLoading(false);
     }
   };
 
@@ -158,7 +189,7 @@ export default function LeavesPage() {
               onChange={(value) => setFilters({ ...filters, userId: value })}
               options={[
                 { value: '', label: 'All Users', icon: Users },
-                ...users.map(user => ({ value: user._id, label: user.name, icon: Users }))
+                ...users.map(user => ({ value: user.id || user._id, label: user.name, icon: Users }))
               ]}
               placeholder="Select user"
               icon={Users}
@@ -366,6 +397,7 @@ export default function LeavesPage() {
               variant={reviewStatus === 'approved' ? 'success' : 'danger'}
               className="flex-1"
               disabled={reviewStatus === 'rejected' && !rejectionReason.trim()}
+              loading={reviewLoading}
             >
               {reviewStatus === 'approved' ? 'Approve' : 'Reject'} Leave
             </Button>

@@ -59,7 +59,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
   const modalContent = (
     <div 
       ref={overlayRef}
-      className="fixed inset-0 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
+      className="fixed inset-0 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md cursor-pointer"
       onClick={handleOverlayClick}
       style={{ 
         zIndex: 9999,

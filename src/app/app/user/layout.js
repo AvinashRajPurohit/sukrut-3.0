@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import UserSidebar from '@/components/user/UserSidebar';
 import { NavbarActionsProvider, useNavbarActions } from '@/components/shared/NavbarActionsContext';
+import UserNotificationBell from '@/components/user/UserNotificationBell';
 
 const pageTitles = {
   '/app/user': { title: 'Dashboard', subtitle: 'Your attendance overview and quick actions' },
@@ -29,6 +30,7 @@ function UserLayoutContent({ children }) {
                 )}
               </div>
               <div className="flex items-center gap-4">
+                <UserNotificationBell />
                 {actions}
               </div>
             </div>
