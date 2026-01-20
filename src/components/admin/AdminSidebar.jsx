@@ -8,7 +8,8 @@ import {
   Server, 
   FileText, 
   Settings,
-  Calendar
+  Calendar,
+  BookOpen
 } from 'lucide-react';
 import ThemeToggle from '@/components/shared/ThemeToggle';
 import Logo from '@/components/shared/Logo';
@@ -24,6 +25,7 @@ export default function AdminSidebar() {
     { href: '/app/admin/reports', label: 'Reports', icon: FileText },
     { href: '/app/admin/holidays', label: 'Holidays', icon: Calendar },
     { href: '/app/admin/leaves', label: 'Leave Requests', icon: FileText },
+    { href: '/app/admin/blogs', label: 'Blogs', icon: BookOpen },
     { href: '/app/admin/settings', label: 'Settings', icon: Settings },
   ];
 

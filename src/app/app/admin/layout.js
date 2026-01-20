@@ -12,6 +12,7 @@ const pageTitles = {
   '/app/admin/reports': { title: 'Reports', subtitle: 'View and analyze attendance reports' },
   '/app/admin/holidays': { title: 'Holidays', subtitle: 'Manage holidays and weekends' },
   '/app/admin/leaves': { title: 'Leave Requests', subtitle: 'Review and manage employee leave requests' },
+  '/app/admin/blogs': { title: 'Blogs', subtitle: 'Manage blog posts and articles' },
   '/app/admin/settings': { title: 'Settings', subtitle: 'Configure attendance rules and preferences' },
 };
 
