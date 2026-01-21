@@ -10,7 +10,9 @@
     "create-admin": "node scripts/create-admin.js"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
+    "@types/three": "^0.182.0",
     "bcrypt": "^6.0.0",
     "date-fns": "^4.1.0",
     "gsap": "^3.14.2",

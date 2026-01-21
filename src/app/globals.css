@@ -327,3 +327,12 @@ html:has(.blog-light-mode) .dark,
 .animate-float-slow {
   animation: float-slow 8s ease-in-out infinite;
 }
+
+.bg-hero {
+  background:
+    radial-gradient(
+      60% 60% at 50% 40%,
+      rgba(227, 154, 46, 0.22),
+      #0F0E0C 70%
+    );
+}

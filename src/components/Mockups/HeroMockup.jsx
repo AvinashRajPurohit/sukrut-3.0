@@ -1,173 +1,138 @@
+// components/Mockups/HeroMockup.jsx
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Float, Environment, ContactShadows } from "@react-three/drei";
+import { useRef, useMemo } from "react";
 import * as THREE from "three";
-import gsap from "gsap";
 
-export default function HeroMockup3D() {
-  const mountRef = useRef(null);
+// 1. The Glowing Sphere Component
+const GlowingSphere = () => {
+  const meshRef = useRef();
 
-  useEffect(() => {
-    const container = mountRef.current;
-
-    /* ======================
-       SCENE
-    ====================== */
-    const scene = new THREE.Scene();
-
-    /* ======================
-       CAMERA
-    ====================== */
-    const camera = new THREE.PerspectiveCamera(
-      43,
-      container.clientWidth / container.clientHeight,
-      0.1,
-      100
-    );
-
-    // 🔥 Camera closer so cube looks BIG
-   camera.position.set(5.2, 5.2, 7.5);
-
-    camera.lookAt(0, 0, 0);
-
-    /* ======================
-       RENDERER
-    ====================== */
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true,
-    });
-
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    container.appendChild(renderer.domElement);
-
-    
-
-    /* ======================
-       LIGHTING (WHITE / GRAY)
-    ====================== */
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
-    scene.add(ambientLight);
-
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
-    keyLight.position.set(6, 10, 8);
-    scene.add(keyLight);
-
-    const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
-    fillLight.position.set(-6, -4, 6);
-    scene.add(fillLight);
-
-    /* ======================
-       MATERIAL (WHITE + GRAY)
-    ====================== */
-   const material = new THREE.MeshPhysicalMaterial({
-  color: 0xf1f3f5,        // milky white-gray
-  roughness: 0.15,       // smooth surface
-  metalness: 0.0,
-
-  transmission: 0.6,     // 🔥 glass-like transparency
-  thickness: 1.2,        // depth of crystal
-  ior: 1.35,             // index of refraction (crystal-like)
-
-  transparent: true,
-  opacity: 0.85,         // not fully glass, milky crystal
-
-  clearcoat: 0.4,        // subtle glossy layer
-  clearcoatRoughness: 0.25,
-});
-
-
-    /* ======================
-       BUILD SMALL CUBES
-    ====================== */
-    const cubes = [];
-    const size = 1.4;   // 🔥 bigger cubes
-    const gap = 0.05;   // slight separation
-
-    for (let x = -1; x <= 1; x++) {
-      for (let y = -1; y <= 1; y++) {
-        for (let z = -1; z <= 1; z++) {
-          const geometry = new THREE.BoxGeometry(size, size, size);
-          const cube = new THREE.Mesh(geometry, material);
-
-          // scattered start (lazy-load feel)
-          cube.position.set(
-            THREE.MathUtils.randFloat(-8, 8),
-            THREE.MathUtils.randFloat(-8, 8),
-            THREE.MathUtils.randFloat(-8, 8)
-          );
-
-          scene.add(cube);
-          cubes.push({
-            cube,
-            target: {
-              x: x * (size + gap),
-              y: y * (size + gap),
-              z: z * (size + gap),
-            },
-          });
-        }
-      }
+  // Animation: Rotate the sphere
+  useFrame((state, delta) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta * 5.5; // Rotate slowly
+      // meshRef.current.rotation.x += delta * 1.2; // Slight tilt rotation
     }
-
-    /* ======================
-       GSAP ASSEMBLE ANIMATION
-    ====================== */
-    cubes.forEach(({ cube, target }, i) => {
-      gsap.to(cube.position, {
-        x: target.x,
-        y: target.y,
-        z: target.z,
-        duration: 2.4,
-        delay: i * 0.03,
-        ease: "power4.out",
-      });
-    });
-
-    // 🔥 Final scale punch so cube feels strong
-    gsap.to(scene.scale, {
-      x: 1.05,
-      y: 1.05,
-      z: 1.05,
-      duration: 0.8,
-      ease: "power2.out",
-      delay: 2.2,
-    });
-
-    /* ======================
-       RENDER LOOP
-    ====================== */
-    const animate = () => {
-      renderer.render(scene, camera);
-      requestAnimationFrame(animate);
-    };
-    animate();
-
-    /* ======================
-       HANDLE RESIZE
-    ====================== */
-    const onResize = () => {
-      camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.clientWidth, container.clientHeight);
-    };
-    window.addEventListener("resize", onResize);
-
-    /* ======================
-       CLEANUP
-    ====================== */
-    return () => {
-      window.removeEventListener("resize", onResize);
-      container.removeChild(renderer.domElement);
-      renderer.dispose();
-    };
-  }, []);
+  });
 
   return (
-    <div
-      ref={mountRef}
-      className="w-[35vw] max-w-[520px] aspect-square"
-    />
+    <mesh ref={meshRef} position={[0, 1.8, 0]}>
+      {/* The Sphere Geometry */}
+      <sphereGeometry args={[0.8, 64, 64]} />
+      
+      {/* Glowing Material */}
+      <meshStandardMaterial
+        color="#1a2b4b"
+        emissive="#1a2b4b"
+        emissiveIntensity={2}
+        roughness={0.1}
+        metalness={0.1}
+        toneMapped={false} // Helps the glow pop
+      />
+      
+      {/* Optional: Add a wireframe or stripe effect overlay if desired */}
+      <mesh scale={[1.01, 1.01, 1.01]}>
+         <sphereGeometry args={[0.8, 64, 64]} />
+         <meshBasicMaterial 
+            color="gray" 
+            wireframe 
+            transparent 
+            opacity={0.1} 
+         />
+      </mesh>
+    </mesh>
+  );
+};
+
+// 2. The Spring Cube Component
+const SpringCube = ({ position, delay }) => {
+  const meshRef = useRef();
+  
+  // Initial position to return to
+  const initialY = position[1];
+
+  useFrame((state) => {
+    if (meshRef.current) {
+      const t = state.clock.getElapsedTime();
+      // Animation: Move up and down like a spring based on time + delay
+      // Math.sin creates the wave, the delay makes them move separately
+      meshRef.current.position.y = initialY + Math.sin(t * 2 + delay) * 0.2; 
+    }
+  });
+
+  return (
+    <mesh ref={meshRef} position={position} castShadow receiveShadow>
+      <boxGeometry args={[1.2, 1.2, 1.2]} />
+      
+      {/* Dark Glassy/Tech Material */}
+      <meshPhysicalMaterial
+        color="#1a2b4b"       // Dark Blue-ish tint
+        metalness={0.8}
+        roughness={0.1}
+        transmission={0.2}    // Slight glass effect
+        thickness={1}
+        clearcoat={1}
+        clearcoatRoughness={0}
+      />
+      
+      {/* Edge Highlights (Optional for that tech look) */}
+      <lineSegments>
+        <edgesGeometry args={[new THREE.BoxGeometry(1.2, 1.2, 1.2)]} />
+        <lineBasicMaterial color="#4a8dff" transparent opacity={0.3} />
+      </lineSegments>
+    </mesh>
+  );
+};
+
+// 3. The Main Scene Assembly
+const Scene = () => {
+  return (
+    <group rotation={[0, -Math.PI / 4, 0]}> {/* Rotate whole group to match 3/4 view */}
+      
+      {/* The 4 Cubes (2x2 Grid) */}
+      {/* We pass a 'delay' prop to offset their animation for the wave effect */}
+      <SpringCube position={[-0.65, 0, -0.65]} delay={0} />
+      <SpringCube position={[0.65, 0, -0.65]} delay={1} />
+      <SpringCube position={[-0.65, 0, 0.65]} delay={2} />
+      <SpringCube position={[0.65, 0, 0.65]} delay={3} />
+
+      {/* The Sphere on top */}
+      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+         <GlowingSphere />
+      </Float>
+    </group>
+  );
+};
+
+// components/Mockups/HeroMockup.jsx
+
+export default function HeroMockup() {
+  return (
+    <div className="w-full h-[600px] lg:h-[700px] relative">
+      
+      <Canvas
+        // CHANGE 2: Camera wahi 'z: 6' rakha hai (zoom maintain karne ke liye)
+        // lekin 'y' ko 2.5 kar diya taaki camera thoda upar dekhe
+        camera={{ position: [0, 2.5, 6], fov: 45 }}
+        gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
+      >
+        <ambientLight intensity={0.5} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
+        <pointLight position={[-10, -10, -10]} intensity={0.5} color="blue" />
+        <pointLight position={[0, 1, 0]} intensity={2} color="#0088ff" distance={3} />
+        
+        <Environment preset="city" />
+
+        {/* Scene Logic */}
+        <group position={[0, -0.5, 0]}>
+           <Scene />
+        </group>
+
+        <ContactShadows position={[0, -2, 0]} opacity={0.6} scale={10} blur={2.5} far={4} color="#0a1a3a" />
+      </Canvas>
+    </div>
   );
 }

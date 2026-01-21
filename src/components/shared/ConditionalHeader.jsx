@@ -1,15 +1,22 @@
-'use client';
+"use client";
 
-import { usePathname } from 'next/navigation';
-import Header from '@/layout/Header';
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import Header from "@/layout/Header";
 
 export default function ConditionalHeader() {
   const pathname = usePathname();
-  
-  // Hide header on /app routes
-  if (pathname?.startsWith('/app')) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  if (pathname.startsWith("/app")) {
     return null;
   }
-  
+
   return <Header />;
 }
