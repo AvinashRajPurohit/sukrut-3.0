@@ -19,6 +19,42 @@
       "role": "Marketing Director, International Brand",
       "avatar": "/avatar2.svg",
       "align": "right"
+    },
+    {
+      "id": 3,
+      "title": "Scalable & Future-Ready Solutions",
+      "quote": "They didn’t just build for today. The architecture is scalable, clean, and ready to grow with our business.",
+      "author": "Amit P.",
+      "role": "CTO, SaaS Startup",
+      "avatar": "/avatar1.png",
+      "align": "left"
+    },
+    {
+      "id": 4,
+      "title": "Clear Communication & Ownership",
+      "quote": "What stood out the most was their ownership and clarity. We always knew what was happening and why.",
+      "author": "Emily R.",
+      "role": "Product Manager, Tech Company",
+      "avatar": "/avatar2.svg",
+      "align": "right"
+    },
+    {
+      "id": 5,
+      "title": "Modern Tech Stack Expertise",
+      "quote": "From design to deployment, everything was handled using modern frameworks and best practices.",
+      "author": "Daniel M.",
+      "role": "Engineering Lead, Digital Agency",
+      "avatar": "/avatar1.png",
+      "align": "left"
+    },
+    {
+      "id": 6,
+      "title": "Reliable Delivery & Support",
+      "quote": "Deadlines were met, quality was high, and post-launch support has been excellent so far.",
+      "author": "Neha S.",
+      "role": "Operations Head, Enterprise Client",
+      "avatar": "/avatar2.svg",
+      "align": "right"
     }
   ]
 }

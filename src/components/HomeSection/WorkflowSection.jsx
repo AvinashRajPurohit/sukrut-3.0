@@ -12,7 +12,7 @@ export default function WorkflowSection() {
       <div className="mx-auto max-w-[90%]">
         {/* BADGE */}
         <div className="mb-4 flex justify-center">
-          <span className="rounded-full border border-[#E39A2E]/40 px-4 py-1 text-xs font-medium text-[#E39A2E]">
+          <span className="rounded-full border border-[#E39A2E]/40 px-4 py-2 text-xs font-medium text-[#E39A2E]">
            ⚡  Our Workflow
           </span>
         </div>

@@ -8,118 +8,154 @@ import ReviewCard from "./ReviewCard";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function EnvelopeReviews({ items }) {
-  const ref = useRef(null);
+  const containerRef = useRef(null);
+  const envelopeRef = useRef(null);
+  const popupRef = useRef(null);
+  const rowRef = useRef(null);
 
   const latest = items[0];
-  const rest = items.slice(1, 4);
+  const rest = items.slice(1);
 
-useEffect(() => {
-  const ctx = gsap.context(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ref.current,
-        start: "top 70%",
-        once: true,
-      },
-    });
-
-    // Initial states
-    gsap.set(".card-main", {
-      y: 0,          // ❗ no vertical offset
-      x: 0,
-      scale: 0.95,
-      opacity: 1,
-    });
-
-    gsap.set(".flap-left", { rotate: 0, transformOrigin: "100% 100%" });
-    gsap.set(".flap-right", { rotate: 0, transformOrigin: "0% 100%" });
-
-    gsap.set(".stack-card", {
-      opacity: 0,
-      x: 0,
-      y: 0,
-      scale: 0.96,
-    });
-
-    // ✉️ OPEN ENVELOPE
-    tl.to(".flap-left", {
-      rotate: -45,
-      duration: 0.6,
-      ease: "power2.out",
-    })
-      .to(
-        ".flap-right",
-        {
-          rotate: 45,
-          duration: 0.6,
-          ease: "power2.out",
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 90%",
+          once: true,
         },
-        "<"
-      )
+      });
 
-      // 📤 CARD COMES OUT (CENTER, NO UP SLIDE)
-      .to(".card-main", {
+     gsap.set(popupRef.current, {
+  y: 420,      // ✅ fully hidden inside mask
+  scale: 0.96,
+  opacity: 1,
+});
+
+      gsap.set(envelopeRef.current, {
+        opacity: 1,
         scale: 1,
-        duration: 0.8,
-        ease: "power3.out",
-      })
+      });
 
-      // ⏳ HOLD
-      .to({}, { duration: 1.8 })
+      gsap.set(rowRef.current.children, {
+        opacity: 0,
+        y: 20,
+      });
 
-      // 🔁 MERGE INTO HORIZONTAL STACK
-      .to(".card-main", {
-        x: -60,
-        rotate: -6,
-        scale: 0.95,
-        opacity: 0.4,
-        duration: 0.7,
-        ease: "power3.out",
-      })
-      .to(
-        ".stack-card",
-        {
-          opacity: 1,
-          stagger: 0.15,
-          duration: 0.5,
-          ease: "power2.out",
-        },
-        "<"
-      );
-  }, ref);
+      // 1️⃣ CARD POPS OUT (MASKED)
+      tl.to(popupRef.current, {
+  y: 80,      // ✅ comes cleanly out
+  scale: 1,
+  duration: 0.9,
+  ease: "power3.out",
+})
 
-  return () => ctx.revert();
-}, []);
+        // 2️⃣ HOLD FOR READING
+        .to({}, { duration: 2 })
 
+        // 3️⃣ ENVELOPE DISAPPEARS
+        .to(envelopeRef.current, {
+          opacity: 0,
+          scale: 0.96,
+          duration: 0.4,
+          ease: "power2.inOut",
+        })
+
+        // 4️⃣ POPUP CARD GOES AWAY
+        .to(
+          popupRef.current,
+          {
+            opacity: 0,
+            scale: 0.95,
+            duration: 0.4,
+            ease: "power2.inOut",
+          },
+          "<"
+        )
+
+        // 5️⃣ ALL REVIEWS APPEAR (CLEAN ROW, NO OVERLAP)
+        .to(
+          rowRef.current.children,
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.12,
+            duration: 0.6,
+            ease: "power2.out",
+          },
+          "-=0.1"
+        )
+
+        .to(containerRef.current, {
+  height: 360,
+  duration: 0.6,
+  ease: "power2.inOut",
+  onComplete: () => ScrollTrigger.refresh(),
+});
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <div
-      ref={ref}
-      className="relative h-[520px] flex justify-center items-center"
+      ref={containerRef}
+      className="relative h-[600px] flex justify-center items-center"
     >
-      {/* ENVELOPE */}
-      <div className="absolute bottom-24 w-[360px] h-[220px]">
-        <div className="flap-left absolute left-0 bottom-0 w-1/2 h-full bg-white rotate-0 clip-path-envelope-left" />
-        <div className="flap-right absolute right-0 bottom-0 w-1/2 h-full bg-white rotate-0 clip-path-envelope-right" />
+      {/* 📨 BIG HERO ENVELOPE */}
+      <div
+        ref={envelopeRef}
+        className="absolute w-[800px] h-[420px] pointer-events-none" 
+        style={{ bottom: 140 }}
+      >
+        {/* envelope back */}
+        <div className="absolute inset-0 rounded-[48px] bg-white shadow-2xl" />
+
+        {/* inner purple */}
+        <div className="absolute inset-x-20 inset-y-16 bg-[#E39A2E] rounded-[32px]" />
+
+        {/* left flap */}
+        <div className="absolute left-0 bottom-0 w-1/2 h-[75%] bg-white rotate-[-14deg] origin-bottom-right" />
+
+        {/* right flap */}
+        <div className="absolute right-0 bottom-0 w-1/2 h-[75%] bg-white rotate-[14deg] origin-bottom-left" />
       </div>
 
-      {/* MAIN CARD */}
-      <ReviewCard
-        item={latest}
-        className="card-main z-20"
-      />
+     {/* 📄 MASKED POP-UP CARD (FIXED – NO OVERLAP) */}
+<div
+  className="absolute z-20 overflow-hidden"
+  style={{
+    width: 560,
+    height: 460,   // ✅ >= card height
+    bottom: 180,   // aligns with envelope
+  }}
+>
+  <div ref={popupRef}>
+    <ReviewCard item={latest} />
+  </div>
+</div>
 
-      {/* STACK */}
-      {rest.map((item, i) => (
-        <ReviewCard
-          key={item.id}
-          item={item}
-          className="stack-card z-10"
-          style={{
-            transform: `translateX(${i * 40}px) translateY(${i * 18}px) rotate(${i % 2 ? 6 : -6}deg)`,
-          }}
-        />
-      ))}
+
+<div
+  ref={rowRef}
+  className="
+    absolute top-0
+    w-full
+    px-16 py-10
+    flex gap-12
+    overflow-x-auto
+    overflow-y-hidden
+    scrollbar-hide
+    
+  "
+>
+  {[latest, ...rest].map((item) => (
+    <div key={item.id} className="flex-shrink-0">
+      <ReviewCard item={item} />
+    </div>
+  ))}
+</div>
+
     </div>
   );
 }
