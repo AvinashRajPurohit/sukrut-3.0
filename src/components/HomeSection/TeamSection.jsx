@@ -3,7 +3,7 @@ import TeamCarousel from "./TeamCarousel";
 
 export default function TeamSection() {
   return (
-    <section className=" bg-white">
+    <section className=" bg-white ">
       <div className="mx-auto px-6">
 
         {/* HEADER */}

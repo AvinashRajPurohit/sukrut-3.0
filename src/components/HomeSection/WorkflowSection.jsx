@@ -11,11 +11,21 @@ export default function WorkflowSection() {
     <section className="bg-[#F7F4EF] py-20">
       <div className="mx-auto max-w-[90%]">
         {/* BADGE */}
-        <div className="mb-4 flex justify-center">
-          <span className="rounded-full border border-[#E39A2E]/40 px-4 py-2 text-xs font-medium text-[#E39A2E]">
-           ⚡  Our Workflow
-          </span>
-        </div>
+      <div className="mb-6 flex justify-center">
+  <div className="inline-flex items-center gap-2.5 rounded-full bg-[#FFF8F0] border border-[#FFE8CC] px-4 py-1.5 shadow-[0_2px_8px_-2px_rgba(227,154,46,0.15)] transition-transform hover:scale-105 cursor-default">
+    
+    {/* Animated Pulsing Dot */}
+    <span className="relative flex h-2 w-2">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E39A2E] opacity-75"></span>
+      <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E39A2E]"></span>
+    </span>
+
+    {/* Text */}
+    <span className="text-xs font-bold tracking-widest text-[#E39A2E] ">
+      Our Workflow
+    </span>
+  </div>
+</div>
 
         {/* HEADING */}
         <h2 className="mb-20 text-center text-4xl font-semibold text-black">

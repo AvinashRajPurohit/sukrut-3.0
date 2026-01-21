@@ -10,7 +10,7 @@ export default function CTASection() {
 
   return (
     <section
-      className="relative w-full py-20 lg:py-32 overflow-hidden"
+      className="relative w-full py-20 overflow-hidden"
       aria-labelledby="cta-heading"
     >
       {/* Light amber/orange gradient background using primary color */}

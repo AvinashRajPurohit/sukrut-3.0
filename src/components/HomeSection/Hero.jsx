@@ -81,11 +81,17 @@ export default function Hero() {
         </div>
 
         {/* RIGHT SIDE IMAGE */}
-        <div className="relative flex justify-center items-center">
-          {/* Subtle glow specifically behind the model center */}
-          <div className="absolute w-[300px] h-[300px] bg-blue-100 rounded-full blur-[80px] -z-10" />
-          <HeroMockup />
-        </div>
+<div className="relative flex justify-center items-center">
+
+  {/* BOTTOM FADE MASK */}
+  <div className="pointer-events-none absolute bottom-0 left-0 w-full h-40 
+                  bg-gradient-to-t from-white to-transparent z-20" />
+
+  {/* Subtle glow specifically behind the model center */}
+  <div className="absolute w-[300px] h-[300px] bg-blue-100 rounded-full blur-[80px] -z-10" />
+
+  <HeroMockup />
+</div>
        
       </div>
 

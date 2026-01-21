@@ -6,10 +6,18 @@ export default function FeatureCardsSection() {
     <section className="py-44">
       {/* ===== CENTER HEADER ===== */}
       <div className="mx-auto  text-center mb-20">
-        <span className="inline-flex items-center gap-2 rounded-full border border-[#E39A2E] px-4 py-2 text-sm text-[#E39A2E]">
-          ⚡ Core Capabilities
-        </span>
+        <span className="inline-flex items-center gap-2.5 rounded-full bg-[#FFF8F0] border border-[#FFE8CC] px-4 py-1.5 shadow-[0_2px_8px_-2px_rgba(227,154,46,0.15)] transition-transform hover:scale-105 cursor-default">
+  {/* Pulsing Dot Animation */}
+  <span className="relative flex h-2 w-2">
+    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E39A2E] opacity-75"></span>
+    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E39A2E]"></span>
+  </span>
 
+  {/* Text Styling */}
+  <span className="text-xs font-bold tracking-widest text-[#E39A2E] ">
+    Core Capabilities
+  </span>
+</span>
         <h2 className="mt-6 text-4xl font-semibold leading-snug text-black">
           Systems Built for Scale, Performance & Longevity
         </h2>

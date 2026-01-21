@@ -2,136 +2,306 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, Environment, ContactShadows } from "@react-three/drei";
+import { Float, Environment, ContactShadows, Sparkles } from "@react-three/drei";
 import { useRef, useMemo } from "react";
 import * as THREE from "three";
+import { useThree } from "@react-three/fiber";
 
-// 1. The Glowing Sphere Component
+/* =======================
+   PREMIUM GLOWING SPHERE
+======================= */
 const GlowingSphere = () => {
   const meshRef = useRef();
+  const glowRef = useRef();
 
-  // Animation: Rotate the sphere
   useFrame((state, delta) => {
     if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 5.5; // Rotate slowly
-      // meshRef.current.rotation.x += delta * 1.2; // Slight tilt rotation
+      meshRef.current.rotation.y += delta * 0.2;
+      meshRef.current.rotation.x += delta * 0.1;
+    }
+    if (glowRef.current) {
+      glowRef.current.rotation.z -= delta * 0.1;
+      // Pulse effect
+      const t = state.clock.elapsedTime;
+      glowRef.current.material.opacity = 0.4 + Math.sin(t * 2) * 0.1;
     }
   });
 
   return (
-    <mesh ref={meshRef} position={[0, 1.8, 0]}>
-      {/* The Sphere Geometry */}
-      <sphereGeometry args={[0.8, 64, 64]} />
-      
-      {/* Glowing Material */}
-      <meshStandardMaterial
-        color="#1a2b4b"
-        emissive="#1a2b4b"
-        emissiveIntensity={2}
-        roughness={0.1}
-        metalness={0.1}
-        toneMapped={false} // Helps the glow pop
-      />
-      
-      {/* Optional: Add a wireframe or stripe effect overlay if desired */}
-      <mesh scale={[1.01, 1.01, 1.01]}>
-         <sphereGeometry args={[0.8, 64, 64]} />
-         <meshBasicMaterial 
-            color="gray" 
-            wireframe 
-            transparent 
-            opacity={0.1} 
-         />
+    <group position={[0, 1.8, 0]}>
+      {/* 1. INNER DARK CORE */}
+      {/* <mesh ref={meshRef}>
+        <sphereGeometry args={[0.8, 64, 64]} />
+        <meshPhysicalMaterial
+          color="#000000"
+          emissive="#1d4ed8" // Deep Blue Glow
+          emissiveIntensity={.5}
+          roughness={0.1}
+          metalness={1}
+          clearcoat={1}
+        />
+      </mesh> */}
+
+      {/* 2. OUTER HOLOGRAPHIC SHELL */}
+      <mesh ref={glowRef} scale={[1.2, 1.2, 1.2]}>
+        <sphereGeometry args={[0.8, 64, 64]} />
+        <meshBasicMaterial
+          color="#E39A2E"
+          transparent
+          opacity={0.1}
+          wireframe
+        />
       </mesh>
-    </mesh>
+      
+      {/* 3. LIGHT SOURCE INSIDE */}
+      <pointLight intensity={3} color="#3b82f6" distance={3} decay={2} />
+    </group>
   );
 };
 
-// 2. The Spring Cube Component
-const SpringCube = ({ position, delay }) => {
-  const meshRef = useRef();
-  
-  // Initial position to return to
-  const initialY = position[1];
+/* =======================
+   FUTURISTIC HUD RING
+======================= */
+const BackgroundHUD = () => {
+  const groupRef = useRef();
+  const { camera } = useThree();
 
-  useFrame((state) => {
-    if (meshRef.current) {
-      const t = state.clock.getElapsedTime();
-      // Animation: Move up and down like a spring based on time + delay
-      // Math.sin creates the wave, the delay makes them move separately
-      meshRef.current.position.y = initialY + Math.sin(t * 2 + delay) * 0.2; 
-    }
+  useFrame(({ clock }) => {
+    if (!groupRef.current) return;
+    // Smooth LookAt
+    groupRef.current.lookAt(camera.position);
+    // Subtle Rotation
+    groupRef.current.rotation.z = Math.sin(clock.elapsedTime * 0.1) * 0.1;
   });
 
   return (
-    <mesh ref={meshRef} position={position} castShadow receiveShadow>
+    <group ref={groupRef} position={[0, 1.8, -1.5]} scale={1.2}>
+      {/* Thin Line Ring */}
+      <mesh>
+        <ringGeometry args={[2.8, 2.82, 128]} />
+        <meshBasicMaterial color="#3b82f6" transparent opacity={0.2} side={THREE.DoubleSide} />
+      </mesh>
+      
+      {/* Dashed Tech Ring */}
+      <mesh rotation={[0, 0, 0.5]}>
+        <ringGeometry args={[2.4, 2.45, 64, 1, 0, Math.PI * 1.5]} />
+        <meshBasicMaterial color="#93c5fd" transparent opacity={0.15} side={THREE.DoubleSide} />
+      </mesh>
+      
+      {/* Inner Glow Circle */}
+      <mesh>
+         <ringGeometry args={[2.0, 2.01, 128]} />
+         <meshBasicMaterial color="#E39A2E" transparent opacity={0.3} side={THREE.DoubleSide} />
+      </mesh>
+    </group>
+  );
+};
+
+/* =======================
+   PREMIUM OBSIDIAN CUBES
+======================= */
+const SpringCube = ({ position, delay }) => {
+  const ref = useRef();
+  const baseY = position[1];
+
+  useFrame(({ clock }) => {
+    // Smooth floating animation
+    const t = clock.elapsedTime;
+    ref.current.position.y = baseY + Math.sin(t * 1.5 + delay) * 0.15;
+    
+    // Slight tilt for realism
+    ref.current.rotation.x = Math.sin(t * 0.5 + delay) * 0.05;
+    ref.current.rotation.z = Math.cos(t * 0.5 + delay) * 0.05;
+  });
+
+  return (
+    <mesh ref={ref} position={position} castShadow receiveShadow>
       <boxGeometry args={[1.2, 1.2, 1.2]} />
-      
-      {/* Dark Glassy/Tech Material */}
-      <meshPhysicalMaterial
-        color="#1a2b4b"       // Dark Blue-ish tint
-        metalness={0.8}
-        roughness={0.1}
-        transmission={0.2}    // Slight glass effect
-        thickness={1}
-        clearcoat={1}
-        clearcoatRoughness={0}
-      />
-      
-      {/* Edge Highlights (Optional for that tech look) */}
+      {/* OBSIDIAN GLASS MATERIAL */}
+     <meshPhysicalMaterial
+  color="#081628"        // ⚫ mostly black with blue base (60/40)
+  emissive="#172554"     // 🔵 subtle deep blue inner tone
+  emissiveIntensity={0.28}
+
+  metalness={0.88}      // strong metal feel
+  roughness={0.14}      // controlled gloss
+  transmission={0.15}   // very subtle glass
+  thickness={2}
+
+  clearcoat={1}
+  clearcoatRoughness={0.07}
+  ior={1.5}
+/>
+
+
+
+      {/* NEON EDGES */}
       <lineSegments>
         <edgesGeometry args={[new THREE.BoxGeometry(1.2, 1.2, 1.2)]} />
-        <lineBasicMaterial color="#4a8dff" transparent opacity={0.3} />
+        <lineBasicMaterial
+  color="#3b82f6"
+  transparent
+  opacity={0.25}
+/>
+
       </lineSegments>
     </mesh>
   );
 };
 
-// 3. The Main Scene Assembly
+/* =======================
+   RESTORED: FADED SHADER GRID
+======================= */
+const FadedGrid = () => {
+  const mat = useRef();
+
+  useFrame(({ clock }) => {
+    if (mat.current) {
+      mat.current.uniforms.uTime.value = clock.elapsedTime;
+    }
+  });
+
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.2, 0]}>
+      <planeGeometry args={[12, 12, 1, 1]} />
+      <shaderMaterial
+        ref={mat}
+        transparent
+        depthWrite={false}
+        uniforms={{
+          uTime: { value: 0 },
+          uColor: { value: new THREE.Color("#E39A2E") }, // ORANGE/GOLD Color
+        }}
+        vertexShader={`
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+          }
+        `}
+        fragmentShader={`
+          varying vec2 vUv;
+          uniform vec3 uColor;
+          uniform float uTime;
+
+          float gridLine(float coord) {
+            float width = fwidth(coord);
+            return 1.0 - smoothstep(0.0, width * 1.2, abs(fract(coord) - 0.5));
+          }
+
+          void main() {
+            float scale = 20.0;
+            float gx = gridLine(vUv.x * scale);
+            float gy = gridLine(vUv.y * scale);
+            float grid = max(gx, gy);
+
+            // Center Fade
+            float centerDist = distance(vUv, vec2(0.5));
+            float centerFade = smoothstep(0.55, 0.25, centerDist);
+
+            // Edge Fade
+            float edgeFadeX = smoothstep(0.0, 0.08, vUv.x) * smoothstep(0.0, 0.08, 1.0 - vUv.x);
+            float edgeFadeY = smoothstep(0.0, 0.08, vUv.y) * smoothstep(0.0, 0.08, 1.0 - vUv.y);
+            float edgeFade = edgeFadeX * edgeFadeY;
+
+            // Soft Pulse
+            float pulse = 0.12 + sin(uTime * 2.0) * 0.03;
+
+            float alpha = grid * centerFade * edgeFade * pulse;
+
+            gl_FragColor = vec4(uColor, alpha);
+          }
+        `}
+      />
+    </mesh>
+  );
+};
+
+/* =======================
+   MAIN SCENE ASSEMBLY
+======================= */
 const Scene = () => {
   return (
-    <group rotation={[0, -Math.PI / 4, 0]}> {/* Rotate whole group to match 3/4 view */}
+    <group rotation={[0, -Math.PI / 4, 0]}>
       
-      {/* The 4 Cubes (2x2 Grid) */}
-      {/* We pass a 'delay' prop to offset their animation for the wave effect */}
+      {/* Floating Cubes */}
       <SpringCube position={[-0.65, 0, -0.65]} delay={0} />
       <SpringCube position={[0.65, 0, -0.65]} delay={1} />
       <SpringCube position={[-0.65, 0, 0.65]} delay={2} />
       <SpringCube position={[0.65, 0, 0.65]} delay={3} />
 
-      {/* The Sphere on top */}
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-         <GlowingSphere />
+      {/* Restored Shader Grid */}
+      <FadedGrid />
+      
+      {/* Atmosphere Sparkles */}
+      <Sparkles 
+        count={50} 
+        scale={6} 
+        size={4} 
+        speed={0.4} 
+        opacity={0.5} 
+        color="#E39A2E" // Gold Accents
+      />
+
+      {/* Floating Centerpiece */}
+      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5} floatingRange={[0, 0.3]}>
+        <BackgroundHUD />
+        <GlowingSphere />
       </Float>
+
     </group>
   );
 };
 
-// components/Mockups/HeroMockup.jsx
-
+/* =======================
+   HERO MOCKUP EXPORT
+======================= */
 export default function HeroMockup() {
   return (
     <div className="w-full h-[600px] lg:h-[700px] relative">
       
       <Canvas
-        // CHANGE 2: Camera wahi 'z: 6' rakha hai (zoom maintain karne ke liye)
-        // lekin 'y' ko 2.5 kar diya taaki camera thoda upar dekhe
-        camera={{ position: [0, 2.5, 6], fov: 45 }}
-        gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
+        camera={{ position: [0, 2, 8], fov: 35 }} 
+        gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, exposure: 1.2 }}
+        shadows
       >
-        <ambientLight intensity={0.5} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
-        <pointLight position={[-10, -10, -10]} intensity={0.5} color="blue" />
-        <pointLight position={[0, 1, 0]} intensity={2} color="#0088ff" distance={3} />
+        {/* LIGHTING SETUP */}
+        <ambientLight intensity={0.4} color="#ffffff" />
         
+        {/* Main Key Light */}
+        <spotLight
+          position={[10, 15, 10]}
+          angle={0.3}
+          penumbra={0.5}
+          intensity={5}
+          color="#ffffff"
+          castShadow
+          shadow-bias={-0.0001}
+        />
+
+        {/* Blue Rim Light (Left) */}
+        <spotLight position={[-5, 5, -5]} angle={0.5} intensity={5} color="#3b82f6" />
+        
+        {/* Gold Rim Light (Right - Subtle) */}
+        <pointLight position={[5, 0, 0]} intensity={2} color="#E39A2E" distance={5} />
+
+        {/* Environment Reflections */}
         <Environment preset="city" />
 
-        {/* Scene Logic */}
-        <group position={[0, -0.5, 0]}>
-           <Scene />
+        {/* Scene Content */}
+        <group position={[0, -0.8, 0]}>
+          <Scene />
         </group>
 
-        <ContactShadows position={[0, -2, 0]} opacity={0.6} scale={10} blur={2.5} far={4} color="#0a1a3a" />
+        {/* Shadows */}
+        <ContactShadows
+          position={[0, -2.1, 0]}
+          opacity={0.7}
+          scale={15}
+          blur={2.5}
+          far={5}
+          color="#020617"
+        />
       </Canvas>
     </div>
   );
