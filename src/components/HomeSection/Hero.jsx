@@ -1,45 +1,120 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import heroData from "@/components/data/hero.json";
 import HeroMockup from "../Mockups/HeroMockup";
+import { FiArrowUpRight } from "react-icons/fi";
 
 export default function Hero() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const navMapping = {
+    "Home": "hero",
+    "Focus": "focus",
+    "Impact": "impact",
+    "Capabilities": "capabilities",
+    "Clients": "clients",
+    "Workflow": "workflow",
+    "Process": "process",
+    "Contact": "contact" 
+  };
+
+  const totalItems = heroData.sideNav.length;
+  // Calculate percentage based on index
+  const progressPercentage = (activeIndex / (totalItems - 1)) * 100;
+
   return (
     <section
       className="relative w-full bg-white py-10 overflow-hidden"
       aria-labelledby="hero-heading"
     >
-      {/* Visual Decor: Subtle background glow behind the mockup area (Does not affect layout) */}
+      {/* Visual Decor: Subtle background glow (Grid Removed) */}
       <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-b from-blue-50/50 to-white -z-10 blur-3xl opacity-60" />
 
-      <div className="mx-auto px-6 pb-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="mx-auto px-6 pb-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
 
         {/* LEFT SIDE */}
-        <div className="flex gap-10">
+        <div className="flex gap-16 pl-6">
 
-          {/* Side vertical nav */}
-          <nav
-            aria-label="Section navigation"
-            className="hidden lg:flex flex-col gap-4 text-[11px] font-bold tracking-widest text-gray-300 pt-2 whitespace-nowrap cursor-pointer uppercase"
+        
+          <div 
+            className="relative hidden lg:flex flex-col h-[300px]"
+            onMouseLeave={() => setActiveIndex(0)} 
           >
-            {heroData.sideNav.map((item, index) => (
-              <div key={item} className="flex flex-col items-center group">
-                <span className="writing-vertical-rl transition-colors duration-300 group-hover:text-[#E39A2E]">
-                  {item}
-                </span>
-                {/* Decorative line between items */}
-                {index !== heroData.sideNav.length - 1 && (
-                   <div className="w-[1px] h-4 bg-gray-100 my-2" />
-                )}
-              </div>
-            ))}
-          </nav>
+            
+            <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gray-100 rounded-full" />
 
-          {/* Main content */}
-          <div className="px-16 space-y-6">
+            {/* 2. THE ACTIVE SNAKE LINE (Orange) */}
+            <div 
+              className="absolute left-0 top-0 w-[2px] bg-[#E39A2E] rounded-full transition-all duration-500 ease-out shadow-[0_0_10px_#E39A2E]"
+              style={{ height: `${progressPercentage}%` }} // Grows from 0% to 100%
+            />
+
+            {/* 3. THE GLOWING SPHERE (Centered on Tip) */}
+            <div 
+              className="absolute left-[1px] z-20 flex items-center justify-center transition-all duration-500 ease-out"
+              style={{ 
+                top: `${progressPercentage}%`, 
+                transform: 'translate(-50%, -50%)', 
+                width: '24px',  
+                height: '24px' 
+              }} 
+            >
+                {/* Outer Ripple Animation */}
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#E39A2E] opacity-40 animate-ping"></span>
+                
+                {/* White Border Ring */}
+                <span className="relative inline-flex rounded-full h-4 w-4 border-[2px] border-[#E39A2E] bg-white shadow-md"></span>
+                
+                {/* Inner Solid Core */}
+                <span className="absolute inline-flex rounded-full h-2 w-2 bg-[#E39A2E]"></span>
+            </div>
+
+            {/* 4. NAV ITEMS */}
+            <nav className="flex flex-col justify-between h-full relative z-10"> 
+              {heroData.sideNav.map((item, index) => {
+                const targetId = navMapping[item] || "hero";
+                const isActive = index === activeIndex;
+
+                return (
+                  <div 
+                    key={item}
+                    onMouseEnter={() => setActiveIndex(index)}
+                    onClick={() => scrollToSection(targetId)}
+                    className="group relative flex items-center cursor-pointer pl-10"
+                  >
+                    {/* Hit Area for better UX */}
+                    <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-full h-10" />
+
+                    <span 
+                      className={`
+                        writing-vertical-rl text-[11px] font-bold tracking-widest uppercase select-none
+                        transition-all duration-300 transform origin-left
+                        ${isActive ? 'text-[#E39A2E] scale-110' : 'text-gray-300 group-hover:text-gray-400'}
+                      `}
+                    >
+                      {item}
+                    </span>
+                  </div>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Main content (Clean UI - Grid Removed) */}
+          <div className="px-4 space-y-6">
             
             {/* Styled Badge */}
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-16">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-16 shadow-sm shadow-orange-100/50">
               <span className="w-1.5 h-1.5 rounded-full bg-[#E39A2E] mr-2 animate-pulse" />
               <span className="block text-xs font-bold tracking-widest text-[#E39A2E] uppercase">
                 {heroData.badge}
@@ -57,11 +132,13 @@ export default function Hero() {
               ))}
             </h1>
 
-            <p className="mt-8 max-w-xl text-gray-500 text-lg leading-relaxed font-medium">
-              {heroData.description}
-            </p>
+            <div className="pl-0"> {/* Border removed per request to revert UI style */}
+                <p className="max-w-xl text-gray-500 text-lg leading-relaxed font-medium">
+                {heroData.description}
+                </p>
+            </div>
 
-            {/* Improved Button UI */}
+            {/* Button */}
             <div className="mt-8">
               <Link
                 href={heroData.cta.href}
@@ -81,54 +158,13 @@ export default function Hero() {
         </div>
 
         {/* RIGHT SIDE IMAGE */}
-<div className="relative flex justify-center items-center">
-
-  {/* BOTTOM FADE MASK */}
-  <div className="pointer-events-none absolute bottom-0 left-0 w-full h-40 
-                  bg-gradient-to-t from-white to-transparent z-20" />
-
-  {/* Subtle glow specifically behind the model center */}
-  <div className="absolute w-[300px] h-[300px] bg-blue-100 rounded-full blur-[80px] -z-10" />
-
-  <HeroMockup />
-</div>
-       
-      </div>
-
-      {/* SUPPORT SECTION BELOW HERO */}
-      <div className="mx-auto max-w-[90%] px-6 -mt-10 relative z-20">
-        <div
-          className="
-            flex flex-col lg:flex-row items-start lg:items-center
-            justify-between gap-6
-            rounded-t-2xl border border-gray-100 
-            bg-white/70 backdrop-blur-xl 
-            shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)]
-            h-auto lg:h-48 
-            px-8 py-8
-          "
-        >
-          {/* Left */}
-          <div className="flex items-center gap-5">
-            <div className="flex items-center justify-center w-16 h-16 border-white border px-2 py-2 rounded-2xl bg-gradient-to-br from-white to-gray-50 shadow-sm">
-              <Image
-                src={heroData.supportSection.icon}
-                alt=""
-                width={32}
-                height={32}
-                className="opacity-90"
-              />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-              {heroData.supportSection.title}
-            </h2>
-          </div>
-
-          {/* Right */}
-          <p className="max-w-md text-gray-500 text-md leading-relaxed text-justify font-medium">
-            {heroData.supportSection.description}
-          </p>
+        <div className="relative flex justify-center items-center">
+          <div className="pointer-events-none absolute bottom-0 left-0 w-full h-40 
+                          bg-gradient-to-t from-white to-transparent z-20" />
+          <div className="absolute w-[300px] h-[300px] bg-blue-100 rounded-full blur-[80px] -z-10" />
+          <HeroMockup />
         </div>
+       
       </div>
 
     </section>

@@ -1,66 +1,48 @@
+"use client";
+
 import FeatureCard from "./FeatureCard";
-import cards from "@/components/data/featureCards.json";
+import cards from "@/components/data/featureCards.json"; // Data imported from JSON file
 
 export default function FeatureCardsSection() {
   return (
-    <section className="py-44">
+    <section className="py-32 bg-black text-white">
+      
       {/* ===== CENTER HEADER ===== */}
-      <div className="mx-auto  text-center mb-20">
-        <span className="inline-flex items-center gap-2.5 rounded-full bg-[#FFF8F0] border border-[#FFE8CC] px-4 py-1.5 shadow-[0_2px_8px_-2px_rgba(227,154,46,0.15)] transition-transform hover:scale-105 cursor-default">
-  {/* Pulsing Dot Animation */}
-  <span className="relative flex h-2 w-2">
-    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E39A2E] opacity-75"></span>
-    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E39A2E]"></span>
-  </span>
+      <div className="mx-auto text-center mb-24 px-6">
+        
+        {/* Pulsing Badge */}
+        <div className="inline-flex items-center gap-2.5 rounded-full bg-white/5 border border-white/10 px-4 py-1.5 mb-8">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E39A2E] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E39A2E]"></span>
+          </span>
+          <span className="text-xs font-bold tracking-widest text-[#E39A2E] uppercase">
+            Core Capabilities
+          </span>
+        </div>
 
-  {/* Text Styling */}
-  <span className="text-xs font-bold tracking-widest text-[#E39A2E] ">
-    Core Capabilities
-  </span>
-</span>
-        <h2 className="mt-6 text-4xl font-semibold leading-snug text-black">
-          Systems Built for Scale, Performance & Longevity
+        <h2 className="text-4xl md:text-5xl font-semibold leading-tight text-white">
+          The Future of <span className="text-[#E39A2E]">System Architecture</span> Is Here
         </h2>
       </div>
-      <div className="mx-auto max-w-[90%] grid grid-cols-[2fr_1fr] gap-6 py-10">
 
-        <div className="flex flex-col gap-6">
-
-          <div className="grid grid-cols-[2fr_1fr] gap-5">
-            <div className="h-[550px]">
-              <FeatureCard item={cards[0]} />
-            </div>
-
-            <div className="h-[550px]">
-              <FeatureCard item={cards[1]} />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-[1fr_2fr] gap-5">
-            <div className="h-[360px]">
-              <FeatureCard item={cards[3]} />
-            </div>
-
-            <div className="h-[360px]">
-              <FeatureCard item={cards[4]} />
-            </div>
-          </div>
-
+      {/* ===== 3 COLUMN GRID ===== */}
+      <div className="mx-auto max-w-7xl px-6">
+        {/* Grid Layout: 
+            - 1 Column on Mobile
+            - 3 Columns on Large Screens
+            - Borders between items using divide-x (Clean approach)
+            - Top/Bottom borders on the container
+        */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 lg:divide-x lg:divide-gray-800 border-t border-b border-gray-800">
+            {cards.map((card) => (
+                <div key={card.id}>
+                    <FeatureCard item={card} />
+                </div>
+            ))}
         </div>
-
-        <div className="flex flex-col gap-6">
-
-          <div className="h-[350px]">
-            <FeatureCard item={cards[2]} />
-          </div>
-
-          <div className="h-[560px]">
-            <FeatureCard item={cards[5]} />
-          </div>
-
-        </div>
-
       </div>
+
     </section>
   );
 }

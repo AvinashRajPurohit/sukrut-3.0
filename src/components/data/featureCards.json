@@ -2,49 +2,22 @@
   {
     "id": 1,
     "title": "System-First Architecture",
-    "short": "Designed as scalable systems, not pages.",
-    "details": "Every product is architected as a modular, extensible system that evolves with your business.",
-    "image": "/SystemArchitecture.png",
-    "span": "lg:col-span-2 lg:row-span-2"
+    "short": "Scalable systems, not just pages.",
+    "details": "Every product is architected as a modular, extensible system that evolves with your business. We prioritize clean architecture over quick fixes to ensure longevity.",
+    "graphicType": "network"
   },
   {
     "id": 2,
-    "title": "Continuous Monitoring & Optimization",
-    "short": "Systems that stay healthy as they scale.",
-    "details": "Real-time insights, logging, and performance tuning ensure reliability in production.",
-    "image": "/Monitoring.png",
-    "span": "lg:col-span-1 lg:row-span-2"
+    "title": "Continuous Scale & Security",
+    "short": "Secure by default, built to grow.",
+    "details": "Real-time insights, logging, and performance tuning ensure reliability. Our security-first approach protects data at every transmission point without slowing down growth.",
+    "graphicType": "globe"
   },
   {
     "id": 3,
-    "title": "Scalability Built-In",
-    "short": "Growth without rewrites.",
-    "details": "Designed to handle growth in users, data, and features without architectural changes.",
-    "image": "/Scalability.png",
-    "span": "lg:col-span-1 lg:row-span-1"
-  },
-  {
-    "id": 4,
-    "title": "Security & Reliability",
-    "short": "Secure by default.",
-    "details": "Security-first architecture with real-world reliability and compliance in mind.",
-    "image": "/Security.png",
-    "span": "lg:col-span-1 lg:row-span-1"
-  },
-  {
-    "id": 5,
-    "title": "Performance by Design",
-    "short": "Fast, stable, efficient systems.",
-    "details": "Speed and efficiency are engineered from the ground up, not added later.",
-    "image": "/Performance.png",
-    "span": "lg:col-span-1 lg:row-span-1"
-  },
-  {
-    "id": 6,
-    "title": "Future-Ready Engineering",
-    "short": "Built to evolve.",
-    "details": "Clean, maintainable codebases that adapt as your business grows.",
-    "image": "/FutureReady.png",
-    "span": "lg:col-span-1 lg:row-span-1"
+    "title": "Future-Ready Integration",
+    "short": "Built to adapt and evolve.",
+    "details": "Clean, maintainable codebases that adapt as your business grows. We ensure seamless integration with third-party tools and future technologies from day one.",
+    "graphicType": "burst"
   }
 ]

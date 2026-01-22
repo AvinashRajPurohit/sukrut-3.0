@@ -8,7 +8,7 @@ export default function FocusSection() {
   const [active, setActive] = useState(focusData.items[0].id);
 
   return (
-    <section className="py-24 lg:py-44 relative">
+    <section className="py-24 relative">
       
       {/* Optional: Glow behind the container for extra depth on the main page */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-[#E39A2E] opacity-5 blur-[150px] -z-10 rounded-full pointer-events-none" />

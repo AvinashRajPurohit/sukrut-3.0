@@ -1,74 +1,47 @@
 "use client";
 
 import { useRef } from "react";
-import gsap from "gsap";
-import { FiArrowUpRight } from "react-icons/fi";
+import Link from "next/link";
+import { FiChevronRight, FiCheckCircle } from "react-icons/fi";
+import AbstractGraphic from "../Mockups/AbstractGraphics";
 
 export default function FeatureCard({ item }) {
-   const imageRef = useRef(null);
-  const textRef = useRef(null);
-  const detailRef = useRef(null);
-  const iconRef = useRef(null);
-
-  const onEnter = () => {
-    gsap.timeline({ defaults: { ease: "power3.out" } })
-      .to(imageRef.current, { x: 40, opacity: 0, duration: 0.5 })
-      .to(textRef.current, { y: -20, duration: 0.4 }, "<")
-      .fromTo(detailRef.current, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4 }, "-=0.2")
-      .fromTo(iconRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3 }, "-=0.2");
-  };
-
-  const onLeave = () => {
-    gsap.timeline()
-      .to(iconRef.current, { opacity: 0, duration: 0.2 })
-      .to(detailRef.current, { opacity: 0, y: 10, duration: 0.2 })
-      .to(textRef.current, { y: 0, duration: 0.3 }, "<")
-      .to(imageRef.current, { x: 0, opacity: 1, duration: 0.4 }, "<");
-  };
-
   return (
-    <div
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-      className="relative h-full w-full overflow-hidden rounded-2xl bg-gray-900 p-6 cursor-pointer"
-    >
-      {/* IMAGE AS DIV */}
-      <div
-        ref={imageRef}
-        className="absolute inset-0 bg-cover bg-center opacity-90"
-        style={{ backgroundImage: `url(${item.image})` }}
-      />
-
-      {/* CONTENT */}
-      <div className="relative z-10 flex h-full flex-col justify-between">
-        <div ref={textRef}>
-          <h3 className="text-lg mt-4 font-semibold text-white">
-            {item.title}
-          </h3>
-          <p className="mt-2 text-sm text-gray-300">
-            {item.short}
-          </p>
-
-          <p
-          ref={detailRef}
-          className="mt-28 text-sm text-gray-400 opacity-0"
-        >
+    <div className="group relative flex h-[500px] flex-col justify-between overflow-hidden bg-[#111111] p-8 transition-all duration-300 hover:bg-[#161616] border-b-2 border-transparent hover:border-[#E39A2E]">
+      
+      {/* 1. TOP CONTENT */}
+      <div className="relative z-10">
+        <h3 className="text-[23px] font-medium text-white mb-6">
+          {item.title}
+        </h3>
+        
+        <p className="text-sm leading-relaxed text-gray-400 mb-6">
           {item.details}
         </p>
-        </div>
 
-        
-
-        {/* EXPAND ICON */}
-        <div
-          ref={iconRef}
-          className="absolute bottom-4 right-4 opacity-0"
-        >
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E39A2E] text-black">
-            <FiArrowUpRight />
-          </div>
-        </div>
+        {/* Optional Check Icon like in reference */}
+         <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+             <FiCheckCircle className="text-[#E39A2E] text-xl" />
+         </div>
       </div>
+
+      {/* 2. MIDDLE - 3D ANIMATION AREA */}
+      {/* This mimics the graphics in the center/bottom of the reference cards */}
+      <div className="absolute inset-0 top-40 z-0 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+        <AbstractGraphic type={item.graphicType} />
+      </div>
+
+      {/* 3. BOTTOM LINK */}
+      {/* <div className="relative z-10 mt-auto pt-6">
+        <Link 
+            href="#" 
+            className="inline-flex items-center text-xs font-bold tracking-widest text-white uppercase hover:text-[#E39A2E] transition-colors"
+        >
+            Read More 
+            <FiChevronRight className="ml-1 text-[#E39A2E]" />
+        </Link>
+      </div> */}
+
     </div>
   );
 }

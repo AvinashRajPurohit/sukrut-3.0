@@ -7,11 +7,14 @@
     "href": "/contact"
   },
   "sideNav": [
-    "Intro",
-    "Features",
-    "Core Technologies",
-    "Services",
-    "Contacts"
+    "Home",
+    "Focus",
+    "Impact",
+    "Capabilities",
+    "Clients",
+    "Workflow",
+    "Process",
+    "Contact"
   ],
   "image": {
     "src": "/cube.png",

@@ -8,16 +8,26 @@ export default function WhyClientsSection() {
     <section className="relative bg-white py-10 pb-60 overflow-hidden">
       
       {/* === BACKGROUND GRID (Faded Edges) === */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div 
-          className="absolute inset-0 h-full w-full"
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)'
+        }}
+      >
+        <div
+          className="absolute inset-0 opacity-[0.4]"
           style={{
-            backgroundImage: `linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)`,
-            backgroundSize: '30px 30px',
-            maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)',
-            WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)'
+            backgroundImage: `
+            linear-gradient(#E5E7EB 1px, transparent 1px), 
+            linear-gradient(90deg, #E5E7EB 1px, transparent 1px)
+          `,
+            backgroundSize: '32px 32px', // Graph paper size
           }}
         />
+
+        <div className="absolute top-0 left-10 w-[1px] h-full bg-gray-200 hidden lg:block" />
+        <div className="absolute top-0 right-10 w-[1px] h-full bg-gray-200 hidden lg:block" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-[90%] px-6">
