@@ -5,7 +5,7 @@
     "metric": "40%",
     "metricLabel": "Faster Website Performance",
     "description": "We begin with research-driven strategy and UX planning to reduce friction and create intuitive digital experiences.",
-    "image": "/strategy.png"
+    "image": "/designstrategy.png"
   },
   {
     "id": 2,
@@ -13,7 +13,7 @@
     "metric": "99.9%",
     "metricLabel": "Reliable & Scalable Builds",
     "description": "Using modern frameworks and clean architecture, we build secure, scalable, and future-ready websites.",
-    "image": "/development.png"
+    "image": "/WebDevelopments.png"
   },
   {
     "id": 3,
@@ -29,7 +29,7 @@
     "metric": "24/7",
     "metricLabel": "Monitoring & Support",
     "description": "Continuous monitoring, updates, and proactive support keep your platform secure and high-performing.",
-    "image": "/support.png"
+    "image": "/clientsupport.png"
   },
   {
     "id": 5,

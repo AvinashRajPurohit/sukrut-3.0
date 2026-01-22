@@ -9,27 +9,32 @@
     {
       "id": 1,
       "title": "Product Discovery & Strategy",
-      "subtitle": "User research, requirements analysis, roadmap planning"
+      "subtitle": "User research, requirements analysis, roadmap planning",
+      "detailDescription": "We align technology with business goals through deep research, defining a strategic roadmap for long-term success."
     },
     {
       "id": 2,
       "title": "UI/UX Design & Prototyping",
-      "subtitle": "User-centered interfaces focused on usability and performance"
+      "subtitle": "User-centered interfaces focused on usability and performance",
+      "detailDescription": "Our designers transform concepts into intuitive, accessible, and high-performance interfaces that engage users."
     },
     {
       "id": 3,
       "title": "Product Engineering",
-      "subtitle": "Frontend, backend, APIs, scalable architecture"
+      "subtitle": "Frontend, backend, APIs, scalable architecture",
+      "detailDescription": "We build robust, secure, and scalable applications using modern frameworks and clean architecture principles."
     },
     {
       "id": 4,
       "title": "Cloud & DevOps",
-      "subtitle": "Secure deployment, CI/CD, monitoring and scalability"
+      "subtitle": "Secure deployment, CI/CD, monitoring and scalability",
+      "detailDescription": "Automated CI/CD pipelines and secure cloud infrastructure ensure your app scales smoothly and remains resilient."
     },
     {
       "id": 5,
       "title": "AI Automation & Optimization",
-      "subtitle": "Smart features, performance tuning, continuous improvement"
+      "subtitle": "Smart features, performance tuning, continuous improvement",
+      "detailDescription": "Post-launch, we leverage AI and data analytics to continuously optimize performance and drive operational efficiency."
     }
   ]
 }
