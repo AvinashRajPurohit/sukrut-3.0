@@ -13,15 +13,9 @@ import {
   FiGlobe,
   FiCpu,
   FiZap,
-  FiMoreVertical,
-  FiMenu,
-  FiSearch,
-  FiMapPin,
-  FiMoreHorizontal
+  FiMoreHorizontal,
+  FiLayout
 } from "react-icons/fi";
-
-// Added specific icons needed for the UI logic
-import { FiLayout } from "react-icons/fi"; 
 
 const TABS = [
   { label: "Architecture", icon: FiLayout, desc: "Topology" },
@@ -37,31 +31,33 @@ export function CloudMockup() {
   const progressBarRef = useRef(null);
   const barsRef = useRef([]);
 
-  /* AUTO FLOW CONTROL */
+  /* --- FIXED: AUTO FLOW CONTROL --- */
   useEffect(() => {
     if (isHovered) return;
 
-    // Animate Progress Bar
-    gsap.fromTo(progressBarRef.current, 
-      { width: "0%" }, 
-      { 
-        width: "100%", 
-        duration: 3.5, 
-        ease: "linear", 
-        onComplete: () => {
-          setStage((s) => (s + 1) % TABS.length);
+    // GSAP Context ensures proper cleanup in React Strict Mode
+    const ctx = gsap.context(() => {
+      gsap.fromTo(progressBarRef.current, 
+        { width: "0%" }, 
+        { 
+          width: "100%", 
+          duration: 2.0, // FAST: Reduced from 3.5s to 2.0s
+          ease: "linear", 
+          onComplete: () => {
+            // Using callback to ensure we get the latest state safely
+            setStage((prev) => (prev + 1) % TABS.length);
+          }
         }
-      }
-    );
+      );
+    });
 
-    return () => gsap.killTweensOf(progressBarRef.current);
+    return () => ctx.revert(); // This kills the animation completely on unmount/update
   }, [stage, isHovered]);
 
-  /* CONTENT TRANSITIONS */
+  /* --- CONTENT TRANSITIONS (Faster) --- */
   useEffect(() => {
     if (!contentRef.current) return;
     
-    // Animate Content Entrance
     gsap.fromTo(
       contentRef.current.children,
       { opacity: 0, y: 15, scale: 0.98 },
@@ -69,38 +65,36 @@ export function CloudMockup() {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 0.5,
-        stagger: 0.08,
+        duration: 0.3, // FAST: Reduced from 0.5s
+        stagger: 0.05, // FAST: Reduced stagger
         ease: "power2.out",
         clearProps: "all"
       }
     );
   }, [stage]);
 
-  /* SCALING BAR ANIMATION (Specific to Stage 1) */
+  /* --- SCALING BAR ANIMATION (Faster) --- */
   useEffect(() => {
     if (stage !== 1) return;
-    if (!barsRef.current.length) return;
+    
+    // Reset bars first to ensure re-animation works
+    gsap.set(barsRef.current, { width: "0%" });
 
-    gsap.fromTo(
-      barsRef.current,
-      { width: "0%" },
-      {
+    gsap.to(barsRef.current, {
         width: (i, el) => el.dataset.value,
-        duration: 1.2,
+        duration: 0.8, // FAST: Reduced from 1.2s
         ease: "expo.out",
-        stagger: 0.1,
-      }
-    );
+        stagger: 0.05,
+    });
   }, [stage]);
 
   return (
     <div 
       className="w-full max-w-[900px] h-[500px] mx-auto p-0"
-      onMouseEnter={() => { setIsHovered(true); gsap.to(progressBarRef.current, { paused: true }); }}
-      onMouseLeave={() => { setIsHovered(false); gsap.to(progressBarRef.current, { paused: false }); }}
+      onMouseEnter={() => setIsHovered(true)} // Pausing via state logic is safer than gsap.to paused
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* OUTER CONTAINER - Cloud Console Look */}
+      {/* OUTER CONTAINER */}
       <div className="relative h-full rounded-2xl bg-white border border-gray-100 flex flex-col shadow-2xl shadow-blue-900/5 overflow-hidden ring-1 ring-gray-900/5 font-sans">
         
         {/* HEADER */}
@@ -112,8 +106,6 @@ export function CloudMockup() {
             <div>
               <h4 className="text-sm font-bold text-gray-900 leading-tight">Cloud Console</h4>
               <div className="flex items-center gap-2 text-xs text-gray-500">
-                <FiMapPin size={10} />
-                <span>us-east-1</span>
                 <span className="text-gray-300">|</span>
                 <span className="text-green-600 font-medium flex items-center gap-1.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"></span>
@@ -123,7 +115,6 @@ export function CloudMockup() {
             </div>
           </div>
 
-          {/* Region/User Mockup */}
           <div className="flex items-center gap-3">
              <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-md border border-gray-100 text-xs text-gray-600">
                 <FiGlobe /> Global Edge
@@ -178,7 +169,7 @@ export function CloudMockup() {
               
               <div ref={contentRef} className="h-full w-full relative z-10 flex flex-col">
                  
-                 {/* STAGE 0: ARCHITECTURE (Topology Map) */}
+                 {/* STAGE 0: ARCHITECTURE */}
                  {stage === 0 && (
                     <div className="h-full flex flex-col items-center justify-center">
                        <div className="mb-8 text-center">
@@ -187,7 +178,6 @@ export function CloudMockup() {
                        </div>
                        
                        <div className="relative flex items-center gap-12">
-                          {/* Load Balancer Node */}
                           <div className="relative z-10">
                              <div className="h-16 w-16 bg-white rounded-2xl border-2 border-orange-100 shadow-lg flex items-center justify-center text-orange-500 relative">
                                 <div className="absolute -top-2 -right-2 h-4 w-4 bg-green-500 rounded-full border-2 border-white animate-pulse" />
@@ -196,12 +186,10 @@ export function CloudMockup() {
                              <div className="text-center mt-2 text-xs font-bold text-gray-600">Load Balancer</div>
                           </div>
 
-                          {/* Connection Lines (CSS) */}
                           <div className="absolute left-16 right-16 top-8 h-[2px] bg-gradient-to-r from-orange-200 via-blue-200 to-purple-200">
-                             <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 h-8 w-[1px] bg-blue-200" /> {/* Vertical branch */}
+                             <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 h-8 w-[1px] bg-blue-200" />
                           </div>
 
-                          {/* Server Nodes */}
                           <div className="flex flex-col gap-6 relative z-10">
                              <NodeCard icon={<FiServer />} label="App Server 1" color="blue" />
                              <NodeCard icon={<FiServer />} label="App Server 2" color="blue" />
@@ -211,7 +199,7 @@ export function CloudMockup() {
                     </div>
                  )}
 
-                 {/* STAGE 1: AUTO SCALING (Metrics Bars) */}
+                 {/* STAGE 1: AUTO SCALING */}
                  {stage === 1 && (
                     <div className="h-full flex flex-col justify-center">
                        <div className="flex justify-between items-end mb-6">
@@ -238,7 +226,9 @@ export function CloudMockup() {
                                 </div>
                                 <div className="h-3 w-full bg-gray-100 rounded-full overflow-hidden">
                                    <div 
-                                      ref={el => barsRef.current[i] = el}
+                                      ref={el => {
+                                          if(el) barsRef.current[i] = el;
+                                      }}
                                       data-value={m.width}
                                       className={`h-full rounded-full ${m.color} opacity-80 shadow-sm`}
                                       style={{ width: "0%" }}
@@ -250,7 +240,7 @@ export function CloudMockup() {
                     </div>
                  )}
 
-                 {/* STAGE 2: MONITORING (Health Dashboard) */}
+                 {/* STAGE 2: MONITORING */}
                  {stage === 2 && (
                     <div className="h-full flex flex-col">
                        <div className="mb-6 flex justify-between items-center">
@@ -259,47 +249,18 @@ export function CloudMockup() {
                        </div>
 
                        <div className="grid grid-cols-2 gap-4">
-                          <HealthCard 
-                             title="Avg Response" 
-                             value="45ms" 
-                             status="Healthy" 
-                             trend="-2ms"
-                             color="green" 
-                             icon={<FiActivity />} 
-                          />
-                          <HealthCard 
-                             title="Error Rate" 
-                             value="0.02%" 
-                             status="Stable" 
-                             trend="0%"
-                             color="blue" 
-                             icon={<FiShield />} 
-                          />
-                          <HealthCard 
-                             title="Throughput" 
-                             value="12k rpm" 
-                             status="High Load" 
-                             trend="+1.2k"
-                             color="orange" 
-                             icon={<FiZap />} 
-                          />
-                          <HealthCard 
-                             title="CPU Load" 
-                             value="34%" 
-                             status="Normal" 
-                             trend="-5%"
-                             color="purple" 
-                             icon={<FiCpu />} 
-                          />
+                          <HealthCard title="Avg Response" value="45ms" status="Healthy" trend="-2ms" color="green" icon={<FiActivity />} />
+                          <HealthCard title="Error Rate" value="0.02%" status="Stable" trend="0%" color="blue" icon={<FiShield />} />
+                          <HealthCard title="Throughput" value="12k rpm" status="High Load" trend="+1.2k" color="orange" icon={<FiZap />} />
+                          <HealthCard title="CPU Load" value="34%" status="Normal" trend="-5%" color="purple" icon={<FiCpu />} />
                        </div>
                     </div>
                  )}
 
-                 {/* STAGE 3: STATUS (Live Success) */}
+                 {/* STAGE 3: STATUS */}
                  {stage === 3 && (
                     <div className="h-full flex flex-col items-center justify-center text-center">
                        <div className="relative mb-8">
-                          {/* Animated Rings */}
                           <div className="absolute inset-0 border-4 border-green-100 rounded-full animate-ping opacity-20" />
                           <div className="absolute inset-2 border-4 border-green-200 rounded-full animate-pulse opacity-30" />
                           
@@ -342,8 +303,6 @@ export function CloudMockup() {
     </div>
   );
 }
-
-/* --- SUB COMPONENTS --- */
 
 function NodeCard({ icon, label, color }) {
    const colors = {

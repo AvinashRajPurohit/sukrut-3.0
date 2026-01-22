@@ -35,8 +35,8 @@ export function ProductEngineeringMockup() {
       setTimeout(() => {
         setPage((p) => (p + 1) % pages.length);
         setClicking(false);
-      }, 250); // Thoda slow click animation for visibility
-    }, 3000); // Thoda zyada time diya content padhne ke liye
+      }, 250); 
+    }, 2000); 
 
     return () => clearInterval(t);
   }, []);

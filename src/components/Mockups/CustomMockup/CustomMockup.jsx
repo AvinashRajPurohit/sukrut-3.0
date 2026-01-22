@@ -41,7 +41,7 @@ export function CustomMockup() {
         setStep((s) => (s + 1) % TABS.length);
         setClicking(false);
       }, 250);
-    }, 3500); // Thoda time badhaya taaki content dikhe
+    }, 2000); // Thoda time badhaya taaki content dikhe
 
     return () => clearInterval(t);
   }, []);
