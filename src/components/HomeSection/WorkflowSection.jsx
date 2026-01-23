@@ -3,11 +3,14 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import workflowTabs from "@/components/data/workflowTabs.json";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export default function WorkflowSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false); // Track if user is interacting
   const intervalRef = useRef(null);
+  const [headerRef, headerVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [accordionRef, accordionVisible] = useScrollAnimation({ threshold: 0.1 });
 
   // Auto-Play Logic
   useEffect(() => {
@@ -25,8 +28,17 @@ export default function WorkflowSection() {
       <div className="mx-auto max-w-[90%]">
         
         {/* BADGE */}
-        <div className="mb-6 flex justify-center">
-          <div className="inline-flex items-center gap-2.5 rounded-full bg-[#FFF8F0] border border-[#FFE8CC] px-4 py-1.5 shadow-[0_2px_8px_-2px_rgba(227,154,46,0.15)] transition-transform hover:scale-105 cursor-default">
+        <div 
+          ref={headerRef}
+          className={`mb-6 flex justify-center transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+        >
+          <div className={`inline-flex items-center gap-2.5 rounded-full bg-[#FFF8F0] border border-[#FFE8CC] px-4 py-1.5 shadow-[0_2px_8px_-2px_rgba(227,154,46,0.15)] transition-all duration-700 ease-out hover:scale-105 cursor-default ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+          }`}
+          style={{ transitionDelay: '100ms' }}
+          >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E39A2E] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E39A2E]"></span>
@@ -37,12 +49,20 @@ export default function WorkflowSection() {
           </div>
         </div>
 
-  <h2 className="mb-20 text-center text-5xl font-semibold text-black tracking-tight leading-[1.1]">
+  <h2 className={`mb-20 text-center text-5xl font-semibold text-black tracking-tight leading-[1.1] transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+          }`}
+          style={{ transitionDelay: '200ms' }}
+          >
             Engineering For <span className="text-gray-400">Real-World Scale.</span>
           </h2>
         {/* HORIZONTAL ACCORDION */}
         <div 
-          className="flex h-[600px] gap-4"
+          ref={accordionRef}
+          className={`flex h-[600px] gap-4 transition-all duration-700 ease-out ${
+            accordionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+          style={{ transitionDelay: '300ms' }}
           onMouseEnter={() => setIsHovered(true)}  
           onMouseLeave={() => setIsHovered(false)} 
         >

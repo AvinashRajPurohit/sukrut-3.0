@@ -44,7 +44,7 @@ export default function CTASection() {
         }}
       />
 
-      <div className="relative mx-auto max-w-4xl px-6">
+      <div className="relative mx-auto max-w-[1400px] px-6">
         <div 
           ref={contentRef}
           className={`text-center space-y-6 lg:space-y-8 transition-all duration-700 ease-out ${

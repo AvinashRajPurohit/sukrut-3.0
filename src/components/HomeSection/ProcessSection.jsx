@@ -5,10 +5,13 @@ import data from "@/components/data/process.json";
 import ProcessTimeline from "./ProcessTimeline";
 import Link from "next/link";
 import { FiArrowUpRight, FiCornerDownRight } from "react-icons/fi";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export default function ProcessSection() {
   const [activeStepId, setActiveStepId] = useState(data.steps[0].id);
   const activeStepData = data.steps.find((s) => s.id === activeStepId);
+  const [headerRef, headerVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [timelineRef, timelineVisible] = useScrollAnimation({ threshold: 0.1 });
 
   return (
     <section className="relative py-60 bg-[#FDFDFD]">
@@ -38,10 +41,19 @@ export default function ProcessSection() {
       <div className="relative z-10 mx-auto max-w-[90%] px-6">
 
         {/* TOP GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start mb-16 lg:mb-24">
+        <div 
+          ref={headerRef}
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-20 items-start mb-16 lg:mb-24 transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+        >
 
           {/* LEFT: Heading */}
-          <div className="relative">
+          <div className={`relative transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+          }`}
+          style={{ transitionDelay: '100ms' }}
+          >
             <h2 className="text-5xl font-bold text-black leading-tight tracking-tight">
               {data.heading}
               <span className="text-[#E39A2E]">.</span>
@@ -52,7 +64,11 @@ export default function ProcessSection() {
           </div>
 
           {/* RIGHT: Dynamic Content & CTA */}
-          <div className="space-y-8 flex flex-col items-start lg:items-end text-left lg:text-right">
+          <div className={`space-y-8 flex flex-col items-start lg:items-end text-left lg:text-right transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+          }`}
+          style={{ transitionDelay: '200ms' }}
+          >
             
             <Link
               href={data.cta.href}
@@ -82,7 +98,13 @@ export default function ProcessSection() {
         </div>
 
         {/* TIMELINE SECTION (Position won't change now) */}
-        <div className="py-10 bg-white/50 backdrop-blur-sm border border-gray-200 p-8 lg:p-12 relative">
+        <div 
+          ref={timelineRef}
+          className={`py-10 bg-white/50 backdrop-blur-sm border border-gray-200 p-8 lg:p-12 relative transition-all duration-700 ease-out ${
+            timelineVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+          style={{ transitionDelay: '300ms' }}
+        >
            {/* Notches */}
           <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-black" />
           <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-black" />

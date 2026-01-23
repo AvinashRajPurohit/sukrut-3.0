@@ -11,7 +11,7 @@ const iconMap = {
 
 export default function AboutHeroSection() {
   const { hero } = aboutData;
-  const IconComponent = iconMap[hero.featuredBox.icon] || Users;
+  const IconComponent = iconMap[hero?.featuredBox?.icon] || Users;
   const [headerRef, headerVisible] = useScrollAnimation();
   const [gridRef, gridVisible] = useScrollAnimation({ threshold: 0.1 });
 
@@ -20,7 +20,7 @@ export default function AboutHeroSection() {
       className="relative w-full bg-white py-20 lg:py-32"
       aria-labelledby="about-heading"
     >
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-[1400px] px-6">
         {/* Header Section */}
         <div 
           ref={headerRef}

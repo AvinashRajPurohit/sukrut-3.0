@@ -2,8 +2,11 @@
 
 import data from "@/components/data/values.json";
 import EnvelopeReviews from "./ReviewEnvelope";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export default function WhyClientsSection() {
+  const [headerRef, headerVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [reviewsRef, reviewsVisible] = useScrollAnimation({ threshold: 0.1 });
   return (
     <section className="relative bg-white py-10 pb-60 overflow-hidden">
       
@@ -32,10 +35,19 @@ export default function WhyClientsSection() {
 
       <div className="relative z-10 mx-auto max-w-[90%] px-6">
 
-        <div className="text-center mb-24">
+        <div 
+          ref={headerRef}
+          className={`text-center mb-24 transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+        >
           
           {/* 🔥 UPDATED PREMIUM BADGE */}
-          <div className="inline-flex items-center gap-2.5 rounded-full bg-[#FFF8F0] border border-[#FFE8CC] px-4 py-1.5 shadow-[0_2px_8px_-2px_rgba(227,154,46,0.15)] transition-transform hover:scale-105 cursor-default">
+          <div className={`inline-flex items-center gap-2.5 rounded-full bg-[#FFF8F0] border border-[#FFE8CC] px-4 py-1.5 shadow-[0_2px_8px_-2px_rgba(227,154,46,0.15)] transition-all duration-700 ease-out hover:scale-105 cursor-default ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+          }`}
+          style={{ transitionDelay: '100ms' }}
+          >
             
             {/* Animated Pulsing Dot */}
             <span className="relative flex h-2 w-2">
@@ -49,12 +61,24 @@ export default function WhyClientsSection() {
             </span>
           </div>
 
-          <h2 className="mt-6 text-4xl font-semibold text-black">
+          <h2 className={`mt-6 text-4xl font-semibold text-black transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+          }`}
+          style={{ transitionDelay: '200ms' }}
+          >
             {data.heading}
           </h2>
         </div>
 
-        <EnvelopeReviews items={data.items} />
+        <div
+          ref={reviewsRef}
+          className={`transition-all duration-700 ease-out ${
+            reviewsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+          style={{ transitionDelay: '300ms' }}
+        >
+          <EnvelopeReviews items={data.items} />
+        </div>
       </div>
     </section>
   );

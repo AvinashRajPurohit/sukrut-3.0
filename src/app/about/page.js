@@ -1,4 +1,9 @@
 import AboutHeroSection from '@/components/HomeSection/AboutHeroSection';
+import MissionCapabilitiesSection from '@/components/HomeSection/MissionCapabilitiesSection';
+import WhoWeAreSection from '@/components/HomeSection/WhoWeAreSection';
+import OurValuesSection from '@/components/HomeSection/OurValuesSection';
+import MeetTheTeamSection from '@/components/HomeSection/MeetTheTeamSection';
+import CareersSection from '@/components/HomeSection/CareersSection';
 import PrinciplesSection from '@/components/HomeSection/PrinciplesSection';
 import GrowthSection from '@/components/HomeSection/GrowthSection';
 import AboutTeamSection from '@/components/HomeSection/AboutTeamSection';
@@ -21,24 +26,26 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <main role="main" className="bg-white light">
+    <main role="main" className="bg-black">
       {/* Hero Section */}
       <AboutHeroSection />
       
-      {/* Principles Section */}
+      {/* Mission & Capabilities Section */}
+      {/* <MissionCapabilitiesSection /> */}
+
       <PrinciplesSection />
       
-      {/* Growth Section */}
-      <GrowthSection />
+      {/* Who We Are Section */}
+      <WhoWeAreSection />
       
-      {/* Team Section */}
-      <AboutTeamSection />
+      {/* Our Values Section */}
+      <OurValuesSection />
       
-      {/* Values & Mission Section */}
-      <ValuesMissionSection />
+      {/* Meet the Team Section */}
+      <MeetTheTeamSection />
       
-      {/* CTA Section */}
-      <CTASection />
+      {/* Careers Section */}
+      <CareersSection />
       
       {/* Additional sections can be added here */}
     </main>

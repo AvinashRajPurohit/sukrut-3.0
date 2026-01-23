@@ -3,8 +3,12 @@
 import impactData from "@/components/data/impact.json";
 import OrbitCircles from "../Mockups/OrbitGraphic";
 import { FiCornerDownRight } from "react-icons/fi";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export default function ImpactSection() {
+  const [headerRef, headerVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [contentRef, contentVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [visualRef, visualVisible] = useScrollAnimation({ threshold: 0.1 });
   return (
     <section className="relative py-32 bg-[#FDFDFD]">
       
@@ -33,10 +37,19 @@ export default function ImpactSection() {
 
       <div className="relative z-10 mx-auto max-w-[90%] px-6">
 
-        <div className="text-center mx-auto mb-20">
+        <div 
+          ref={headerRef}
+          className={`text-center mx-auto mb-20 transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+        >
           
           {/* PREMIUM BADGE */}
-          <div className="inline-flex items-center gap-2.5 rounded-full bg-[#FFF8F0] border border-[#FFE8CC] px-4 py-1.5 shadow-[0_2px_8px_-2px_rgba(227,154,46,0.15)] transition-transform hover:scale-105 cursor-default mb-6">
+          <div className={`inline-flex items-center gap-2.5 rounded-full bg-[#FFF8F0] border border-[#FFE8CC] px-4 py-1.5 shadow-[0_2px_8px_-2px_rgba(227,154,46,0.15)] transition-all duration-700 ease-out hover:scale-105 cursor-default mb-6 ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+          }`}
+          style={{ transitionDelay: '100ms' }}
+          >
             {/* Pulsing Dot */}
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E39A2E] opacity-75"></span>
@@ -49,7 +62,11 @@ export default function ImpactSection() {
             </span>
           </div>
 
-          <h2 className="text-5xl font-bold text-black leading-tight tracking-tight">
+          <h2 className={`text-5xl font-bold text-black leading-tight tracking-tight transition-all duration-700 ease-out ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+          }`}
+          style={{ transitionDelay: '200ms' }}
+          >
             {impactData.title}
           </h2>
         </div>
@@ -62,10 +79,20 @@ export default function ImpactSection() {
            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-black" />
            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-black" />
 
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center justify-between">
+           <div 
+             ref={contentRef}
+             className={`grid grid-cols-1 lg:grid-cols-2 gap-20 items-center justify-between transition-all duration-700 ease-out ${
+               contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+             }`}
+             style={{ transitionDelay: '300ms' }}
+           >
 
             {/* LEFT CONTENT */}
-            <div>
+            <div className={`transition-all duration-700 ease-out ${
+              contentVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+            }`}
+            style={{ transitionDelay: '400ms' }}
+            >
               <p className="text-3xl font-medium max-w-2xl leading-snug text-gray-800 border-l-4 border-[#E39A2E] pl-6">
                 {impactData.heading.line1}
                 <span className="text-gray-400 block mt-2">
@@ -90,7 +117,13 @@ export default function ImpactSection() {
               </div>
             </div>
             
-            <div className="h-full w-full mx-auto relative">
+            <div 
+              ref={visualRef}
+              className={`h-full w-full mx-auto relative transition-all duration-700 ease-out ${
+                visualVisible ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-8 scale-95'
+              }`}
+              style={{ transitionDelay: '500ms' }}
+            >
               {/* Optional Grid behind orbit for depth */}
               <div className="absolute inset-0 border border-dashed border-gray-200 rounded-full opacity-50 pointer-events-none scale-90" />
               

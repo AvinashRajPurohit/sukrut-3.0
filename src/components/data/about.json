@@ -9,19 +9,19 @@
     },
     "images": [
       {
-        "src": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop",
+        "src": "/about/hero/hero-1.jpg",
         "alt": "Diverse team members collaborating in a modern office environment"
       },
       {
-        "src": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop",
+        "src": "/about/hero/hero-2.jpg",
         "alt": "Team members engaged in a collaborative discussion around a table"
       },
       {
-        "src": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=600&fit=crop",
+        "src": "/about/hero/hero-3.jpg",
         "alt": "Team members in a relaxed office lounge setting"
       },
       {
-        "src": "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800&h=600&fit=crop",
+        "src": "/about/hero/hero-4.jpg",
         "alt": "Team members presenting and discussing data visualizations"
       }
     ]
@@ -58,7 +58,7 @@
       "role": "Chief Executive Officer"
     },
     "image": {
-      "src": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=800&fit=crop",
+      "src": "/about/growth/growth-image.jpg",
       "alt": "Diverse team members collaborating around a table with laptops in a modern office"
     }
   },
@@ -70,49 +70,196 @@
         "id": 1,
         "name": "Deepak Rajpurohit",
         "role": "Chief Executive Officer",
-        "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"
+        "image": "/about/team/deepak-rajpurohit.jpg",
+        "linkedin": "#",
+        "bio": "Deepak is the Chief Executive Officer of Sukrut, a leading software engineering company building scalable solutions for real-world challenges. With over a decade of experience leading technology innovation at global tech companies, he is a recognized expert regularly advising businesses and organizations. He has been instrumental in building robust systems that power business growth and digital transformation."
       },
       {
         "id": 2,
         "name": "Isabella Schmidt",
         "role": "Head of Product",
-        "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop"
+        "image": "/about/team/isabella-schmidt.jpg",
+        "linkedin": "#",
+        "bio": "Isabella is the Head of Product at Sukrut, driving product strategy and innovation. With extensive experience in product management and user experience design, she ensures that our solutions meet the highest standards of quality and usability. Her expertise in translating business needs into technical solutions has been crucial to our success."
       },
       {
         "id": 3,
-        "name": "Matteo Rossi",
-        "role": "Engineering Lead",
-        "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop"
+        "name": "Himanshu Shekhawat",
+        "role": "Senior Software Developer",
+        "image": "/about/team/Himanshu_Shekhawat.jpeg",
+        "linkedin": "https://www.linkedin.com/in/himanshu-singh-shekhawat-bb6a7a2b9?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
+        "bio": "Himanshu is a Senior Software Developer specializing in building reliable, scalable applications that support real-world business and healthcare workflows. With strong expertise across frontend and backend development, he works with technologies like React, FastAPI, and Python to transform complex requirements into clean, high-performance systems. He is known for writing maintainable code, improving system efficiency, and delivering solutions teams and clients can depend on."
       },
       {
         "id": 4,
-        "name": "Elena Fischer",
-        "role": "Marketing Strategist",
-        "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop"
+        "name": "Riya Gandoriya",
+        "role": "Senior Software Developer",
+        "image": "/about/team/Riya_Gandoriya.jpeg",
+        "linkedin": "https://www.linkedin.com/in/riya-gandoriya-492660217/",
+        "bio": "Riya Gandoriya is a Senior Software Developer at Sukrut, specializing in backend development with FastAPI, Node.js, and Salesforce. She focuses on building complex solutions, fostering strong teamwork, and ensuring smooth, timely project delivery."
+      },
+      {
+        "id": 11,
+        "name": "Deepak Singh Rathore",
+        "role": "QA Lead | Former AI Engineer",
+        "image": "/about/team/Deepak_Singh_Rathore.jpeg",
+        "linkedin": "https://www.linkedin.com/in/deepak-singh-rathore-88822a255/",
+        "bio": "Deepak Singh Rathore is a QA Lead with over 4 years of industry experience, focused on building dependable software through strong testing practices and cross-functional collaboration. With a background in AI engineering, he brings a deep technical perspective to system behavior, integrations, and edge cases, ensuring quality is embedded throughout the development lifecycle."
+      },
+      {
+        "id": 12,
+        "name": "Amit Rajpurohit",
+        "role": "Python Developer ",
+        "image": "/about/team/Amit_Rajpurohit.jpeg",
+        "linkedin": "https://www.linkedin.com/in/amit-rajpurohit-2b5774227?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "bio": "Amit Rajpurohit is a Python Engineer specializing in FastAPI, Selenium, and automation bot development. He builds scalable backend systems and intelligent workflows, with experience integrating and automating platforms like Salesforce to improve efficiency and business operations."
       },
       {
         "id": 5,
-        "name": "Alex Chen",
-        "role": "Lead Designer",
-        "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop"
+        "name": "Sachin Kumar Swami",
+        "role": "Senior Mern Stack Developer",
+        "image": "/about/team/Sachin_Kumar_Swami.jpeg",
+        "linkedin": "http://linkedin.com/in/sachin-kumar-swami-b0b720244",
+        "bio": "Sachin Kumar Swami is a Senior React Developer who leverages full-stack technologies to engineer robust, scalable web solutions. He has a strong aptitude for solving complex technical problems through thoughtful system design and optimization. He consistently delivers software that is resilient, efficient, and future-proof."
+      },
+      {
+        "id": 9,
+        "name": "Dhairya Yadav",
+        "role": "Full Stack Developer",
+        "image": "/about/team/Dhairya_Yadav.jpeg",
+        "linkedin": "https://www.linkedin.com/in/dhairya-yadav-990256282?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "bio": "Dhairya Yadav builds end-to-end applications that bridge user needs and technical execution. By optimizing frontend responsiveness and backend logic, he delivers scalable solutions that improve performance and drive user engagement."
       },
       {
         "id": 6,
-        "name": "Sarah Johnson",
-        "role": "Operations Manager",
-        "image": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=400&fit=crop"
+        "name": "Neeraj Sharma",
+        "role": "Full Stack Developer",
+        "image": "/about/team/Neeraj_Sharma.jpeg",
+        "linkedin": "https://www.linkedin.com/in/neeraj-sharma-2a47711b1/",
+        "bio": "Neeraj Sharma is a Full-Stack Developer with experience building scalable, high-performance web applications. He specializes in frontend development using React, Tailwind CSS, and Material UI, and backend development with FastAPI and Node.js to design secure, efficient APIs. He excels at translating business requirements into clean, maintainable solutions while delivering seamless user experiences across the stack."
       },
       {
         "id": 7,
-        "name": "Michael Brown",
-        "role": "Senior Developer",
-        "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop"
+        "name": "Aditya Sharma",
+        "role": "Python Developer",
+        "image": "/about/team/Aditya_Sharma.jpeg",
+        "linkedin": "https://www.linkedin.com/in/toshiladityasharma",
+        "bio": "Aditya Sharma is a Python Developer focused on building automation bots and web applications. He enjoys creating efficient solutions that simplify tasks and improve workflows."
       },
       {
         "id": 8,
-        "name": "Priya Patel",
-        "role": "Business Analyst",
-        "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop"
+        "name": "Jasper Ritesh Ariel",
+        "role": "Front-end Developer",
+        "image": "/about/team/Jasper_Ritesh_Ariel.jpeg",
+        "linkedin": "https://www.linkedin.com/in/jasper-ritesh-ariel-b58a35246/",
+        "bio": "Jasper Ritesh Ariel is a Front-end Developer specializing in React.js and Tailwind CSS, with a strong focus on building responsive, user-friendly, and scalable web interfaces. He is passionate about translating designs into high-quality code, optimizing performance, and delivering seamless user experiences."
+      },
+      {
+        "id": 13,
+        "name": "Vishal Kumawat",
+        "role": "Full Stack Developer",
+        "image": "/about/team/Vishal_Kumawat(1).jpg",
+        "linkedin": "https://www.linkedin.com/in/vishal-kumawat-675496203?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "bio": "Vishal Kumawat is a Full Stack Developer specializing in Python, React.js, Next.js, FastAPI, and Node.js. He builds scalable, high-performance web applications and APIs, focusing on clean architecture, maintainable code, and seamless user experiences across the stack."
+      },
+      {
+        "id": 14,
+        "name": "Narendra Singh Khangarot",
+        "role": "Frontend Developer",
+        "image": "/about/team/Narendra_Singh_Khangarot.jpeg",
+        "linkedin": "https://www.linkedin.com/in/narendra-singh-8a10a62b7",
+        "bio": "Narendra Singh Khangarot is a React Developer specializing in transforming complex requirements into elegant, scalable solutions. With deep React.js expertise, he focuses on performance optimization, architectural clarity, and maintainability, approaching development with a strategic mindset and commitment to technical excellence."
+      },
+      {
+        "id": 10,
+        "name": "Mehul Singh Tanwar",
+        "role": "MERN Stack Developer",
+        "image": "/about/team/Mehul_Singh.jpeg",
+        "linkedin": "https://www.linkedin.com/in/mehul-singh55",
+        "bio": "Mehul is a MERN Stack Developer at Sukrut Associates, passionate about building modern, user-friendly web applications. He works with MongoDB, Express.js, React.js, and Node.js to turn ideas into reliable, scalable solutions. He enjoys collaborating with teams, learning new technologies, and writing clean code that improves product performance and user experience."
+      },
+      {
+        "id": 15,
+        "name": "Jassi Singh",
+        "role": "Quality Assurance & Salesforce Developer",
+        "image": "/about/team/jassi_singh.jpg",
+        "linkedin": "https://www.linkedin.com/in/jassi-singh-76a358386?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "bio": "Jassi Singh is a Quality Assurance and Salesforce Developer with experience in delivering high-quality software through rigorous testing and building reliable Salesforce solutions. Skilled in test planning, defect tracking, and Salesforce development using Apex, Lightning components, and declarative tools, he focuses on improving system performance through collaboration and attention to detail."
+      },
+      {
+        "id": 16,
+        "name": "Priyanshu Upadhyay",
+        "role": "Python Engineer",
+        "image": "/about/team/Priyanshu_Upadhyay.jpeg",
+        "linkedin": "https://in.linkedin.com/in/priyanshu-upadhya",
+        "bio": "Priyanshu Upadhyay is a Python Engineer with strong expertise in Selenium automation, backend development, and system integrations. He specializes in Salesforce integration and healthcare technology, including FHIR-based data interoperability, and builds scalable, automation-driven solutions that improve system performance and business workflows."
+      },
+      {
+        "id": 17,
+        "name": "Dhruv Pratap Singh",
+        "role": "MERN Stack Developer",
+        "image": "/about/team/Dhruv_Pratap_Singh.jpeg",
+        "linkedin": "https://www.linkedin.com/in/dhruv-pratap-singh-ranawat-05b7aa25a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "bio": "Dhruv Pratap Singh is a MERN Stack Developer with strong experience building scalable, production-ready web applications. He focuses on clean architecture, efficient APIs, and delivering high-quality, maintainable solutions aligned with business requirements."
+      }
+    ]
+  },
+  "careers": {
+    "title": "Careers",
+    "description": [
+      "At Sukrut, we believe that making a difference is a team effort that spans across our customers, colleagues, and communities.",
+      "As a dynamic, fast-growing software engineering company, we are always looking to expand and complement our team with amazing talent from across the globe."
+    ],
+    "images": [
+      {
+        "id": 1,
+        "src": "/about/careers/career-1.jpg",
+        "alt": "Team members collaborating around a laptop"
+      },
+      {
+        "id": 2,
+        "src": "/about/careers/career-2.jpg",
+        "alt": "Team working at a conference booth"
+      },
+      {
+        "id": 3,
+        "src": "/about/careers/career-3.jpg",
+        "alt": "Person working on laptop"
+      },
+      {
+        "id": 4,
+        "src": "/about/careers/career-4.jpg",
+        "alt": "Team meeting in modern office"
+      },
+      {
+        "id": 5,
+        "src": "/about/careers/career-5.jpg",
+        "alt": "Collaborative workspace"
+      },
+      {
+        "id": 6,
+        "src": "/about/careers/career-6.jpg",
+        "alt": "Team brainstorming session"
+      },
+      {
+        "id": 7,
+        "src": "/about/careers/career-7.jpg",
+        "alt": "Office collaboration"
+      },
+      {
+        "id": 8,
+        "src": "/about/careers/career-8.jpg",
+        "alt": "Team presentation"
+      },
+      {
+        "id": 9,
+        "src": "/about/careers/career-9.jpg",
+        "alt": "Modern office environment"
+      },
+      {
+        "id": 10,
+        "src": "/about/careers/career-10.jpg",
+        "alt": "Team working together"
       }
     ]
   },

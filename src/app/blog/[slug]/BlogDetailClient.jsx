@@ -33,7 +33,7 @@ export default function BlogDetailClient({ blog }) {
           />
         </div>
 
-        <article className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 z-10">
+        <article className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 z-10 pt-20 lg:pt-24">
           {/* Back Button */}
           <div 
             ref={headerRef}

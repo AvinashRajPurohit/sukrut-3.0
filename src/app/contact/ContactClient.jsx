@@ -184,7 +184,7 @@ export default function ContactClient() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero + Form Section */}
-      <section className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-white">
+      <section className="relative pb-16 sm:pb-20 md:pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-white pt-28 lg:pt-32">
         {/* Premium background - subtle diagonal lines matching the image */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {/* Main diagonal lines pattern - light gray, subtle like in the image */}

@@ -48,7 +48,7 @@ export default function AboutTeamSection() {
         />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto max-w-[1400px] px-6">
         {/* Header Section */}
         <div 
           ref={headerRef}
@@ -81,7 +81,7 @@ export default function AboutTeamSection() {
         {/* Team Members Grid - Responsive: 1 col mobile, 2 cols tablet, 4 cols desktop */}
         <div 
           ref={gridRef}
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 max-w-7xl mx-auto transition-all duration-700 ease-out ${
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mx-auto transition-all duration-700 ease-out ${
             shouldShowImages ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >

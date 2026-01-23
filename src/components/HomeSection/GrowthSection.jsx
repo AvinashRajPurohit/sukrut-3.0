@@ -21,7 +21,7 @@ export default function GrowthSection() {
         }}
       />
       
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto max-w-[1400px] px-6">
         <div 
           ref={contentRef}
           className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center transition-all duration-700 ease-out ${

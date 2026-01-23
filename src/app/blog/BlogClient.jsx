@@ -91,7 +91,7 @@ export default function BlogClient({ initialBlogs = [], initialPagination = { to
         </div>
 
         {/* Header Section */}
-        <section className="relative bg-white py-16 sm:py-20 md:py-24 px-4 sm:px-6 z-10 overflow-hidden">
+        <section className="relative bg-white pb-16 sm:pb-20 md:pb-24 px-4 sm:px-6 z-10 overflow-hidden pt-28 lg:pt-32">
           {/* Light Background with Visible Shapes */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {/* Very subtle gradient overlay */}
@@ -216,7 +216,7 @@ export default function BlogClient({ initialBlogs = [], initialPagination = { to
 
           <div 
             ref={headerRef}
-            className={`relative max-w-7xl mx-auto text-center transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`relative max-w-7xl mx-auto text-center mt-8 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               headerVisible ? 'opacity-100 translate-y-0 scale-100 blur-0' : 'opacity-0 -translate-y-12 scale-105 blur-md'
             }`}
           >

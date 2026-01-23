@@ -6,9 +6,12 @@ import Link from "next/link";
 import heroData from "@/components/data/hero.json";
 import HeroMockup from "../Mockups/HeroMockup";
 import { FiArrowUpRight } from "react-icons/fi";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export default function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [contentRef, contentVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [mockupRef, mockupVisible] = useScrollAnimation({ threshold: 0.1 });
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
@@ -34,7 +37,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative w-full bg-white py-10 overflow-hidden"
+      className="relative w-full bg-white py-10 overflow-hidden pt-20 lg:pt-24"
       aria-labelledby="hero-heading"
     >
       {/* Visual Decor: Subtle background glow (Grid Removed) */}
@@ -43,7 +46,12 @@ export default function Hero() {
       <div className="mx-auto px-6 pb-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
 
         {/* LEFT SIDE */}
-        <div className="flex gap-16 pl-6">
+        <div 
+          ref={contentRef}
+          className={`flex gap-16 pl-6 transition-all duration-700 ease-out ${
+            contentVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+          }`}
+        >
 
         
           <div 
@@ -114,7 +122,11 @@ export default function Hero() {
           <div className="px-4 space-y-6">
             
             {/* Styled Badge */}
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-16 shadow-sm shadow-orange-100/50">
+            <div className={`inline-flex items-center px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-16 shadow-sm shadow-orange-100/50 transition-all duration-700 ease-out ${
+              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+            }`}
+            style={{ transitionDelay: '100ms' }}
+            >
               <span className="w-1.5 h-1.5 rounded-full bg-[#E39A2E] mr-2 animate-pulse" />
               <span className="block text-xs font-bold tracking-widest text-[#E39A2E] uppercase">
                 {heroData.badge}
@@ -123,23 +135,40 @@ export default function Hero() {
 
             <h1
               id="hero-heading"
-              className="text-4xl lg:text-[58px] font-bold leading-[1.1] text-gray-900 tracking-tight"
+              className={`text-4xl lg:text-[58px] font-bold leading-[1.1] text-gray-900 tracking-tight transition-all duration-700 ease-out ${
+                contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}
+              style={{ transitionDelay: '200ms' }}
             >
               {heroData.title.split("\n").map((line, i) => (
-                <span key={i} className="block">
+                <span 
+                  key={i} 
+                  className={`block transition-all duration-600 ease-out ${
+                    contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                  }`}
+                  style={{ transitionDelay: `${300 + i * 100}ms` }}
+                >
                   {line}
                 </span>
               ))}
             </h1>
 
-            <div className="pl-0"> {/* Border removed per request to revert UI style */}
+            <div className={`pl-0 transition-all duration-700 ease-out ${
+              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+            }`}
+            style={{ transitionDelay: '500ms' }}
+            >
                 <p className="max-w-xl text-gray-500 text-lg leading-relaxed font-medium">
                 {heroData.description}
                 </p>
             </div>
 
             {/* Button */}
-            <div className="mt-8">
+            <div className={`mt-8 transition-all duration-700 ease-out ${
+              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+            }`}
+            style={{ transitionDelay: '600ms' }}
+            >
               <Link
                 href={heroData.cta.href}
                 className="
@@ -158,7 +187,13 @@ export default function Hero() {
         </div>
 
         {/* RIGHT SIDE IMAGE */}
-        <div className="relative flex justify-center items-center">
+        <div 
+          ref={mockupRef}
+          className={`relative flex justify-center items-center transition-all duration-700 ease-out ${
+            mockupVisible ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-8 scale-95'
+          }`}
+          style={{ transitionDelay: '400ms' }}
+        >
           <div className="pointer-events-none absolute bottom-0 left-0 w-full h-40 
                           bg-gradient-to-t from-white to-transparent z-20" />
           <div className="absolute w-[300px] h-[300px] bg-blue-100 rounded-full blur-[80px] -z-10" />
