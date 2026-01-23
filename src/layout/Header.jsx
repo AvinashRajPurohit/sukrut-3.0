@@ -4,16 +4,14 @@ import menuData from "@/components/data/menu.json";
 import MenuAction from "./MenuAction";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
-  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
     let ticking = false;
@@ -21,7 +19,7 @@ export default function Header() {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 20);
+          setIsScrolled(window.scrollY > 10);
           ticking = false;
         });
         ticking = true;
@@ -34,7 +32,9 @@ export default function Header() {
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
-    setIsNavigating(false);
+  }, [pathname]);
+
+  useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -43,45 +43,12 @@ export default function Header() {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [pathname, isMobileMenuOpen]);
-
-  // Track navigation by intercepting link clicks
-  useEffect(() => {
-    const handleLinkClick = (e) => {
-      const link = e.target.closest('a[href]');
-      if (link && link.getAttribute('href')?.startsWith('/') && !link.getAttribute('href')?.startsWith('#')) {
-        const href = link.getAttribute('href');
-        if (href !== pathname) {
-          setIsNavigating(true);
-          // Auto-hide after 2 seconds as fallback (in case pathname doesn't change)
-          setTimeout(() => setIsNavigating(false), 2000);
-        }
-      }
-    };
-
-    document.addEventListener('click', handleLinkClick, true);
-    return () => document.removeEventListener('click', handleLinkClick, true);
-  }, [pathname]);
+  }, [isMobileMenuOpen]);
 
   return (
     <>
-      {/* Navigation Loading Indicator */}
-      {isNavigating && (
-        <div className="fixed top-0 left-0 right-0 h-0.5 bg-gray-200/50 z-[100]">
-          <div 
-            className="h-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900"
-            style={{
-              background: 'linear-gradient(90deg, #111827 0%, #1f2937 50%, #111827 100%)',
-              backgroundSize: '200% 100%',
-              animation: 'shimmer 1s ease-in-out infinite',
-              width: '100%'
-            }}
-          />
-        </div>
-      )}
-      
       <header
-        className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-out ${
+        className={`fixed top-0 left-0 right-0 w-full z-50 transition-colors duration-200 ease-out ${
           isScrolled
             ? 'bg-white/85 backdrop-blur-[40px] shadow-[0_8px_32px_rgba(0,0,0,0.04)] border-b border-gray-100/60'
             : 'bg-white/75 backdrop-blur-[30px] border-b border-gray-50/40'
@@ -93,13 +60,9 @@ export default function Header() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.8),transparent_70%)] pointer-events-none" />
         
         {/* Subtle border glow */}
-        <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-200/50 to-transparent transition-opacity duration-300 ${
-          isScrolled ? 'opacity-100' : 'opacity-50'
-        }`} />
+        <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-200/50 to-transparent transition-opacity duration-200 ${isScrolled ? 'opacity-100' : 'opacity-50'}`} />
         
-        <div className={`relative mx-auto max-w-[1400px] px-6 flex items-center justify-between transition-all duration-300 ease-out ${
-          isScrolled ? 'h-20' : 'h-24'
-        }`}>
+        <div className="relative mx-auto max-w-[1400px] px-6 flex items-center justify-between h-20">
           
           {/* Left Section: Premium Logo */}
           <div className="flex items-center">
@@ -107,20 +70,21 @@ export default function Header() {
               href="/"
               prefetch={true}
               aria-label="Go to homepage"
-              className="group flex items-center transition-all duration-500 hover:opacity-90 active:scale-[0.97]"
+              className="group flex items-center transition-opacity duration-200 hover:opacity-90 active:scale-[0.97]"
             >
               <div className="relative">
                 {/* Logo glow ring */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-gray-900/0 via-gray-900/10 to-gray-900/0 rounded-lg blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-gray-900/0 via-gray-900/10 to-gray-900/0 rounded-lg blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
                 
                 <Image
                   src="/sukrut_light_mode_logo.png"   
                   alt="Sukrut logo"
-                  width={isScrolled ? 130 : 140}               
-                  height={isScrolled ? 32 : 36}
+                  width={130}               
+                  height={32}
                   priority
                   quality={100}
-                  className="transition-all duration-300 ease-out relative z-10"
+                  unoptimized
+                  className="relative z-10 select-none"
                 />
                 
                 {/* Animated shine effect */}
@@ -198,7 +162,7 @@ export default function Header() {
 
       {/* Ultra Premium Mobile Menu */}
       <div
-        className={`lg:hidden fixed inset-0 top-24 z-40 bg-white/98 backdrop-blur-[40px] transition-all duration-500 ease-out ${
+        className={`lg:hidden fixed inset-0 top-20 z-40 bg-white/98 backdrop-blur-[40px] transition-all duration-500 ease-out ${
           isMobileMenuOpen
             ? 'opacity-100 visible translate-y-0'
             : 'opacity-0 invisible -translate-y-4'
@@ -273,7 +237,7 @@ export default function Header() {
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-gray-50/0 via-white/40 to-gray-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   
                   {/* Shimmer on hover */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-1000" />
                   
                   <span className="relative z-10 block transform transition-transform duration-300 group-active:scale-95">
                     {item.title}

@@ -24,35 +24,69 @@ export default function FocusPoints({ data, active, onChange }) {
             key={item.id}
             onClick={() => onChange(item.id)}
             className={`
-              relative w-full text-left  px-6 py-8
-              transition-all duration-300 cursor-pointer
+              group relative w-full text-left px-6 py-8 rounded-lg
+              transition-all duration-500 ease-out cursor-pointer
               ${isActive
-                ? "bg-[#3A3225] border border-[#E39A2E]"
-                : "bg-black/30 hover:bg-black/40"}
+                ? "bg-[#3A3225] border border-[#E39A2E] shadow-lg shadow-[#E39A2E]/20"
+                : "bg-black/30 border border-transparent hover:bg-black/40 hover:border-white/10"}
             `}
           >
-            {/* 🔥 ACTIVE LEFT LINE */}
-            {isActive && (
-              <span className="absolute left-0 top-0 h-full w-1 bg-[#E39A2E]" />
-            )}
+            {/* 🔥 ACTIVE LEFT LINE with smooth transition */}
+            <span 
+              className={`
+                absolute left-0 top-0 h-full w-1 bg-[#E39A2E] rounded-r-full
+                transition-all duration-500 ease-out
+                ${isActive ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}
+              `}
+            />
 
-            <div className="flex items-center gap-4">
-              {/* ICON */}
+            {/* Background glow effect for active state */}
+            <div 
+              className={`
+                absolute inset-0 rounded-lg bg-gradient-to-r from-[#E39A2E]/5 to-transparent
+                transition-opacity duration-500 ease-out
+                ${isActive ? 'opacity-100' : 'opacity-0'}
+              `}
+            />
+
+            <div className="relative flex items-center gap-4">
+              {/* ICON with smooth transitions */}
               <div
                 className={`
                   flex h-12 w-12 items-center justify-center rounded-md
-                  ${isActive ? "bg-[#E39A2E]/20 text-[#E39A2E]" : "bg-white/10 text-gray-300"}
+                  transition-all duration-500 ease-out
+                  ${isActive 
+                    ? "bg-[#E39A2E]/20 text-[#E39A2E] scale-110 shadow-md shadow-[#E39A2E]/20" 
+                    : "bg-white/10 text-gray-300 group-hover:bg-white/15 group-hover:scale-105"}
                 `}
               >
-                <Icon size={22} />
+                <Icon 
+                  size={22} 
+                  className="transition-transform duration-500 ease-out"
+                  style={{ transform: isActive ? 'scale(1.1)' : 'scale(1)' }}
+                />
               </div>
 
-              {/* TEXT */}
-              <div>
-                <h3 className="font-medium text-lg text-white">
+              {/* TEXT with smooth transitions */}
+              <div className="flex-1">
+                <h3 
+                  className={`
+                    font-medium text-lg transition-all duration-500 ease-out
+                    ${isActive 
+                      ? "text-white" 
+                      : "text-gray-300 group-hover:text-white"}
+                  `}
+                >
                   {item.title}
                 </h3>
-                <p className="text-sm text-gray-400 mt-1 leading-relaxed">
+                <p 
+                  className={`
+                    text-sm mt-1 leading-relaxed transition-all duration-500 ease-out
+                    ${isActive 
+                      ? "text-gray-300" 
+                      : "text-gray-400 group-hover:text-gray-300"}
+                  `}
+                >
                   {item.description}
                 </p>
               </div>
