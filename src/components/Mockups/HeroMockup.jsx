@@ -152,70 +152,70 @@ const SpringCube = ({ position, delay }) => {
 /* =======================
    RESTORED: FADED SHADER GRID
 ======================= */
-const FadedGrid = () => {
-  const mat = useRef();
+// const FadedGrid = () => {
+//   const mat = useRef();
 
-  useFrame(({ clock }) => {
-    if (mat.current) {
-      mat.current.uniforms.uTime.value = clock.elapsedTime;
-    }
-  });
+//   useFrame(({ clock }) => {
+//     if (mat.current) {
+//       mat.current.uniforms.uTime.value = clock.elapsedTime;
+//     }
+//   });
 
-  return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.2, 0]}>
-      <planeGeometry args={[12, 12, 1, 1]} />
-      <shaderMaterial
-        ref={mat}
-        transparent
-        depthWrite={false}
-        uniforms={{
-          uTime: { value: 0 },
-          uColor: { value: new THREE.Color("#E39A2E") }, // ORANGE/GOLD Color
-        }}
-        vertexShader={`
-          varying vec2 vUv;
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-          }
-        `}
-        fragmentShader={`
-          varying vec2 vUv;
-          uniform vec3 uColor;
-          uniform float uTime;
+//   return (
+//     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.2, 0]}>
+//       <planeGeometry args={[12, 12, 1, 1]} />
+//       <shaderMaterial
+//         ref={mat}
+//         transparent
+//         depthWrite={false}
+//         uniforms={{
+//           uTime: { value: 0 },
+//           uColor: { value: new THREE.Color("#E39A2E") }, // ORANGE/GOLD Color
+//         }}
+//         vertexShader={`
+//           varying vec2 vUv;
+//           void main() {
+//             vUv = uv;
+//             gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+//           }
+//         `}
+//         fragmentShader={`
+//           varying vec2 vUv;
+//           uniform vec3 uColor;
+//           uniform float uTime;
 
-          float gridLine(float coord) {
-            float width = fwidth(coord);
-            return 1.0 - smoothstep(0.0, width * 1.2, abs(fract(coord) - 0.5));
-          }
+//           float gridLine(float coord) {
+//             float width = fwidth(coord);
+//             return 1.0 - smoothstep(0.0, width * 1.2, abs(fract(coord) - 0.5));
+//           }
 
-          void main() {
-            float scale = 20.0;
-            float gx = gridLine(vUv.x * scale);
-            float gy = gridLine(vUv.y * scale);
-            float grid = max(gx, gy);
+//           void main() {
+//             float scale = 20.0;
+//             float gx = gridLine(vUv.x * scale);
+//             float gy = gridLine(vUv.y * scale);
+//             float grid = max(gx, gy);
 
-            // Center Fade
-            float centerDist = distance(vUv, vec2(0.5));
-            float centerFade = smoothstep(0.55, 0.25, centerDist);
+//             // Center Fade
+//             float centerDist = distance(vUv, vec2(0.5));
+//             float centerFade = smoothstep(0.55, 0.25, centerDist);
 
-            // Edge Fade
-            float edgeFadeX = smoothstep(0.0, 0.08, vUv.x) * smoothstep(0.0, 0.08, 1.0 - vUv.x);
-            float edgeFadeY = smoothstep(0.0, 0.08, vUv.y) * smoothstep(0.0, 0.08, 1.0 - vUv.y);
-            float edgeFade = edgeFadeX * edgeFadeY;
+//             // Edge Fade
+//             float edgeFadeX = smoothstep(0.0, 0.08, vUv.x) * smoothstep(0.0, 0.08, 1.0 - vUv.x);
+//             float edgeFadeY = smoothstep(0.0, 0.08, vUv.y) * smoothstep(0.0, 0.08, 1.0 - vUv.y);
+//             float edgeFade = edgeFadeX * edgeFadeY;
 
-            // Soft Pulse
-            float pulse = 0.12 + sin(uTime * 2.0) * 0.03;
+//             // Soft Pulse
+//             float pulse = 0.12 + sin(uTime * 2.0) * 0.03;
 
-            float alpha = grid * centerFade * edgeFade * pulse;
+//             float alpha = grid * centerFade * edgeFade * pulse;
 
-            gl_FragColor = vec4(uColor, alpha);
-          }
-        `}
-      />
-    </mesh>
-  );
-};
+//             gl_FragColor = vec4(uColor, alpha);
+//           }
+//         `}
+//       />
+//     </mesh>
+//   );
+// };
 
 /* =======================
    MAIN SCENE ASSEMBLY
@@ -231,7 +231,7 @@ const Scene = () => {
       <SpringCube position={[0.65, 0, 0.65]} delay={3} />
 
       {/* Restored Shader Grid */}
-      <FadedGrid />
+      {/* <FadedGrid /> */}
       
       {/* Atmosphere Sparkles */}
       <Sparkles 

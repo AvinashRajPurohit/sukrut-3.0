@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react'; // 1. Hooks add kiye
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import aboutData from '@/components/data/about.json';
@@ -13,9 +13,10 @@ export default function CareersSection() {
   const [headerRef, headerVisible] = useScrollAnimation();
   const [carouselRef, carouselVisible] = useScrollAnimation({ threshold: 0.1 });
 
-  const nextSlide = () => {
+  // 2. nextSlide ko useCallback mein wrap kiya taaki interval sahi se chale
+  const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % careerImages.length);
-  };
+  }, [careerImages.length]);
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + careerImages.length) % careerImages.length);
@@ -24,6 +25,15 @@ export default function CareersSection() {
   const goToSlide = (index) => {
     setCurrentSlide(index);
   };
+
+  // 3. Auto-play logic: Har 3 second mein slide change hogi
+  useEffect(() => {
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 3000);
+
+    return () => clearInterval(timer); // Cleanup: Component unmount hone par timer stop
+  }, [nextSlide]);
 
   return (
     <section
@@ -94,7 +104,6 @@ export default function CareersSection() {
               }}
             >
               {careerImages.map((image, index) => {
-                // Each image takes larger portion of viewport width with gaps
                 const imageWidth = `${360 / careerImages.length}vw`;
                 
                 return (

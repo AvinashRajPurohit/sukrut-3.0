@@ -7,6 +7,7 @@ import heroData from "@/components/data/hero.json";
 import HeroMockup from "../Mockups/HeroMockup";
 import { FiArrowUpRight, FiCheck, FiTrendingUp, FiUsers, FiAward, FiZap } from "react-icons/fi";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import ActivityMockup from "../Mockups/ActivityMockup";
 
 export default function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -162,13 +163,13 @@ export default function Hero() {
             </div>
 
             {/* Premium Stats Grid */}
-            <div className={`grid grid-cols-3 gap-4 transition-all duration-500 ease-out ${
+            {/* <div className={`grid grid-cols-3 gap-4 transition-all duration-500 ease-out ${
               contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
             style={{ transitionDelay: '350ms' }}
-            >
+            > */}
               {/* Stat 1 */}
-              <div className="group relative p-4 rounded-2xl bg-gradient-to-br from-white to-gray-50/50 border border-gray-100/80 backdrop-blur-sm hover:border-[#E39A2E]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#E39A2E]/5">
+              {/* <div className="group relative p-4 rounded-2xl bg-gradient-to-br from-white to-gray-50/50 border border-gray-100/80 backdrop-blur-sm hover:border-[#E39A2E]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#E39A2E]/5">
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#E39A2E]/0 via-[#E39A2E]/0 to-[#E39A2E]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative">
                   <div className="flex items-center gap-2 mb-1">
@@ -177,10 +178,10 @@ export default function Hero() {
                   </div>
                   <p className="text-xs text-gray-500 font-medium">Projects</p>
                 </div>
-              </div>
+              </div> */}
 
               {/* Stat 2 */}
-              <div className="group relative p-4 rounded-2xl bg-gradient-to-br from-white to-gray-50/50 border border-gray-100/80 backdrop-blur-sm hover:border-[#E39A2E]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#E39A2E]/5">
+              {/* <div className="group relative p-4 rounded-2xl bg-gradient-to-br from-white to-gray-50/50 border border-gray-100/80 backdrop-blur-sm hover:border-[#E39A2E]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#E39A2E]/5">
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#E39A2E]/0 via-[#E39A2E]/0 to-[#E39A2E]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative">
                   <div className="flex items-center gap-2 mb-1">
@@ -189,10 +190,10 @@ export default function Hero() {
                   </div>
                   <p className="text-xs text-gray-500 font-medium">Clients</p>
                 </div>
-              </div>
+              </div> */}
 
               {/* Stat 3 */}
-              <div className="group relative p-4 rounded-2xl bg-gradient-to-br from-white to-gray-50/50 border border-gray-100/80 backdrop-blur-sm hover:border-[#E39A2E]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#E39A2E]/5">
+              {/* <div className="group relative p-4 rounded-2xl bg-gradient-to-br from-white to-gray-50/50 border border-gray-100/80 backdrop-blur-sm hover:border-[#E39A2E]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#E39A2E]/5">
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#E39A2E]/0 via-[#E39A2E]/0 to-[#E39A2E]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative">
                   <div className="flex items-center gap-2 mb-1">
@@ -202,7 +203,7 @@ export default function Hero() {
                   <p className="text-xs text-gray-500 font-medium">Years</p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Premium Feature Highlights */}
             <div className={`flex flex-wrap gap-3 transition-all duration-500 ease-out ${
@@ -270,7 +271,7 @@ export default function Hero() {
           <div className="absolute w-[300px] h-[300px] bg-blue-100 rounded-full blur-[80px] -z-10" />
           <HeroMockup />
         </div>
-       
+       <ActivityMockup />
       </div>
 
     </section>

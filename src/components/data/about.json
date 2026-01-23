@@ -9,19 +9,19 @@
     },
     "images": [
       {
-        "src": "/about/hero/hero-1.jpg",
+        "src": "/about/hero/hero-1-about.jpeg",
         "alt": "Diverse team members collaborating in a modern office environment"
       },
       {
-        "src": "/about/hero/hero-2.jpg",
+        "src": "/about/hero/hero-about-2.jpeg",
         "alt": "Team members engaged in a collaborative discussion around a table"
       },
       {
-        "src": "/about/hero/hero-3.jpg",
+        "src": "/about/hero/hero-3.jpeg",
         "alt": "Team members in a relaxed office lounge setting"
       },
       {
-        "src": "/about/hero/hero-4.jpg",
+        "src": "/about/hero/hero-about-4.jpeg",
         "alt": "Team members presenting and discussing data visualizations"
       }
     ]
@@ -68,19 +68,19 @@
     "members": [
       {
         "id": 1,
+        "name": "Vipul Rajpurohit",
+        "role": "Head of Product",
+        "image": "/about/team/vipul-rajpurohit.jpg",
+        "linkedin": "#",
+        "bio": "Vipul is the Head of Product at Sukrut, driving product strategy and innovation. With extensive experience in product management and user experience design, she ensures that our solutions meet the highest standards of quality and usability. Her expertise in translating business needs into technical solutions has been crucial to our success."
+      },
+      {
+        "id": 2,
         "name": "Deepak Rajpurohit",
         "role": "Chief Executive Officer",
         "image": "/about/team/deepak-rajpurohit.jpg",
         "linkedin": "#",
         "bio": "Deepak is the Chief Executive Officer of Sukrut, a leading software engineering company building scalable solutions for real-world challenges. With over a decade of experience leading technology innovation at global tech companies, he is a recognized expert regularly advising businesses and organizations. He has been instrumental in building robust systems that power business growth and digital transformation."
-      },
-      {
-        "id": 2,
-        "name": "Isabella Schmidt",
-        "role": "Head of Product",
-        "image": "/about/team/isabella-schmidt.jpg",
-        "linkedin": "#",
-        "bio": "Isabella is the Head of Product at Sukrut, driving product strategy and innovation. With extensive experience in product management and user experience design, she ensures that our solutions meet the highest standards of quality and usability. Her expertise in translating business needs into technical solutions has been crucial to our success."
       },
       {
         "id": 3,
@@ -158,7 +158,7 @@
         "id": 13,
         "name": "Vishal Kumawat",
         "role": "Full Stack Developer",
-        "image": "/about/team/Vishal_Kumawat(1).jpg",
+        "image": "/about/team/Vishal_Kumawat.jpg",
         "linkedin": "https://www.linkedin.com/in/vishal-kumawat-675496203?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
         "bio": "Vishal Kumawat is a Full Stack Developer specializing in Python, React.js, Next.js, FastAPI, and Node.js. He builds scalable, high-performance web applications and APIs, focusing on clean architecture, maintainable code, and seamless user experiences across the stack."
       },
@@ -190,7 +190,7 @@
         "id": 16,
         "name": "Priyanshu Upadhyay",
         "role": "Python Engineer",
-        "image": "/about/team/Priyanshu_Upadhyay.jpeg",
+        "image": "/about/team/Priyanshu_Upadhyay.png",
         "linkedin": "https://in.linkedin.com/in/priyanshu-upadhya",
         "bio": "Priyanshu Upadhyay is a Python Engineer with strong expertise in Selenium automation, backend development, and system integrations. He specializes in Salesforce integration and healthcare technology, including FHIR-based data interoperability, and builds scalable, automation-driven solutions that improve system performance and business workflows."
       },
@@ -210,58 +210,60 @@
       "At Sukrut, we believe that making a difference is a team effort that spans across our customers, colleagues, and communities.",
       "As a dynamic, fast-growing software engineering company, we are always looking to expand and complement our team with amazing talent from across the globe."
     ],
-    "images": [
-      {
-        "id": 1,
-        "src": "/about/careers/career-1.jpg",
-        "alt": "Team members collaborating around a laptop"
-      },
-      {
-        "id": 2,
-        "src": "/about/careers/career-2.jpg",
-        "alt": "Team working at a conference booth"
-      },
-      {
-        "id": 3,
-        "src": "/about/careers/career-3.jpg",
-        "alt": "Person working on laptop"
-      },
-      {
-        "id": 4,
-        "src": "/about/careers/career-4.jpg",
-        "alt": "Team meeting in modern office"
-      },
-      {
-        "id": 5,
-        "src": "/about/careers/career-5.jpg",
-        "alt": "Collaborative workspace"
-      },
-      {
-        "id": 6,
-        "src": "/about/careers/career-6.jpg",
-        "alt": "Team brainstorming session"
-      },
-      {
-        "id": 7,
-        "src": "/about/careers/career-7.jpg",
-        "alt": "Office collaboration"
-      },
-      {
-        "id": 8,
-        "src": "/about/careers/career-8.jpg",
-        "alt": "Team presentation"
-      },
-      {
-        "id": 9,
-        "src": "/about/careers/career-9.jpg",
-        "alt": "Modern office environment"
-      },
-      {
-        "id": 10,
-        "src": "/about/careers/career-10.jpg",
-        "alt": "Team working together"
-      }
-    ]
+  "images": [
+  {
+    "id": 1,
+    "src": "/about/careers/career-1.jpeg",
+    "alt": "Team enjoying a fun day out together during an office trip"
+  },
+  {
+    "id": 2,
+    "src": "/about/careers/career2.jpeg",
+    "alt": "Smiling teammates bonding and creating memories on a team vacation"
+  },
+  {
+    "id": 3,
+    "src": "/about/careers/career.jpeg",
+    "alt": "Relaxed moments as the team unwinds and enjoys time together"
+  },
+  {
+    "id": 4,
+    "src": "/about/careers/career-4.jpeg",
+    "alt": "Team laughing and connecting during an offsite retreat"
+  },
+  {
+    "id": 5,
+    "src": "/about/careers/career-5.jpeg",
+    "alt": "Friendly team games bringing everyone closer"
+  },
+  {
+    "id": 6,
+    "src": "/about/careers/career-6.jpeg",
+    "alt": "Celebrating wins and milestones together as one team"
+  },
+  {
+    "id": 7,
+    "src": "/about/careers/career-7.jpeg",
+    "alt": "Casual hangout moments filled with laughter and good vibes"
+  },
+  {
+    "id": 8,
+    "src": "/about/careers/career-8.jpeg",
+    "alt": "Team building activities that turn coworkers into friends"
+  },
+  {
+    "id": 9,
+    "src": "/about/careers/career-9.jpeg",
+    "alt": "Enjoying outdoor activities and shared adventures beyond the office"
+  },
+  {
+    "id": 10,
+    "src": "/about/careers/career-10.jpeg",
+    "alt": "Traveling, playing, and growing together as a close-knit team"
+  }
+]
+
+
   },
   "valuesMission": {
     "mission": {

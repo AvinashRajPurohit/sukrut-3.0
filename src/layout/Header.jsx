@@ -62,7 +62,7 @@ export default function Header() {
         {/* Subtle border glow */}
         <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-200/50 to-transparent transition-opacity duration-200 ${isScrolled ? 'opacity-100' : 'opacity-50'}`} />
         
-        <div className="relative mx-auto max-w-[1400px] px-6 flex items-center justify-between h-20">
+        <div className="relative mx-auto max-w-[1450px] px-6 flex items-center justify-between h-20">
           
           {/* Left Section: Premium Logo */}
           <div className="flex items-center">
