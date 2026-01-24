@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 /**
- * Hook to handle automatic token refresh and daily logout countdown
+ * Hook to handle automatic token refresh
  */
 export function useTokenRefresh() {
   const router = useRouter();
@@ -21,14 +21,8 @@ export function useTokenRefresh() {
         });
 
         if (!response.ok) {
-          // If refresh fails, redirect to login
-          const data = await response.json();
-          if (data.error && data.error.includes('Daily session')) {
-            // Daily logout time reached
-            router.push('/app/login?message=Daily session expired');
-          } else {
-            router.push('/app/login');
-          }
+          await response.json().catch(() => ({}));
+          router.push('/app/login');
         }
       } catch (error) {
         console.error('Token refresh error:', error);
@@ -36,7 +30,7 @@ export function useTokenRefresh() {
       }
     }, 14 * 60 * 1000); // 14 minutes
 
-    // Check for daily logout every minute
+    // Check session validity every minute
     checkIntervalRef.current = setInterval(async () => {
       try {
         // Try to access a protected endpoint to check if session is still valid
@@ -45,10 +39,8 @@ export function useTokenRefresh() {
         });
 
         if (!response.ok) {
-          const data = await response.json();
-          if (data.error && data.error.includes('Daily session')) {
-            router.push('/app/login?message=Daily session expired');
-          }
+          await response.json().catch(() => ({}));
+          router.push('/app/login');
         }
       } catch (error) {
         // Silently fail - don't interrupt user

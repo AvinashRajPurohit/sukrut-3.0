@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import connectDB from '@/lib/db/connection';
 import RefreshToken from '@/lib/db/models/RefreshToken';
-import { verifyRefreshToken, generateAccessToken, generateRefreshToken, REFRESH_TOKEN_EXPIRY, expirationToSeconds, getExpirationDate, shouldLogoutDueToDailyTime, getDailyLogoutTime } from '@/lib/auth/tokens';
+import { verifyRefreshToken, generateAccessToken, generateRefreshToken, REFRESH_TOKEN_EXPIRY, expirationToSeconds, getExpirationDate } from '@/lib/auth/tokens';
 import { getClientIP } from '@/lib/utils/ip-validation';
 
 export async function POST(request) {
@@ -61,19 +61,6 @@ export async function POST(request) {
       return response;
     }
 
-    // Check if daily logout time has passed
-    if (shouldLogoutDueToDailyTime()) {
-      // Delete all refresh tokens for this user
-      await RefreshToken.deleteMany({ userId: decoded.userId });
-      const response = NextResponse.json(
-        { error: 'Daily session expired. Please log in again.' },
-        { status: 401 }
-      );
-      response.cookies.delete('accessToken');
-      response.cookies.delete('refreshToken');
-      return response;
-    }
-
     // Token rotation: Generate new tokens
     const tokenPayload = {
       userId: decoded.userId,
@@ -89,8 +76,7 @@ export async function POST(request) {
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
     // Calculate expiry date from REFRESH_TOKEN_EXPIRY (token rotation)
-    // This will be capped at daily logout time
-    const expiresAt = getExpirationDate(REFRESH_TOKEN_EXPIRY, true);
+    const expiresAt = getExpirationDate(REFRESH_TOKEN_EXPIRY);
 
     // Delete old refresh token and create new one (token rotation)
     await RefreshToken.deleteOne({ _id: storedToken._id });
