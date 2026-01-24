@@ -152,13 +152,18 @@ export default function ContactFooterSection() {
         </div>
 
         <div className="flex justify-center gap-8 md:gap-16 text-sm font-medium text-gray-400 uppercase tracking-widest">
-          {["About Us", "Blog", "Contact", "FAQ"].map((item) => (
+          {[
+            { label: "About Us", href: "/about" },
+            { label: "Blog", href: "/blog" },
+            { label: "Contact", href: "/contact" },
+            { label: "FAQ", href: "/faq" }
+          ].map((item) => (
              <Link
-               key={item}
-               href={`/${item.toLowerCase().replace(" ", "")}`}
+               key={item.label}
+               href={item.href}
                className="cursor-pointer transition hover:text-[#E39A2E]"
              >
-               {item}
+               {item.label}
              </Link>
           ))}
         </div>

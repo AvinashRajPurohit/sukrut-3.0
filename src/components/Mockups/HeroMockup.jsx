@@ -2,7 +2,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, Environment, ContactShadows, Sparkles } from "@react-three/drei";
+import { Float, Environment, Sparkles } from "@react-three/drei";
 import { useRef, useMemo } from "react";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
@@ -292,16 +292,6 @@ export default function HeroMockup() {
         <group position={[0, -0.8, 0]}>
           <Scene />
         </group>
-
-        {/* Shadows */}
-        <ContactShadows
-          position={[0, -2.1, 0]}
-          opacity={0.7}
-          scale={15}
-          blur={2.5}
-          far={5}
-          color="#020617"
-        />
       </Canvas>
     </div>
   );
