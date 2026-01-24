@@ -210,21 +210,7 @@ export default function ContactClient() {
     <main className="min-h-screen bg-white">
       {/* Hero + Form Section */}
       <section className="relative pb-16 sm:pb-20 md:pb-24 overflow-hidden bg-white pt-28 lg:pt-32">
-        {/* Bg: left/hero only — hexagon, diagonal bar, dots (no grid, form stays clean) */}
-        <div className="absolute inset-0 pointer-events-none z-0">
-          {/* Hexagon outline */}
-          <div
-            className="absolute -left-4 top-36 w-20 h-24 border border-gray-300/55"
-            style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}
-          />
-          {/* Soft diagonal bar */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-44 h-20 -skew-x-12 bg-gray-200/40" />
-          {/* Dots */}
-          <div className="absolute left-[16%] top-44 w-1.5 h-1.5 rounded-full bg-gray-400/55" />
-          <div className="absolute left-[10%] bottom-36 w-1 h-1 rounded-full bg-gray-400/45" />
-          <div className="absolute left-[20%] top-2/3 w-2 h-2 rounded-full bg-gray-300/55" />
-        </div>
-        <div className="relative max-w-[1450px] px-4 sm:px-6 mx-auto z-10">
+        <div className="relative max-w-[1450px] px-4 sm:px-6 mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             {/* Left Side - Hero Content */}
             <div 
