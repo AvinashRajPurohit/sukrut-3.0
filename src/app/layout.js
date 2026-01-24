@@ -1,6 +1,6 @@
 import "./globals.css";
 import ConditionalHeader from "@/components/shared/ConditionalHeader";
-import ContactFooterSection from "@/layout/Contact&FooterSection";
+import ConditionalFooter from "@/components/shared/ConditionalFooter";
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -47,6 +47,14 @@ export default function RootLayout({ children }) {
                     html.classList.remove('dark');
                   }
                   html.setAttribute('data-theme', initialTheme);
+                  
+                  // CRITICAL: Set app-route class if on /app routes before any styles load
+                  if (window.location.pathname.startsWith('/app')) {
+                    html.classList.add('app-route');
+                    if (document.body) {
+                      document.body.classList.add('app-route');
+                    }
+                  }
                 } catch (e) {
                   console.error('Theme initialization error:', e);
                 }
@@ -58,7 +66,7 @@ export default function RootLayout({ children }) {
       <body className={plusJakartaSans.className}>
         <ConditionalHeader />
         {children}
-        <ContactFooterSection />
+        <ConditionalFooter />
       </body>
     </html>
   );

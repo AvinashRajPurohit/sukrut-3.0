@@ -57,7 +57,7 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-4 relative">
+    <div className="h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-4 relative overflow-hidden">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
@@ -119,7 +119,7 @@ function LoginContent() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+      <div className="h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 overflow-hidden">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#E39A2E]"></div>
       </div>
     }>
