@@ -54,11 +54,11 @@ export default function OrbitCircles({ points }) {
   return (
     <div
       ref={containerRef}
-      className="relative w-full overflow-hidden min-h-[340px] sm:min-h-[400px] md:min-h-[500px] lg:min-h-[600px]"
+      className="relative w-full overflow-hidden min-h-[360px] sm:min-h-[400px] md:min-h-[520px] lg:min-h-[700px]"
     >
-      {/* Wrapper sized to fit circles + their overflow (top: 66px, right: 50px). Scaled and centered. */}
+      {/* Wrapper: centered (top-1/2) so orbit isn't cut top or bottom; min-height gives enough room on md/lg */}
       <div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-center scale-[0.48] sm:scale-[0.58] md:scale-75 lg:scale-100"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-center scale-[0.5] sm:scale-[0.58] md:scale-75 lg:scale-100"
         style={{ width: 700, height: 686 }}
       >
         {/* 620x620 canvas offset so circles (top:-66, right:-50) and labels (right:-80) fit inside 700x686 */}
@@ -113,10 +113,10 @@ const Label = forwardRef(
   ({ text, top, left, right, bottom, className }, ref) => (
     <div
       ref={ref}
-      className={`absolute flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs md:text-sm text-black ${className || ""}`}
+      className={`absolute flex items-center gap-1.5 sm:gap-2 text-sm md:text-base text-black shrink-0 ${className || ""}`}
       style={{ top, left, right, bottom }}
     >
-      <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#E39A2E] flex-shrink-0" />
+      <span className="w-2.5 h-2.5 rounded-full bg-[#E39A2E] shrink-0" />
       <span className="whitespace-nowrap">{text}</span>
     </div>
   )

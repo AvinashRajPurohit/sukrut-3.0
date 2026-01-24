@@ -48,7 +48,7 @@ export default function ContactFooterSection() {
             </span>
           </div>
 
-          <h2 className="text-5xl font-bold mb-6 tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 tracking-tight leading-tight">
             Let's Engineer <br />
             <span className="text-[#E39A2E]">Your Vision.</span>
           </h2>

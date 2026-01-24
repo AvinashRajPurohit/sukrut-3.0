@@ -9,8 +9,8 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 export default function MeetTheTeamSection() {
   const { team } = aboutData;
   const teamMembers = team.members || [];
-  const [headerRef, headerVisible] = useScrollAnimation();
-  const [gridRef, gridVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [headerRef, headerVisible] = useScrollAnimation({ threshold: 0.01 });
+  const [gridRef, gridVisible] = useScrollAnimation({ threshold: 0.01 });
   const [openBioId, setOpenBioId] = useState(null);
   const cardRefs = useRef({});
   const sectionRef = useRef(null);
@@ -67,14 +67,14 @@ export default function MeetTheTeamSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full bg-gray-100 py-20 lg:py-32"
+      className="relative w-full bg-gray-100 py-16 lg:py-32"
       aria-labelledby="meet-team-heading"
     >
-      <div className="mx-auto max-w-[1400px] px-6">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
         {/* Header Section */}
         <div 
           ref={headerRef}
-          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-16 lg:mb-20 transition-all duration-700 ease-out ${
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 mb-12 lg:mb-20 transition-all duration-700 ease-out ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
@@ -84,12 +84,12 @@ export default function MeetTheTeamSection() {
           }`}
           style={{ transitionDelay: '100ms' }}
           >
-            <h3 className="text-lg lg:text-xl font-medium text-[#E39A2E] mb-4 uppercase tracking-wide">
+            <h3 className="text-base sm:text-lg lg:text-xl font-medium text-[#E39A2E] mb-3 sm:mb-4 uppercase tracking-wide">
               Meet the team
             </h3>
                   <h2
                     id="meet-team-heading"
-                    className="text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight"
+                    className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight"
                   >
                     Built by a diverse, mission-driven team
                   </h2>
@@ -101,16 +101,16 @@ export default function MeetTheTeamSection() {
           }`}
           style={{ transitionDelay: '200ms' }}
           >
-            <p className="text-base lg:text-lg text-gray-600 leading-relaxed">
+            <p className="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed">
               {team.subtitle || 'Our experts in software engineering, system architecture, and digital solutions are dedicated to building scalable technology infrastructure that powers business growth.'}
             </p>
           </div>
         </div>
 
-        {/* Team Members Grid */}
+        {/* Team Members Grid - 2 cols on mobile for smaller cards */}
         <div 
           ref={gridRef}
-          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 transition-all duration-700 ease-out ${
+          className={`grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8 lg:gap-12 transition-all duration-700 ease-out ${
             gridVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
@@ -125,8 +125,8 @@ export default function MeetTheTeamSection() {
               }`}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
-              {/* Profile Image - Shorter Portrait Ratio */}
-              <div className="relative w-full aspect-[7/8] overflow-hidden bg-gray-200">
+              {/* Profile Image - Square on mobile (compact), portrait on sm+ */}
+              <div className="relative w-full aspect-square sm:aspect-[7/8] overflow-hidden bg-gray-200">
                 <Image
                   src={member.image}
                   alt={`${member.name} - ${member.role}`}
@@ -137,10 +137,10 @@ export default function MeetTheTeamSection() {
               </div>
 
               {/* White Info Section */}
-              <div className="bg-white p-5 lg:p-6 relative">
+              <div className="bg-white p-2 sm:p-5 lg:p-6 relative">
                 {/* Name and LinkedIn Icon - Justify Between */}
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <h3 className="text-lg lg:text-xl font-bold text-gray-900">
+                <div className="flex items-start justify-between gap-1 sm:gap-2 mb-0.5 sm:mb-2">
+                  <h3 className="text-xs sm:text-lg lg:text-xl font-bold text-gray-900 leading-tight line-clamp-2 min-w-0">
                     {member.name}
                   </h3>
                   {member.linkedin && (
@@ -148,37 +148,37 @@ export default function MeetTheTeamSection() {
                       href={member.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-gray-600 hover:text-[#E39A2E] transition-colors flex-shrink-0"
+                      className="text-gray-600 hover:text-[#E39A2E] transition-colors flex-shrink-0 p-0.5 -m-0.5"
                       aria-label={`${member.name} LinkedIn`}
                     >
-                      <Linkedin className="w-5 h-5" />
+                      <Linkedin className="w-4 h-4 sm:w-5 sm:h-5" />
                     </a>
                   )}
                 </div>
                 
-                {/* Role */}
-                <p className="text-sm lg:text-base text-gray-600">
+                {/* Role - compact on mobile */}
+                <p className="text-[11px] sm:text-sm lg:text-base text-gray-600 leading-tight line-clamp-2">
                   {member.role}
                 </p>
 
-                {/* Toggle Bio Button - Transforms from Show to Hide */}
+                {/* Toggle Bio Button - In-flow on mobile (no overlap), absolute on sm+ */}
                 <button
                   onClick={() => toggleBio(member.id)}
-                  className={`absolute bottom-5 right-5 lg:bottom-6 lg:right-6 bg-black text-white text-xs lg:text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ease-out hover:bg-gray-800 cursor-pointer z-20 ${
+                  className={`relative sm:absolute mt-1.5 sm:mt-0 sm:bottom-5 sm:right-5 lg:bottom-6 lg:right-6 bg-black text-white text-[11px] sm:text-xs lg:text-sm font-medium px-2 py-1 sm:px-4 sm:py-2 rounded-full transition-all duration-300 ease-out hover:bg-gray-800 cursor-pointer z-20 w-fit min-w-[2rem] sm:min-w-0 ${
                     openBioId === member.id
                       ? 'opacity-100 translate-y-0'
-                      : 'opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0'
+                      : 'opacity-100 translate-y-0 sm:opacity-0 sm:translate-y-4 sm:group-hover:opacity-100 sm:group-hover:translate-y-0'
                   }`}
                   aria-label={openBioId === member.id ? `Hide bio for ${member.name}` : `Show bio for ${member.name}`}
                 >
-                  <span className="relative inline-block min-w-[90px] text-center">
+                  <span className="relative inline-flex items-center justify-center gap-1 whitespace-nowrap">
                     <span 
                       className={`absolute inset-0 flex items-center justify-center gap-1 transition-opacity duration-300 ease-out ${
                         openBioId === member.id ? 'opacity-0' : 'opacity-100'
                       }`}
                     >
                       <span>+</span>
-                      <span>Show Bio</span>
+                      <span className="hidden sm:inline">Show Bio</span>
                     </span>
                     <span 
                       className={`flex items-center justify-center gap-1 transition-opacity duration-300 ease-out ${
@@ -186,7 +186,7 @@ export default function MeetTheTeamSection() {
                       }`}
                     >
                       <span>×</span>
-                      <span>Hide Bio</span>
+                      <span className="hidden sm:inline">Hide Bio</span>
                     </span>
                   </span>
                 </button>
@@ -194,15 +194,15 @@ export default function MeetTheTeamSection() {
 
               {/* Bio Overlay - Covers about 70% from bottom */}
               <div 
-                className={`absolute bottom-0 left-0 right-0 h-[70%] bg-white p-5 lg:p-6 overflow-hidden flex flex-col z-10 group/bio transition-all duration-300 ease-out ${
+                className={`absolute bottom-0 left-0 right-0 h-[70%] bg-white p-2 sm:p-5 lg:p-6 overflow-hidden flex flex-col z-10 group/bio transition-all duration-300 ease-out ${
                   openBioId === member.id 
                     ? 'opacity-100 translate-y-0' 
                     : 'opacity-0 translate-y-full pointer-events-none'
                 }`}
               >
                   {/* Name and LinkedIn Icon - Justify Between */}
-                  <div className="flex items-start justify-between gap-2 mb-2 flex-shrink-0">
-                    <h3 className="text-lg lg:text-xl font-bold text-gray-900">
+                  <div className="flex items-start justify-between gap-2 mb-1 sm:mb-2 flex-shrink-0">
+                    <h3 className="text-sm sm:text-lg lg:text-xl font-bold text-gray-900">
                       {member.name}
                     </h3>
                     {member.linkedin && (
@@ -219,7 +219,7 @@ export default function MeetTheTeamSection() {
                   </div>
                   
                   {/* Role */}
-                  <p className="text-sm lg:text-base text-gray-600 mb-4 flex-shrink-0">
+                  <p className="text-xs sm:text-sm lg:text-base text-gray-600 mb-2 sm:mb-4 flex-shrink-0">
                     {member.role}
                   </p>
 
@@ -227,7 +227,7 @@ export default function MeetTheTeamSection() {
                   <div 
                     className="relative flex-1 overflow-y-auto pr-2 min-h-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                   >
-                    <p className="text-sm lg:text-base text-gray-600 leading-relaxed">
+                    <p className="text-xs sm:text-sm lg:text-base text-gray-600 leading-relaxed">
                       {member.bio}
                     </p>
                     {/* Fade-out gradient at bottom */}

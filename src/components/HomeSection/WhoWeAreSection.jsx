@@ -26,20 +26,20 @@ export default function WhoWeAreSection() {
 
   return (
     <section
-      className="relative w-full bg-black text-white py-20 lg:py-32"
+      className="relative w-full bg-black text-white py-16 lg:py-32"
       aria-labelledby="who-we-are-heading"
     >
-      <div className="mx-auto max-w-[1400px] px-6">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
         {/* Header Section */}
         <div 
           ref={headerRef}
-          className={`text-center mb-12 lg:mb-16 transition-all duration-700 ease-out ${
+          className={`text-center mb-10 lg:mb-16 transition-all duration-700 ease-out ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
           <h2
             id="who-we-are-heading"
-            className={`text-3xl lg:text-4xl xl:text-5xl font-semibold text-[#E39A2E] mb-6 transition-all duration-700 ease-out ${
+            className={`text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-[#E39A2E] mb-4 sm:mb-6 transition-all duration-700 ease-out ${
               headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
             style={{ transitionDelay: '100ms' }}
@@ -47,7 +47,7 @@ export default function WhoWeAreSection() {
             Who We Are
           </h2>
           <p 
-            className={`text-lg lg:text-xl xl:text-2xl text-white max-w-4xl mx-auto leading-relaxed transition-all duration-700 ease-out ${
+            className={`text-base sm:text-lg lg:text-xl xl:text-2xl text-white max-w-4xl mx-auto leading-relaxed transition-all duration-700 ease-out ${
               headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
             style={{ transitionDelay: '200ms' }}
@@ -59,7 +59,7 @@ export default function WhoWeAreSection() {
         {/* Team Photo - Improved Layout */}
         <div 
           ref={imageRef}
-          className={`mb-16 lg:mb-20 transition-all duration-700 ease-out ${
+          className={`mb-12 lg:mb-20 transition-all duration-700 ease-out ${
             imageVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
           style={{ transitionDelay: '300ms' }}
@@ -78,7 +78,7 @@ export default function WhoWeAreSection() {
               <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#E39A2E]/30 z-10" />
               
               {/* Image container - shows full image without cropping */}
-              <div className="relative w-full overflow-hidden border border-[#333333] bg-gray-900 flex items-center justify-center min-h-[400px] lg:min-h-[500px]">
+              <div className="relative w-full overflow-hidden border border-[#333333] bg-gray-900 flex items-center justify-center min-h-[280px] sm:min-h-[400px] lg:min-h-[500px]">
                 <div className="relative w-full h-full">
                   <Image
                     src="/about/who-we-are/Who_We_Are.jpeg"
@@ -111,7 +111,7 @@ export default function WhoWeAreSection() {
         {/* Highlights Section - Three Columns */}
         <div 
           ref={highlightsRef}
-          className={`relative border border-[#333333] p-8 lg:p-12 transition-all duration-700 ease-out ${
+          className={`relative border border-[#333333] p-6 sm:p-8 lg:p-12 transition-all duration-700 ease-out ${
             highlightsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
           style={{ transitionDelay: '400ms' }}
@@ -128,7 +128,7 @@ export default function WhoWeAreSection() {
           <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-[#E39A2E]/20" />
           <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-[#E39A2E]/20" />
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-12">
             {highlights.map((highlight, index) => (
               <div
                 key={highlight.id}
@@ -145,14 +145,14 @@ export default function WhoWeAreSection() {
                 )}
 
                 {/* Globe Icon */}
-                <div className="flex justify-center mb-6">
-                  <div className="w-16 h-16 rounded-full bg-[#E39A2E]/10 flex items-center justify-center group/icon hover:bg-[#E39A2E]/20 transition-colors duration-300">
-                    <Globe className="w-8 h-8 text-[#E39A2E] transition-transform duration-300 group-hover/icon:rotate-12" />
+                <div className="flex justify-center mb-4 sm:mb-6">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#E39A2E]/10 flex items-center justify-center group/icon hover:bg-[#E39A2E]/20 transition-colors duration-300">
+                    <Globe className="w-7 h-7 sm:w-8 sm:h-8 text-[#E39A2E] transition-transform duration-300 group-hover/icon:rotate-12" />
                   </div>
                 </div>
 
                 {/* Text */}
-                <p className="text-base lg:text-lg text-white/90 leading-relaxed">
+                <p className="text-sm sm:text-base lg:text-lg text-white/90 leading-relaxed">
                   {highlight.text}
                 </p>
               </div>

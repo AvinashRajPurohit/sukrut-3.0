@@ -17,14 +17,14 @@ export default function PrinciplesSection() {
 
   return (
     <section
-      className="relative w-full bg-white py-20 lg:py-32"
+      className="relative w-full bg-white py-16 lg:py-32"
       aria-labelledby="principles-heading"
     >
-      <div className="mx-auto max-w-[1400px] px-6">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
         {/* Header Section */}
         <div 
           ref={headerRef}
-          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-16 lg:mb-20 transition-all duration-700 ease-out ${
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 mb-12 lg:mb-20 transition-all duration-700 ease-out ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
@@ -36,7 +36,7 @@ export default function PrinciplesSection() {
           >
             <h2
               id="principles-heading"
-              className="text-4xl lg:text-5xl xl:text-6xl font-semibold text-gray-900 leading-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-semibold text-gray-900 leading-tight"
             >
               {principles.title.split('\n').map((line, i) => (
                 <span 
@@ -58,7 +58,7 @@ export default function PrinciplesSection() {
           }`}
           style={{ transitionDelay: '250ms' }}
           >
-            <p className="text-lg lg:text-xl text-gray-600 leading-relaxed">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed">
               {principles.description}
             </p>
           </div>
@@ -67,7 +67,7 @@ export default function PrinciplesSection() {
         {/* Principles Cards */}
         <div 
           ref={cardsRef}
-          className={`grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 transition-all duration-700 ease-out ${
+          className={`grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 transition-all duration-700 ease-out ${
             cardsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
@@ -76,7 +76,7 @@ export default function PrinciplesSection() {
             return (
               <div
                 key={principle.id}
-                className={`bg-white border border-gray-200 rounded-2xl p-8 lg:p-10 shadow-sm hover:shadow-md transition-all duration-500 ease-out hover:-translate-y-1 ${
+                className={`bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-sm hover:shadow-md transition-all duration-500 ease-out hover:-translate-y-1 ${
                   cardsVisible 
                     ? 'opacity-100 translate-y-0' 
                     : 'opacity-0 translate-y-8'
@@ -84,7 +84,7 @@ export default function PrinciplesSection() {
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 {/* Icon */}
-                <div className={`w-16 h-16 rounded-full bg-gray-900 flex items-center justify-center mb-6 transition-all duration-600 ease-out ${
+                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-900 flex items-center justify-center mb-4 sm:mb-6 transition-all duration-600 ease-out ${
                   cardsVisible ? 'opacity-100' : 'opacity-0'
                 }`}
                 style={{ transitionDelay: `${index * 100 + 150}ms` }}
@@ -93,7 +93,7 @@ export default function PrinciplesSection() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-4">
                   {principle.title}
                 </h3>
 

@@ -17,14 +17,14 @@ export default function AboutHeroSection() {
 
   return (
     <section
-      className="relative w-full bg-white py-20 lg:py-32"
+      className="relative w-full bg-white pt-24 pb-20 lg:pt-28 lg:pb-32"
       aria-labelledby="about-heading"
     >
-      <div className="mx-auto max-w-[1400px] px-6">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
         {/* Header Section */}
         <div 
           ref={headerRef}
-          className={`text-center mb-16 lg:mb-24 transition-all duration-700 ease-out ${
+          className={`text-center mb-12 lg:mb-24 transition-all duration-700 ease-out ${
             headerVisible 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-8'
@@ -32,14 +32,14 @@ export default function AboutHeroSection() {
         >
           <h1
             id="about-heading"
-            className={`text-4xl lg:text-6xl font-semibold text-gray-900 mb-6 transition-all duration-700 ease-out ${
+            className={`text-3xl sm:text-4xl lg:text-6xl font-semibold text-gray-900 mb-4 sm:mb-6 transition-all duration-700 ease-out ${
               headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
             style={{ transitionDelay: '150ms' }}
           >
             {hero.title}
           </h1>
-          <p className={`text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-700 ease-out ${
+          <p className={`text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-700 ease-out ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
           style={{ transitionDelay: '300ms' }}
@@ -48,17 +48,17 @@ export default function AboutHeroSection() {
           </p>
         </div>
 
-        {/* Grid Layout - Centered featured card spanning 2 rows */}
+        {/* Grid Layout - Flex on mobile (equal gap), Grid on md+ (featured spans 2 rows) */}
         <div 
           ref={gridRef}
-          className={`grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 auto-rows-fr transition-all duration-700 ease-out ${
+          className={`flex flex-col md:grid md:grid-cols-3 gap-4 lg:gap-6 md:auto-rows-fr transition-all duration-700 ease-out ${
             gridVisible 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-8'
           }`}
         >
-          {/* Top Left Image */}
-          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
+          {/* Top Left Image - 1st on mobile, 1st on md+ */}
+          <div className={`order-1 md:order-1 relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
             gridVisible 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-8'
@@ -75,8 +75,8 @@ export default function AboutHeroSection() {
             />
           </div>
 
-          {/* Featured Card - Centered, spans 2 rows */}
-          <div className={`relative md:row-span-2 rounded-2xl overflow-hidden flex flex-col justify-center p-8 lg:p-12 min-h-[400px] md:min-h-0 transition-all duration-700 ease-out ${
+          {/* Featured Card - 3rd on mobile, 2nd on md+ (spans 2 rows) */}
+          <div className={`order-3 md:order-2 relative md:row-span-2 rounded-2xl overflow-hidden flex flex-col justify-center p-6 sm:p-8 lg:p-12 min-h-[340px] sm:min-h-[400px] md:min-h-0 transition-all duration-700 ease-out ${
             gridVisible 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-8'
@@ -130,17 +130,17 @@ export default function AboutHeroSection() {
               <div className="mb-6 text-white transition-all duration-600 ease-out">
                 <IconComponent className="w-10 h-10 lg:w-12 lg:h-12" />
               </div>
-              <h2 className="text-2xl lg:text-3xl xl:text-4xl font-semibold text-white mb-6 leading-tight">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-semibold text-white mb-4 sm:mb-6 leading-tight">
                 {hero.featuredBox.title}
               </h2>
-              <p className="text-base lg:text-lg text-gray-200 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-lg text-gray-200 leading-relaxed">
                 {hero.featuredBox.description}
               </p>
             </div>
           </div>
 
-          {/* Top Right Image */}
-          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
+          {/* Top Right Image - 4th on mobile, 3rd on md+ */}
+          <div className={`order-4 md:order-3 relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
             gridVisible 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-8'
@@ -156,8 +156,8 @@ export default function AboutHeroSection() {
             />
           </div>
 
-          {/* Bottom Left Image */}
-          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
+          {/* Bottom Left Image - 2nd on mobile, 4th on md+ */}
+          <div className={`order-2 md:order-4 relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
             gridVisible 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-8'
@@ -173,8 +173,8 @@ export default function AboutHeroSection() {
             />
           </div>
 
-          {/* Bottom Right Image */}
-          <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
+          {/* Bottom Right Image - 5th on mobile and md+ */}
+          <div className={`order-5 md:order-5 relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 transition-all duration-700 ease-out ${
             gridVisible 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-8'

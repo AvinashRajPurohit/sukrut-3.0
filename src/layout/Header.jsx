@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
@@ -62,7 +62,7 @@ export default function Header() {
         {/* Subtle border glow */}
         <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-200/50 to-transparent transition-opacity duration-200 ${isScrolled ? 'opacity-100' : 'opacity-50'}`} />
         
-        <div className="relative mx-auto max-w-[1450px] px-6 flex items-center justify-between h-20">
+        <div className="relative mx-auto max-w-[1450px] px-4 sm:px-6 flex items-center justify-between h-16 sm:h-20">
           
           {/* Left Section: Premium Logo */}
           <div className="flex items-center">
@@ -138,61 +138,39 @@ export default function Header() {
               Book a demo
             </Link>
 
-            {/* Premium Mobile Menu Button */}
+            {/* Mobile Menu Button - Animated hamburger, 44px tap target */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden relative p-2.5 rounded-xl text-gray-700 hover:bg-gray-50/90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 active:scale-95 group"
-              aria-label="Toggle mobile menu"
+              className="lg:hidden relative flex items-center justify-center min-w-[44px] min-h-[44px] rounded-xl text-gray-700 hover:bg-gray-100/80 active:bg-gray-200/60 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 active:scale-[0.96]"
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileMenuOpen}
             >
-              {/* Hover glow */}
-              <div className="absolute inset-0 rounded-xl bg-gray-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
-              
-              <div className="relative w-6 h-6">
-                {isMobileMenuOpen ? (
-                  <X className="w-6 h-6 absolute inset-0 transition-all duration-300 rotate-0 opacity-100" />
-                ) : (
-                  <Menu className="w-6 h-6 absolute inset-0 transition-all duration-300 rotate-0 opacity-100" />
-                )}
+              <div className="relative w-6 h-5 flex items-center justify-center" aria-hidden="true">
+                <span className={`absolute left-1/2 h-0.5 w-6 -translate-x-1/2 rounded-full bg-current transition-all duration-300 ease-out ${isMobileMenuOpen ? 'top-1/2 -translate-y-1/2 rotate-45' : 'top-0'}`} />
+                <span className={`h-0.5 w-6 rounded-full bg-current transition-all duration-300 ease-out ${isMobileMenuOpen ? 'opacity-0 scale-x-0' : 'opacity-100'}`} />
+                <span className={`absolute left-1/2 h-0.5 w-6 -translate-x-1/2 rounded-full bg-current transition-all duration-300 ease-out ${isMobileMenuOpen ? 'top-1/2 -translate-y-1/2 -rotate-45' : 'bottom-0'}`} />
               </div>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Ultra Premium Mobile Menu */}
+      {/* Mobile Menu - Full-height slide, CTA, safe-area */}
       <div
-        className={`lg:hidden fixed inset-0 top-20 z-40 bg-white/98 backdrop-blur-[40px] transition-all duration-500 ease-out ${
-          isMobileMenuOpen
-            ? 'opacity-100 visible translate-y-0'
-            : 'opacity-0 invisible -translate-y-4'
+        className={`lg:hidden fixed inset-0 top-16 sm:top-20 z-40 bg-white/98 backdrop-blur-xl transition-all duration-300 ease-out ${
+          isMobileMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'
         }`}
         onClick={() => setIsMobileMenuOpen(false)}
       >
-        {/* Multi-layer gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-gray-50/40 pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.9),transparent_60%)] pointer-events-none" />
-        
-        {/* Subtle pattern overlay */}
-        <div 
-          className="absolute inset-0 opacity-[0.02] pointer-events-none"
-          style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, rgb(0,0,0) 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
-          }}
-        />
-        
-        <nav
-          className="relative flex flex-col h-full overflow-y-auto"
-          role="navigation"
-          aria-label="Mobile navigation"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="px-8 py-16 space-y-3">
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-gray-50/30 pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.9),transparent_55%)] pointer-events-none" />
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgb(0,0,0) 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+
+        <nav className="relative h-full overflow-y-auto px-5 sm:px-8 pt-8 pb-[max(1.5rem,env(safe-area-inset-bottom))]" role="navigation" aria-label="Mobile navigation" onClick={(e) => e.stopPropagation()}>
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5 px-1">Menu</p>
+          <div className="space-y-1.5">
             {menuData.items.map((item, index) => {
-              const isActive = pathname === item.href || 
-                (item.href !== '/' && pathname?.startsWith(item.href));
-              
+              const isActive = pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
               return (
                 <Link
                   key={item.id}
@@ -200,48 +178,18 @@ export default function Header() {
                   prefetch={true}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`
-                    group
-                    relative
-                    block
-                    px-6 py-4.5
-                    text-base font-semibold
-                    rounded-2xl
+                    group relative flex items-center min-h-[48px] px-5 py-3.5
+                    text-[15px] font-semibold rounded-xl
                     transition-all duration-300 ease-out
-                    transform
-                    ${
-                      isMobileMenuOpen
-                        ? 'translate-x-0 opacity-100'
-                        : 'translate-x-4 opacity-0'
-                    }
-                    ${
-                      isActive
-                        ? 'text-gray-900 bg-gradient-to-r from-gray-50 via-gray-100/80 to-gray-50 shadow-md border border-gray-200/50'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-gray-50/80 hover:via-gray-50/60 hover:to-gray-50/80 hover:shadow-sm hover:border hover:border-gray-100/50'
-                    }
+                    ${isMobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-3 opacity-0'}
+                    ${isActive
+                      ? 'text-gray-900 bg-gray-100/90 border border-gray-200/60'
+                      : 'text-gray-700 active:bg-gray-50 border border-transparent'}
                   `}
-                  style={{ 
-                    fontFamily: 'var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif',
-                    letterSpacing: '0.015em',
-                    transitionDelay: isMobileMenuOpen ? `${index * 60}ms` : '0ms'
-                  }}
+                  style={{ fontFamily: 'var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif', letterSpacing: '0.02em', transitionDelay: isMobileMenuOpen ? `${index * 50}ms` : '0ms' }}
                 >
-                  {/* Active indicator with gradient */}
-                  {isActive && (
-                    <span 
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 rounded-r-full shadow-sm"
-                      aria-hidden="true"
-                    />
-                  )}
-                  
-                  {/* Hover glow effect */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-gray-50/0 via-white/40 to-gray-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  {/* Shimmer on hover */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-1000" />
-                  
-                  <span className="relative z-10 block transform transition-transform duration-300 group-active:scale-95">
-                    {item.title}
-                  </span>
+                  {isActive && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gray-900 rounded-r-full" aria-hidden="true" />}
+                  <span className="relative">{item.title}</span>
                 </Link>
               );
             })}

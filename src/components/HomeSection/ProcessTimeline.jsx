@@ -52,11 +52,11 @@ export default function ProcessTimeline({ steps, activeStep, setActiveStep }) {
 
   return (
     <div ref={containerRef} className="relative mt-4 sm:mt-6 md:mt-10">
-      {/* LINE */}
-      <div className="absolute top-2 left-0 right-0 h-px bg-gray-200" />
+      {/* LINE - aligned with dot centers; top-6 leaves room so active (scaled) dot isn't cut */}
+      <div className="absolute top-6 left-0 right-0 h-px bg-gray-200" />
 
-      {/* STEPS - horizontal scroll on mobile, spread on md+ */}
-      <div className="relative flex justify-start md:justify-between overflow-x-auto pb-2 -mx-0.5 sm:-mx-1 scrollbar-hide gap-3 sm:gap-4 md:gap-0 flex-nowrap snap-x snap-mandatory">
+      {/* STEPS - pt-4 gives headroom for active dot scale so it isn't cut at top */}
+      <div className="relative flex justify-start md:justify-between overflow-x-auto pt-4 pb-2 -mx-0.5 sm:-mx-1 scrollbar-hide gap-3 sm:gap-4 md:gap-0 flex-nowrap snap-x snap-mandatory">
         {steps.map((step) => (
           <div key={step.id} className="snap-center shrink-0">
             <ProcessStep

@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
-import { Clock, BarChart3, Grid3x3, MessageSquare, MessageCircle, Headphones, ShoppingCart, Lightbulb, CreditCard, MoreHorizontal } from 'lucide-react';
+import { Clock, BarChart3, Grid3x3, MessageSquare, MessageCircle, Headphones, ShoppingCart, Lightbulb, CreditCard, MoreHorizontal, Mail, Phone, FileCheck, Plus, Minus, Code2, Calendar, Layers } from 'lucide-react';
+import Link from 'next/link';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 const features = [
@@ -32,20 +32,24 @@ const features = [
   },
 ];
 
-const testimonials = [
+const processSteps = [
   {
     id: 1,
-    name: 'Sarah Chen',
-    role: 'CTO, TechCorp',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
-    quote: 'Sukrut transformed our digital infrastructure. Their unified approach to software development enabled us to streamline operations and achieve remarkable efficiency gains.',
+    icon: Mail,
+    title: "We'll Get Back Within 24 Hours",
+    description: 'Our team reviews every inquiry and responds with next steps or clarifying questions.',
   },
   {
     id: 2,
-    name: 'Michael Rodriguez',
-    role: 'Founder, InnovateLabs',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
-    quote: 'Working with Sukrut has been transformative. Their comprehensive solutions and technical expertise helped us build a robust platform that scales effortlessly.',
+    icon: Phone,
+    title: 'Discovery Call',
+    description: 'We schedule a call to understand your goals, technical needs, and timeline.',
+  },
+  {
+    id: 3,
+    icon: FileCheck,
+    title: 'Tailored Proposal',
+    description: 'You receive a clear proposal with scope, approach, and next steps.',
   },
 ];
 
@@ -72,6 +76,13 @@ const countryOptions = [
   { value: 'canada', label: 'Canada' },
   { value: 'india', label: 'India' },
   { value: 'australia', label: 'Australia' },
+];
+
+const learnMoreItems = [
+  { icon: Code2, title: 'Full-cycle development', description: 'From idea and design to build, launch, and ongoing support.' },
+  { icon: Calendar, title: 'Fixed or flexible engagement', description: 'Match your budget and timeline with clear milestones.' },
+  { icon: MessageSquare, title: 'Clear communication', description: 'Regular updates and a single point of contact.' },
+  { icon: Layers, title: 'Modern tech stack', description: 'Web, mobile, APIs, and cloud—tailored to your needs.' },
 ];
 
 function CustomDropdown({ options, value, onChange, placeholder, iconOptions = false }) {
@@ -163,9 +174,10 @@ export default function ContactClient() {
     message: '',
   });
 
+  const [learnMoreOpen, setLearnMoreOpen] = useState(false);
   const [heroRef, heroVisible] = useScrollAnimation();
   const [formRef, formVisible] = useScrollAnimation({ threshold: 0.1 });
-  const [testimonialsRef, testimonialsVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [processRef, processVisible] = useScrollAnimation({ threshold: 0.1 });
   const [featuresRef, featuresVisible] = useScrollAnimation({ threshold: 0.1 });
 
   const handleSubmit = (e) => {
@@ -245,13 +257,60 @@ export default function ContactClient() {
                 Partner with Sukrut to build scalable, innovative software that drives growth. From concept to deployment, we deliver solutions tailored to your unique business needs and objectives.
               </p>
 
-              <button className={`px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-all duration-700 ease-out cursor-pointer ${
-                heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}
-              style={{ transitionDelay: '400ms' }}
+              <div className="space-y-0">
+              <button
+                type="button"
+                onClick={() => setLearnMoreOpen((o) => !o)}
+                className={`inline-flex items-center gap-2.5 px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-all duration-700 ease-out cursor-pointer ${
+                  heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                }`}
+                style={{ transitionDelay: '400ms' }}
+                aria-expanded={learnMoreOpen}
               >
                 Learn More
+                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-white/15 transition-transform duration-300">
+                  {learnMoreOpen ? <Minus className="w-3.5 h-3.5" strokeWidth={2.5} /> : <Plus className="w-3.5 h-3.5" strokeWidth={2.5} />}
+                </span>
               </button>
+
+              {/* Animated expandable panel */}
+              <div
+                className="grid transition-[grid-template-rows] duration-300 ease-out"
+                style={{ gridTemplateRows: learnMoreOpen ? '1fr' : '0fr' }}
+              >
+                <div className="overflow-hidden">
+                  <div
+                    className={`border border-gray-200 rounded-xl mt-4 p-5 sm:p-6 bg-gray-50/80 backdrop-blur-sm transition-all duration-300 ${
+                      learnMoreOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
+                    }`}
+                  >
+                    <p className="text-sm font-semibold text-gray-700 mb-4">What you get when you work with us</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {learnMoreItems.map((item, i) => {
+                        const IconC = item.icon;
+                        return (
+                          <div key={i} className="flex gap-3">
+                            <div className="shrink-0 w-9 h-9 rounded-lg bg-[#E39A2E]/10 flex items-center justify-center">
+                              <IconC className="w-4 h-4 text-[#E39A2E]" />
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-semibold text-gray-900">{item.title}</h4>
+                              <p className="text-xs text-gray-600 mt-0.5">{item.description}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <Link
+                      href="/about"
+                      className="inline-block mt-4 text-sm font-medium text-[#E39A2E] hover:text-[#d18a1f] transition-colors"
+                    >
+                      Read more about us →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
             </div>
 
             {/* Right Side - Contact Form */}
@@ -381,41 +440,35 @@ export default function ContactClient() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* What Happens Next Section */}
       <section className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gray-50/50">
         <div 
-          ref={testimonialsRef}
+          ref={processRef}
           className={`max-w-7xl mx-auto transition-all duration-700 ease-out ${
-            testimonialsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            processVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={testimonial.id}
-                className={`bg-white rounded-2xl p-6 lg:p-8 shadow-sm transition-all duration-500 ease-out hover:shadow-md ${
-                  testimonialsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}
-                style={{ transitionDelay: `${index * 150}ms` }}
-              >
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
-                    <Image
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      fill
-                      className="object-cover"
-                      sizes="48px"
-                    />
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">What Happens Next</h2>
+          <p className="text-gray-600 mb-10 max-w-2xl">After you submit the form, here’s what to expect.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {processSteps.map((step, index) => {
+              const IconComponent = step.icon;
+              return (
+                <div
+                  key={step.id}
+                  className={`bg-white rounded-2xl p-6 lg:p-8 shadow-sm transition-all duration-500 ease-out hover:shadow-md ${
+                    processVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ transitionDelay: `${index * 150}ms` }}
+                >
+                  <div className="w-12 h-12 rounded-lg bg-[#E39A2E]/10 flex items-center justify-center mb-4">
+                    <IconComponent className="w-6 h-6 text-[#E39A2E]" />
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-600">{testimonial.role}</p>
-                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{step.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{step.description}</p>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{testimonial.quote}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

@@ -120,7 +120,7 @@ export default function ImpactSection() {
             {/* RIGHT VISUAL - Orbit graphic; min-h and min-w-0 so it doesn't overflow on mobile */}
             <div
               ref={visualRef}
-              className={`min-w-0 overflow-hidden h-full w-full mx-auto relative min-h-[340px] sm:min-h-[400px] lg:min-h-0 transition-all duration-700 ease-out ${
+              className={`min-w-0 overflow-hidden h-full w-full mx-auto relative min-h-[360px] sm:min-h-[400px] md:min-h-[520px] lg:min-h-0 transition-all duration-700 ease-out ${
                 visualVisible ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-8 scale-95'
               }`}
               style={{ transitionDelay: '500ms' }}
