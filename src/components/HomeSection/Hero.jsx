@@ -38,18 +38,18 @@ export default function Hero() {
 
   return (
     <section
-      className="relative w-full bg-white py-10 overflow-hidden pt-20 lg:pt-24"
+      className="relative w-full bg-white py-6 md:py-10 overflow-hidden pt-24 lg:pt-28"
       aria-labelledby="hero-heading"
     >
       {/* Visual Decor: Subtle background glow (Grid Removed) */}
       <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-b from-blue-50/50 to-white -z-10 blur-3xl opacity-60" />
 
-      <div className="mx-auto px-6 pb-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+      <div className="mx-auto px-4 sm:px-6 pb-12 md:pb-24 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center relative z-10">
 
         {/* LEFT SIDE */}
         <div 
           ref={contentRef}
-          className={`flex gap-16 pl-6 transition-all duration-500 ease-out ${
+          className={`flex gap-8 md:gap-16 pl-0 md:pl-6 transition-all duration-500 ease-out ${
             contentVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
           }`}
         >
@@ -120,7 +120,7 @@ export default function Hero() {
           </div>
 
           {/* Main content - Premium Redesign */}
-          <div className="px-4 space-y-8">
+          <div className="px-0 sm:px-4 space-y-5 md:space-y-8">
             
             {/* Premium Badge with Gradient */}
             <div className={`group inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#E39A2E]/10 via-[#E39A2E]/5 to-transparent border border-[#E39A2E]/20 backdrop-blur-sm transition-all duration-500 ease-out hover:border-[#E39A2E]/40 hover:shadow-lg hover:shadow-[#E39A2E]/10 ${
@@ -141,7 +141,7 @@ export default function Hero() {
             {/* Premium Heading with Gradient Text */}
             <h1
               id="hero-heading"
-              className={`text-4xl lg:text-[64px] font-extrabold leading-[1.3] tracking-tight transition-all duration-500 ease-out max-w-4xl ${
+              className={`text-3xl sm:text-4xl lg:text-[64px] font-extrabold leading-[1.3] tracking-tight transition-all duration-500 ease-out max-w-4xl ${
                 contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
               }`}
               style={{ transitionDelay: '100ms' }}
@@ -157,7 +157,7 @@ export default function Hero() {
             }`}
             style={{ transitionDelay: '250ms' }}
             >
-              <p className="max-w-xl text-gray-600 text-lg leading-relaxed font-medium">
+              <p className="max-w-xl text-gray-600 text-base md:text-lg leading-relaxed font-medium">
                 {heroData.description}
               </p>
             </div>
@@ -206,7 +206,7 @@ export default function Hero() {
             </div> */}
 
             {/* Premium Feature Highlights */}
-            <div className={`flex flex-wrap gap-3 transition-all duration-500 ease-out ${
+            <div className={`flex flex-wrap gap-2 md:gap-3 transition-all duration-500 ease-out ${
               contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
             style={{ transitionDelay: '400ms' }}
@@ -220,24 +220,24 @@ export default function Hero() {
                 return (
                   <div 
                     key={i}
-                    className="group flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/60 backdrop-blur-sm border border-gray-200/60 hover:border-[#E39A2E]/40 hover:bg-gradient-to-r hover:from-[#E39A2E]/5 hover:to-transparent transition-all duration-300"
+                    className="group flex items-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-xl bg-white/60 backdrop-blur-sm border border-gray-200/60 hover:border-[#E39A2E]/40 hover:bg-gradient-to-r hover:from-[#E39A2E]/5 hover:to-transparent transition-all duration-300"
                   >
                     <Icon className="w-4 h-4 text-[#E39A2E] group-hover:scale-110 transition-transform" />
-                    <span className="text-sm font-semibold text-gray-700">{feature.text}</span>
+                    <span className="text-xs md:text-sm font-semibold text-gray-700">{feature.text}</span>
                   </div>
                 );
               })}
             </div>
 
             {/* Premium CTA Button */}
-            <div className={`flex items-center gap-4 transition-all duration-500 ease-out ${
+            <div className={`flex flex-col sm:flex-row items-stretch sm:items-center gap-3 md:gap-4 transition-all duration-500 ease-out ${
               contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
             }`}
             style={{ transitionDelay: '450ms' }}
             >
               <Link
                 href={heroData.cta.href}
-                className="group relative inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#E39A2E] to-[#d68b1d] text-white px-8 py-4 text-md font-semibold shadow-lg shadow-[#E39A2E]/30 transition-all duration-300 hover:shadow-xl hover:shadow-[#E39A2E]/40 hover:-translate-y-0.5 overflow-hidden"
+                className="group relative inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#E39A2E] to-[#d68b1d] text-white px-6 py-3 md:px-8 md:py-4 text-sm md:text-base font-semibold shadow-lg shadow-[#E39A2E]/30 transition-all duration-300 hover:shadow-xl hover:shadow-[#E39A2E]/40 hover:-translate-y-0.5 overflow-hidden"
               >
                 {/* Shimmer effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
@@ -246,13 +246,13 @@ export default function Hero() {
               </Link>
               
               {/* Trust Badge */}
-              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-50/80 border border-gray-200/60">
+              <div className="flex items-center justify-center sm:justify-start gap-2 px-3 py-2 md:px-4 rounded-lg bg-gray-50/80 border border-gray-200/60">
                 <div className="flex -space-x-2">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-6 h-6 rounded-full bg-gradient-to-br from-[#E39A2E] to-[#d68b1d] border-2 border-white" />
+                    <div key={i} className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-[#E39A2E] to-[#d68b1d] border-2 border-white" />
                   ))}
                 </div>
-                <span className="text-xs font-medium text-gray-600">Trusted by 200+ companies</span>
+                <span className="text-[10px] sm:text-xs font-medium text-gray-600">Trusted by 200+ companies</span>
               </div>
             </div>
           </div>

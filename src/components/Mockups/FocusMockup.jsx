@@ -43,10 +43,10 @@ export default function FocusMockup({ active }) {
   }, [active]);
 
   return (
-    <div className="relative">
+    <div className="relative w-full min-w-0 max-w-full overflow-hidden">
       <div
         ref={contentRef}
-        className="rounded-2xl bg-white p-6 shadow-2xl min-h-100 transition-all duration-500"
+        className="rounded-xl sm:rounded-2xl bg-white p-3 sm:p-4 md:p-6 shadow-2xl min-h-0 transition-all duration-500 overflow-hidden"
       >
         {active === "product" && <ProductEngineeringMockup />}
         {active === "custom" && <CustomMockup />}

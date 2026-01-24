@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function OrbitCircles() {
+export default function OrbitCircles({ points }) {
   const containerRef = useRef(null);
   const productVisionRef = useRef(null);
 
@@ -52,64 +52,71 @@ export default function OrbitCircles() {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative w-130 h-130 ml-32">
+    <div
+      ref={containerRef}
+      className="relative w-full overflow-hidden min-h-[340px] sm:min-h-[400px] md:min-h-[500px] lg:min-h-[600px]"
+    >
+      {/* Wrapper sized to fit circles + their overflow (top: 66px, right: 50px). Scaled and centered. */}
+      <div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-center scale-[0.48] sm:scale-[0.58] md:scale-75 lg:scale-100"
+        style={{ width: 700, height: 686 }}
+      >
+        {/* 620x620 canvas offset so circles (top:-66, right:-50) and labels (right:-80) fit inside 700x686 */}
+        <div className="absolute left-0 top-[66px] w-[620px] h-[620px]">
+          {/* ================= CIRCLES ================= */}
+          <div className="absolute inset-0 z-0">
+            <div
+              className="orbit-animate absolute rounded-full bg-gray-100 border border-gray-200"
+              style={{ width: 620, height: 620, top: -66, right: -50, transform: "rotate(-15deg)" }}
+            />
+            <div
+              className="orbit-animate absolute rounded-full bg-white border border-gray-200"
+              style={{ width: 500, height: 500, top: -50, right: -30, transform: "rotate(-8deg)" }}
+            />
+            <div
+              className="orbit-animate absolute rounded-full bg-gray-100 border border-gray-200"
+              style={{ width: 400, height: 400, top: -34, right: -20, transform: "rotate(-3deg)" }}
+            />
+            <div
+              className="orbit-animate absolute rounded-full bg-white border border-gray-200"
+              style={{ width: 280, height: 280, top: -20, right: 0, transform: "rotate(2deg)" }}
+            />
+            <div
+              className="orbit-animate absolute rounded-full bg-gray-100 border border-gray-200"
+              style={{ width: 180, height: 180, top: 0, right: 10, transform: "rotate(6deg)" }}
+            />
+          </div>
 
-      {/* ================= CIRCLES ================= */}
-      <div className="absolute inset-0 z-0">
-
-        <div className="orbit-animate absolute rounded-full bg-gray-100 border border-gray-200"
-          style={{ width: 620, height: 620, top: -66, right: -50, transform: "rotate(-15deg)" }}
-        />
-
-        <div className="orbit-animate absolute rounded-full bg-white border border-gray-200"
-          style={{ width: 500, height: 500, top: -50, right: -30, transform: "rotate(-8deg)" }}
-        />
-
-        <div className="orbit-animate absolute rounded-full bg-gray-100 border border-gray-200"
-          style={{ width: 400, height: 400, top: -34, right: -20, transform: "rotate(-3deg)" }}
-        />
-
-        <div className="orbit-animate absolute rounded-full bg-white border border-gray-200"
-          style={{ width: 280, height: 280, top: -20, right: 0, transform: "rotate(2deg)" }}
-        />
-
-        <div className="orbit-animate absolute rounded-full bg-gray-100 border border-gray-200"
-          style={{ width: 180, height: 180, top: 0, right: 10, transform: "rotate(6deg)" }}
-        />
-      </div>
-
-      {/* ================= LABELS ================= */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
-
-        {/* 🔴 ORIGIN POINT */}
-        <Label
-          ref={productVisionRef}
-          className="orbit-animate"
-          right="-80px"
-          top="24px"
-          text="Product Vision"
-        />
-
-        <Label className="orbit-animate" right="42px" top="100px" text="Technical Feasibility" />
-        <Label className="orbit-animate" right="-20px" top="248px" text="Scalability & Performance" />
-        <Label className="orbit-animate" right="200px" top="180px" text="Reliability & Performance" />
-        <Label className="orbit-animate" left="300px" bottom="62px" text="Clean Code & Modern Frameworks" />
-        <Label className="orbit-animate" left="-5px" bottom="100px" text="Deployment, Support & Growth" />
-
+          {/* ================= LABELS ================= */}
+          <div className="absolute inset-0 z-10 pointer-events-none">
+            <Label
+              ref={productVisionRef}
+              className="orbit-animate"
+              right="-80px"
+              top="24px"
+              text="Product Vision"
+            />
+            <Label className="orbit-animate" right="42px" top="100px" text="Technical Feasibility" />
+            <Label className="orbit-animate" right="-20px" top="248px" text="Scalability & Performance" />
+            <Label className="orbit-animate" right="200px" top="180px" text="Reliability & Performance" />
+            <Label className="orbit-animate" left="300px" bottom="62px" text="Clean Code & Modern Frameworks" />
+            <Label className="orbit-animate" left="-5px" bottom="100px" text="Deployment, Support & Growth" />
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-/* 🔹 Label */
+/* 🔹 Label - responsive dot and text */
 const Label = forwardRef(
   ({ text, top, left, right, bottom, className }, ref) => (
     <div
       ref={ref}
-      className={`absolute flex items-center gap-2 text-sm text-black ${className}`}
+      className={`absolute flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs md:text-sm text-black ${className || ""}`}
       style={{ top, left, right, bottom }}
     >
-      <span className="w-2.5 h-2.5 rounded-full bg-[#E39A2E]" />
+      <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#E39A2E] flex-shrink-0" />
       <span className="whitespace-nowrap">{text}</span>
     </div>
   )

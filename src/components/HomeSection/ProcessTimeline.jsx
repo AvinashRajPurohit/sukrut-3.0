@@ -51,20 +51,20 @@ export default function ProcessTimeline({ steps, activeStep, setActiveStep }) {
   };
 
   return (
-    <div ref={containerRef} className="relative mt-10">
-
+    <div ref={containerRef} className="relative mt-4 sm:mt-6 md:mt-10">
       {/* LINE */}
       <div className="absolute top-2 left-0 right-0 h-px bg-gray-200" />
 
-      {/* STEPS */}
-      <div className="relative flex justify-between">
+      {/* STEPS - horizontal scroll on mobile, spread on md+ */}
+      <div className="relative flex justify-start md:justify-between overflow-x-auto pb-2 -mx-0.5 sm:-mx-1 scrollbar-hide gap-3 sm:gap-4 md:gap-0 flex-nowrap snap-x snap-mandatory">
         {steps.map((step) => (
-          <ProcessStep
-            key={step.id}
-            step={step}
-            active={activeStep === step.id}
-            onClick={() => handleStepClick(step.id)}
-          />
+          <div key={step.id} className="snap-center shrink-0">
+            <ProcessStep
+              step={step}
+              active={activeStep === step.id}
+              onClick={() => handleStepClick(step.id)}
+            />
+          </div>
         ))}
       </div>
     </div>

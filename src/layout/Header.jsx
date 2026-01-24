@@ -77,14 +77,14 @@ export default function Header() {
                 <div className="absolute -inset-1 bg-gradient-to-r from-gray-900/0 via-gray-900/10 to-gray-900/0 rounded-lg blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
                 
                 <Image
-                  src="/sukrut_light_mode_logo.png"   
+                  src="/sukrut_light_mode_logo.png"
                   alt="Sukrut logo"
-                  width={130}               
+                  width={130}
                   height={32}
                   priority
                   quality={100}
                   unoptimized
-                  className="relative z-10 select-none"
+                  className="relative z-10 select-none w-[92px] h-auto sm:w-[110px] md:w-[130px]"
                 />
                 
                 {/* Animated shine effect */}
@@ -128,14 +128,14 @@ export default function Header() {
               <ArrowRight className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:translate-x-1.5 group-hover:scale-110" />
             </Link>
 
-            {/* Mobile CTA */}
+            {/* Mobile CTA - same label as desktop */}
             <Link
               href="/contact"
               prefetch={true}
               className="sm:hidden px-5 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 text-white text-xs font-semibold rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-gray-900/25 active:scale-95"
               style={{ fontFamily: 'var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif' }}
             >
-              Demo
+              Book a demo
             </Link>
 
             {/* Premium Mobile Menu Button */}

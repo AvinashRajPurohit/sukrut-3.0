@@ -11,12 +11,12 @@ export default function FocusSection() {
   const [contentRef, contentVisible] = useScrollAnimation({ threshold: 0.1 });
 
   return (
-    <section className="py-24 relative">
+    <section className="py-12 md:py-16 lg:py-24 relative">
       
       {/* Optional: Glow behind the container for extra depth on the main page */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-[#E39A2E] opacity-5 blur-[150px] -z-10 rounded-full pointer-events-none" />
 
-      <div className="mx-auto max-w-[90%] relative rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl">
+      <div className="mx-auto max-w-[95%] sm:max-w-[90%] relative rounded-xl md:rounded-2xl lg:rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl">
         
         
         <div className="absolute inset-0 bg-[#0F0F0F]" />
@@ -31,11 +31,11 @@ export default function FocusSection() {
           }}
         />
 
-        <div className="relative z-10 px-8 py-8 lg:p-10">
+        <div className="relative z-10 px-4 py-6 sm:px-6 sm:py-8 lg:p-10">
 
           <div 
             ref={headerRef}
-            className={`text-center max-w-3xl mx-auto mb-16 lg:mb-24 transition-all duration-700 ease-out ${
+            className={`text-center max-w-3xl mx-auto mb-10 sm:mb-16 lg:mb-24 transition-all duration-700 ease-out ${
               headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
@@ -52,7 +52,7 @@ export default function FocusSection() {
               {focusData.badge}
             </span>
 
-            <h2 className={`mt-8 text-4xl lg:text-5xl font-bold leading-tight text-white tracking-tight transition-all duration-700 ease-out ${
+            <h2 className={`mt-6 md:mt-8 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white tracking-tight transition-all duration-700 ease-out ${
               headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
             style={{ transitionDelay: '200ms' }}
@@ -70,7 +70,7 @@ export default function FocusSection() {
               ))}
             </h2>
             
-            <p className={`mt-6 text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed transition-all duration-700 ease-out ${
+            <p className={`mt-4 md:mt-6 text-sm sm:text-base md:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed transition-all duration-700 ease-out ${
               headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
             style={{ transitionDelay: '500ms' }}
@@ -82,16 +82,16 @@ export default function FocusSection() {
           {/* CONTENT GRID */}
           <div 
             ref={contentRef}
-            className={`grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center transition-all duration-700 ease-out ${
+            className={`grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-24 items-center transition-all duration-700 ease-out ${
               contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
             style={{ transitionDelay: '300ms' }}
           >
 
-            {/* LEFT MOCKUP - Adding a subtle glow behind it */}
-            <div className="relative group">
-               <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-               <div className="relative z-10">
+            {/* LEFT MOCKUP - min-w-0 and overflow-hidden so content doesn't spill on mobile */}
+            <div className="relative group min-w-0 overflow-hidden">
+               <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 hidden lg:block" />
+               <div className="relative z-10 min-w-0">
                  <FocusMockup active={active} />
                </div>
             </div>

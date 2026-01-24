@@ -19,13 +19,18 @@
   }
 }
 
-/* Scale everything down so 100% zoom looks like 80% zoom */
+/* Scale everything down so 100% zoom looks like 80% zoom - desktop only */
+/* On mobile, no scaling to avoid layout issues and horizontal scroll */
 html {
-  transform: scale(0.8);
-  transform-origin: top left;
-  width: 125%;
-  height: 125%;
   overflow-x: hidden;
+}
+@media (min-width: 1024px) {
+  html {
+    transform: scale(0.8);
+    transform-origin: top left;
+    width: 125%;
+    height: 125%;
+  }
 }
 
 body {
@@ -308,6 +313,16 @@ html:has(.blog-light-mode) .dark,
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;  /* Chrome, Safari and Opera */
+}
+
+/* Infinite horizontal scroll for review row */
+@keyframes scroll-infinite {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll-infinite {
+  animation: scroll-infinite 40s linear infinite;
 }
 
 /* Premium Team Section Animations */

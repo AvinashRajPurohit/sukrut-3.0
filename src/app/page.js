@@ -10,7 +10,7 @@ import WorkflowSection from "@/components/HomeSection/WorkflowSection";
 
 export default function Home() {
   return (
-    <main role="main" className="mx-auto">
+    <main role="main" className="mx-auto max-w-full overflow-x-hidden">
       
       {/* 1. HERO (ID: hero) */}
       <div id="hero">

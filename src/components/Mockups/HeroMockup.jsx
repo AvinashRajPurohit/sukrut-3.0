@@ -258,7 +258,7 @@ const Scene = () => {
 ======================= */
 export default function HeroMockup() {
   return (
-    <div className="w-full h-[600px] lg:h-[700px] relative">
+    <div className="w-full h-[320px] sm:h-[400px] md:h-[500px] lg:h-[600px] xl:h-[700px] relative">
       
       <Canvas
         camera={{ position: [0, 2, 8], fov: 35 }} 

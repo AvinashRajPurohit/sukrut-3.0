@@ -10,7 +10,7 @@ export default function CTASection() {
 
   return (
     <section
-      className="relative w-full py-20 overflow-hidden"
+      className="relative w-full py-12 md:py-16 lg:py-20 overflow-hidden"
       aria-labelledby="cta-heading"
     >
       {/* Light amber/orange gradient background using primary color */}
@@ -44,17 +44,17 @@ export default function CTASection() {
         }}
       />
 
-      <div className="relative mx-auto max-w-[1400px] px-6">
+      <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6">
         <div 
           ref={contentRef}
-          className={`text-center space-y-6 lg:space-y-8 transition-all duration-700 ease-out ${
-            contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+className={`text-center space-y-4 sm:space-y-6 lg:space-y-8 transition-all duration-700 ease-out ${
+          contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}
         >
           {/* Main Title */}
           <h2
             id="cta-heading"
-            className={`text-4xl lg:text-5xl xl:text-6xl font-semibold text-gray-900 leading-tight transition-all duration-700 ease-out ${
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold text-gray-900 leading-tight transition-all duration-700 ease-out ${
               contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
             style={{ transitionDelay: '150ms' }}
@@ -73,9 +73,9 @@ export default function CTASection() {
           </h2>
 
           {/* Description */}
-          <p className={`text-lg lg:text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed transition-all duration-700 ease-out ${
-            contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-          }`}
+<p className={`text-base sm:text-lg lg:text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed transition-all duration-700 ease-out ${
+          contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        }`}
           style={{ transitionDelay: '400ms' }}
           >
             {cta.description}
@@ -89,7 +89,7 @@ export default function CTASection() {
           >
             <Link
               href={cta.button.href}
-              className="inline-block px-8 py-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-medium rounded-lg hover:from-gray-900 hover:to-black transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="inline-block px-6 py-3 md:px-8 md:py-4 text-sm md:text-base bg-gradient-to-r from-gray-800 to-gray-900 text-white font-medium rounded-lg hover:from-gray-900 hover:to-black transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               {cta.button.label}
             </Link>

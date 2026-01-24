@@ -24,7 +24,7 @@ export default function FocusPoints({ data, active, onChange }) {
             key={item.id}
             onClick={() => onChange(item.id)}
             className={`
-              group relative w-full text-left px-6 py-8 rounded-lg
+              group relative w-full text-left px-4 py-5 sm:px-6 sm:py-8 rounded-lg
               transition-all duration-500 ease-out cursor-pointer
               ${isActive
                 ? "bg-[#3A3225] border border-[#E39A2E] shadow-lg shadow-[#E39A2E]/20"
@@ -71,7 +71,7 @@ export default function FocusPoints({ data, active, onChange }) {
               <div className="flex-1">
                 <h3 
                   className={`
-                    font-medium text-lg transition-all duration-500 ease-out
+                    font-medium text-base sm:text-lg transition-all duration-500 ease-out
                     ${isActive 
                       ? "text-white" 
                       : "text-gray-300 group-hover:text-white"}
@@ -81,7 +81,7 @@ export default function FocusPoints({ data, active, onChange }) {
                 </h3>
                 <p 
                   className={`
-                    text-sm mt-1 leading-relaxed transition-all duration-500 ease-out
+                    text-xs sm:text-sm mt-1 leading-relaxed transition-all duration-500 ease-out
                     ${isActive 
                       ? "text-gray-300" 
                       : "text-gray-400 group-hover:text-gray-300"}

@@ -7,15 +7,15 @@ import AbstractGraphic from "../Mockups/AbstractGraphics";
 
 export default function FeatureCard({ item }) {
   return (
-    <div className="group relative flex h-[500px] flex-col justify-between overflow-hidden bg-[#111111] p-8 transition-all duration-300 hover:bg-[#161616] border-b-2 border-transparent hover:border-[#E39A2E]">
+    <div className="group relative flex min-h-[380px] sm:min-h-[420px] lg:h-[500px] flex-col justify-between overflow-hidden bg-[#111111] p-5 sm:p-6 md:p-8 transition-all duration-300 hover:bg-[#161616] border-b-2 border-transparent hover:border-[#E39A2E]">
       
       {/* 1. TOP CONTENT */}
       <div className="relative z-10">
-        <h3 className="text-[23px] font-medium text-white mb-6">
+        <h3 className="text-lg sm:text-xl md:text-[23px] font-medium text-white mb-4 md:mb-6">
           {item.title}
         </h3>
         
-        <p className="text-sm leading-relaxed text-gray-400 mb-6">
+        <p className="text-xs sm:text-sm leading-relaxed text-gray-400 mb-4 md:mb-6">
           {item.details}
         </p>
 
@@ -27,7 +27,7 @@ export default function FeatureCard({ item }) {
 
       {/* 2. MIDDLE - 3D ANIMATION AREA */}
       {/* This mimics the graphics in the center/bottom of the reference cards */}
-      <div className="absolute inset-0 top-40 z-0 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+      <div className="absolute inset-0 top-28 sm:top-32 md:top-40 z-0 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
         <AbstractGraphic type={item.graphicType} />
       </div>
 

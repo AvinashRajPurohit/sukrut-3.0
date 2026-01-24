@@ -8,12 +8,12 @@ export default function FeatureCardsSection() {
   const [headerRef, headerVisible] = useScrollAnimation({ threshold: 0.1 });
   const [cardsRef, cardsVisible] = useScrollAnimation({ threshold: 0.1 });
   return (
-    <section className="py-32 bg-black text-white">
+    <section className="py-16 md:py-24 lg:py-32 bg-black text-white">
       
       {/* ===== CENTER HEADER ===== */}
       <div 
         ref={headerRef}
-        className={`mx-auto text-center mb-24 px-6 transition-all duration-700 ease-out ${
+        className={`mx-auto text-center mb-12 md:mb-16 lg:mb-24 px-4 sm:px-6 transition-all duration-700 ease-out ${
           headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}
       >
@@ -33,7 +33,7 @@ export default function FeatureCardsSection() {
           </span>
         </div>
 
-        <h2 className={`text-4xl md:text-5xl font-semibold leading-tight text-white transition-all duration-700 ease-out ${
+        <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight text-white transition-all duration-700 ease-out ${
           headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
         }`}
         style={{ transitionDelay: '200ms' }}
@@ -43,7 +43,7 @@ export default function FeatureCardsSection() {
       </div>
 
       {/* ===== 3 COLUMN GRID ===== */}
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Grid Layout: 
             - 1 Column on Mobile
             - 3 Columns on Large Screens
