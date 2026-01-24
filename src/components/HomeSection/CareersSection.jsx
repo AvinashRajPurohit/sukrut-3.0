@@ -55,7 +55,7 @@ export default function CareersSection() {
       className="relative w-full bg-white py-12 sm:py-16 lg:py-32 overflow-x-hidden"
       aria-labelledby="careers-heading"
     >
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
+      <div className="mx-auto max-w-[1450px] px-4 sm:px-6">
         {/* Header Section - Two Column Layout */}
         <div 
           ref={headerRef}

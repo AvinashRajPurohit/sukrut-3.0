@@ -1,4 +1,7 @@
 import BlogClient from './BlogClient';
+import { getBlogsForPage } from '@/lib/blog';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Blog | Insight and Updates',
@@ -39,50 +42,19 @@ export const metadata = {
   },
 };
 
-async function getBlogs(category = null, search = null) {
-  try {
-    const params = new URLSearchParams();
-    if (category && category !== 'All Articles') {
-      params.append('category', category);
-    }
-    if (search) {
-      params.append('search', search);
-    }
-    params.append('limit', '20');
-
-    // For server-side fetch, use absolute URL
-    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    if (!baseUrl) {
-      if (process.env.VERCEL_URL) {
-        baseUrl = `https://${process.env.VERCEL_URL}`;
-      } else {
-        baseUrl = 'http://localhost:3000';
-      }
-    }
-    
-    const res = await fetch(`${baseUrl}/api/blogs?${params}`, {
-      cache: 'no-store',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!res.ok) {
-      return { blogs: [], pagination: { total: 0, pages: 0 } };
-    }
-
-    const data = await res.json();
-    return data.success ? data : { blogs: [], pagination: { total: 0, pages: 0 } };
-  } catch (error) {
-    console.error('Error fetching blogs:', error);
-    return { blogs: [], pagination: { total: 0, pages: 0 } };
-  }
-}
-
 export default async function BlogPage({ searchParams }) {
-  const category = searchParams?.category || 'All Articles';
-  const search = searchParams?.search || null;
-  const { blogs, pagination } = await getBlogs(category, search);
+  const resolved = searchParams && typeof searchParams.then === 'function'
+    ? await searchParams
+    : searchParams || {};
+  const category = resolved?.category || 'All Articles';
+  const search = resolved?.search || null;
+
+  const { blogs, pagination } = await getBlogsForPage({
+    category,
+    search,
+    page: 1,
+    limit: 20,
+  });
 
   // Structured data for SEO
   const structuredData = {
@@ -117,7 +89,12 @@ export default async function BlogPage({ searchParams }) {
           __html: JSON.stringify(structuredData),
         }}
       />
-      <BlogClient initialBlogs={blogs} initialPagination={pagination} />
+      <BlogClient
+        initialBlogs={blogs}
+        initialPagination={pagination}
+        initialCategory={category}
+        initialSearch={search || ''}
+      />
     </>
   );
 }

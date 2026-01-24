@@ -52,13 +52,22 @@ export default function ProcessTimeline({ steps, activeStep, setActiveStep }) {
 
   return (
     <div ref={containerRef} className="relative mt-4 sm:mt-6 md:mt-10">
-      {/* LINE - aligned with dot centers; top-6 leaves room so active (scaled) dot isn't cut */}
-      <div className="absolute top-6 left-0 right-0 h-px bg-gray-200" />
+      {/* MOBILE: Vertical timeline line — runs through dot centers */}
+      <div
+        className="absolute top-4 bottom-4 left-[7px] w-px bg-gray-200 md:hidden"
+        aria-hidden
+      />
 
-      {/* STEPS - pt-4 gives headroom for active dot scale so it isn't cut at top */}
-      <div className="relative flex justify-start md:justify-between overflow-x-auto pt-4 pb-2 -mx-0.5 sm:-mx-1 scrollbar-hide gap-3 sm:gap-4 md:gap-0 flex-nowrap snap-x snap-mandatory">
+      {/* DESKTOP: Horizontal line — aligned with dot centers */}
+      <div
+        className="absolute top-6 left-0 right-0 h-px bg-gray-200 hidden md:block"
+        aria-hidden
+      />
+
+      {/* MOBILE: Vertical stack — DESKTOP: Horizontal spread with snap scroll */}
+      <div className="relative flex flex-col md:flex-row justify-start md:justify-between gap-4 md:gap-0 py-2 md:pt-4 md:pb-2 md:overflow-x-auto md:scrollbar-hide md:flex-nowrap md:snap-x md:snap-mandatory md:-mx-0.5">
         {steps.map((step) => (
-          <div key={step.id} className="snap-center shrink-0">
+          <div key={step.id} className="md:snap-center md:shrink-0">
             <ProcessStep
               step={step}
               active={activeStep === step.id}

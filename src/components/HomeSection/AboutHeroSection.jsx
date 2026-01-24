@@ -20,7 +20,7 @@ export default function AboutHeroSection() {
       className="relative w-full bg-white pt-24 pb-20 lg:pt-28 lg:pb-32"
       aria-labelledby="about-heading"
     >
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
+      <div className="mx-auto max-w-[1450px] px-4 sm:px-6">
         {/* Header Section */}
         <div 
           ref={headerRef}

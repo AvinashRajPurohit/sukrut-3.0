@@ -1,34 +1,43 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Clock, BarChart3, Grid3x3, MessageSquare, MessageCircle, Headphones, ShoppingCart, Lightbulb, CreditCard, MoreHorizontal, Mail, Phone, FileCheck, Plus, Minus, Code2, Calendar, Layers } from 'lucide-react';
+import { Target, Zap, Users, RefreshCw, MessageSquare, MessageCircle, Headphones, ShoppingCart, Lightbulb, CreditCard, MoreHorizontal, Mail, Phone, FileCheck, Plus, Minus, Code2, Calendar, Layers } from 'lucide-react';
+import { FiArrowUpRight } from 'react-icons/fi';
 import Link from 'next/link';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
-const features = [
+const whyPartner = [
   {
     id: 1,
-    icon: Clock,
-    title: 'Rapid Development',
-    description: 'Accelerate your time-to-market with agile methodologies and proven frameworks',
+    stat: '50+',
+    title: 'Projects Delivered',
+    description: 'From startups to enterprises. We ship on time, every time.',
+    icon: Target,
+    featured: true,
   },
   {
     id: 2,
-    icon: BarChart3,
-    title: 'Data-Driven Solutions',
-    description: 'Leverage analytics and insights to make informed decisions and optimize performance',
+    stat: '24h',
+    title: 'First Response',
+    description: 'We review every inquiry within a day. No black hole, no runaround.',
+    icon: Zap,
+    featured: false,
   },
   {
     id: 3,
-    icon: Grid3x3,
-    title: 'Scalable Architecture',
-    description: 'Build systems that grow with your business, handling increased load seamlessly',
+    stat: '100%',
+    title: 'Dedicated Teams',
+    description: 'Your project gets a focused squad. No context-switching, no drift.',
+    icon: Users,
+    featured: false,
   },
   {
     id: 4,
-    icon: MessageSquare,
-    title: 'Continuous Support',
-    description: 'Receive ongoing maintenance and updates to keep your systems running smoothly',
+    stat: 'Ongoing',
+    title: 'Long-term Support',
+    description: 'Launch is just the start. We iterate, fix, and grow with you.',
+    icon: RefreshCw,
+    featured: false,
   },
 ];
 
@@ -85,7 +94,7 @@ const learnMoreItems = [
   { icon: Layers, title: 'Modern tech stack', description: 'Web, mobile, APIs, and cloud—tailored to your needs.' },
 ];
 
-function CustomDropdown({ options, value, onChange, placeholder, iconOptions = false }) {
+function CustomDropdown({ options, value, onChange, placeholder, iconOptions = false, name }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -112,20 +121,22 @@ function CustomDropdown({ options, value, onChange, placeholder, iconOptions = f
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E39A2E] focus:border-transparent transition-all bg-white text-left flex items-center justify-between text-gray-900 cursor-pointer"
+        className={`w-full rounded-none bg-gray-50/80 border-0 border-b-2 px-3 sm:px-4 py-3 sm:py-4 text-sm text-left flex items-center justify-between text-gray-900 outline-none transition-colors cursor-pointer ${
+          isOpen ? 'border-[#E39A2E]' : 'border-gray-200 hover:border-gray-300'
+        }`}
       >
         <span className={value ? 'text-gray-900' : 'text-gray-400'}>
           {selectedOption ? (
             iconOptions ? (
               <span className="flex items-center gap-2">
-                {selectedOption.icon && <selectedOption.icon className="w-4 h-4" />}
+                {selectedOption.icon && <selectedOption.icon className="w-4 h-4 text-gray-600" />}
                 {selectedOption.label}
               </span>
             ) : selectedOption.label
           ) : placeholder}
         </span>
         <svg
-          className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-gray-400 transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -135,7 +146,7 @@ function CustomDropdown({ options, value, onChange, placeholder, iconOptions = f
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+        <div className="absolute z-50 w-full mt-0.5 bg-white border border-gray-200 rounded-none shadow-xl overflow-hidden">
           {options.map((option) => {
             const IconComponent = option.icon;
             return (
@@ -143,17 +154,17 @@ function CustomDropdown({ options, value, onChange, placeholder, iconOptions = f
                 key={option.value}
                 type="button"
                 onClick={() => {
-                  onChange({ target: { name: iconOptions ? 'inquiry' : (placeholder.includes('country') ? 'country' : 'role'), value: option.value } });
+                  onChange({ target: { name, value: option.value } });
                   setIsOpen(false);
                 }}
-                className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-3 cursor-pointer ${
-                  value === option.value ? 'bg-gray-50' : ''
+                className={`w-full px-3 sm:px-4 py-3 text-left hover:bg-[#E39A2E]/5 transition-colors flex items-center gap-3 cursor-pointer text-sm ${
+                  value === option.value ? 'bg-[#E39A2E]/10 text-[#E39A2E]' : 'text-gray-900'
                 }`}
               >
                 {iconOptions && IconComponent && (
-                  <IconComponent className="w-5 h-5 text-gray-600" />
+                  <IconComponent className="w-4 h-4 shrink-0" />
                 )}
-                <span className="text-gray-900">{option.label}</span>
+                <span>{option.label}</span>
               </button>
             );
           })}
@@ -172,6 +183,7 @@ export default function ContactClient() {
     role: '',
     inquiry: '',
     message: '',
+    terms: false,
   });
 
   const [learnMoreOpen, setLearnMoreOpen] = useState(false);
@@ -187,36 +199,32 @@ export default function ContactClient() {
   };
 
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
   return (
     <main className="min-h-screen bg-white">
       {/* Hero + Form Section */}
-      <section className="relative pb-16 sm:pb-20 md:pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-white pt-28 lg:pt-32">
-        {/* Premium background - subtle diagonal lines matching the image */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {/* Main diagonal lines pattern - light gray, subtle like in the image */}
-          <div 
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `
-                repeating-linear-gradient(
-                  45deg,
-                  transparent,
-                  transparent 60px,
-                  rgba(0, 0, 0, 0.025) 60px,
-                  rgba(0, 0, 0, 0.025) 61px
-                )
-              `,
-            }}
+      <section className="relative pb-16 sm:pb-20 md:pb-24 overflow-hidden bg-white pt-28 lg:pt-32">
+        {/* Bg: left/hero only — hexagon, diagonal bar, dots (no grid, form stays clean) */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          {/* Hexagon outline */}
+          <div
+            className="absolute -left-4 top-36 w-20 h-24 border border-gray-300/55"
+            style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}
           />
+          {/* Soft diagonal bar */}
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-44 h-20 -skew-x-12 bg-gray-200/40" />
+          {/* Dots */}
+          <div className="absolute left-[16%] top-44 w-1.5 h-1.5 rounded-full bg-gray-400/55" />
+          <div className="absolute left-[10%] bottom-36 w-1 h-1 rounded-full bg-gray-400/45" />
+          <div className="absolute left-[20%] top-2/3 w-2 h-2 rounded-full bg-gray-300/55" />
         </div>
-
-        <div className="relative max-w-7xl mx-auto">
+        <div className="relative max-w-[1450px] px-4 sm:px-6 mx-auto z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             {/* Left Side - Hero Content */}
             <div 
@@ -313,138 +321,173 @@ export default function ContactClient() {
             </div>
             </div>
 
-            {/* Right Side - Contact Form */}
-            <div 
+            {/* Right Side - Contact Form (light technical style, matches footer) */}
+            <div
               ref={formRef}
-              className={`bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-lg transition-all duration-700 ease-out ${
+              className={`relative overflow-hidden transition-all duration-700 ease-out ${
                 formVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}
             >
-              <h2 className={`text-2xl font-semibold text-gray-900 mb-6 transition-all duration-700 ease-out ${
-                formVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}
-              style={{ transitionDelay: '150ms' }}
+              <div
+                className="relative bg-white/95 backdrop-blur-sm border border-gray-200/90 p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl shadow-gray-200/40"
+                style={{
+                  backgroundImage: `
+                    linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)
+                  `,
+                  backgroundSize: '24px 24px',
+                }}
               >
-                Get in Touch
-              </h2>
-              
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-                      First Name
+                {/* Corner notches - light mode accent */}
+                <div className="absolute top-0 left-0 w-3 h-3 sm:w-4 sm:h-4 border-t-2 border-l-2 border-[#E39A2E]/70" />
+                <div className="absolute top-0 right-0 w-3 h-3 sm:w-4 sm:h-4 border-t-2 border-r-2 border-[#E39A2E]/70" />
+                <div className="absolute bottom-0 left-0 w-3 h-3 sm:w-4 sm:h-4 border-b-2 border-l-2 border-[#E39A2E]/70" />
+                <div className="absolute bottom-0 right-0 w-3 h-3 sm:w-4 sm:h-4 border-b-2 border-r-2 border-[#E39A2E]/70" />
+
+                {/* Badge */}
+                <div className="inline-flex items-center gap-2 sm:gap-2.5 rounded-full bg-[#E39A2E]/10 border border-[#E39A2E]/30 px-3 sm:px-4 py-1.5 mb-6 cursor-default">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E39A2E] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E39A2E]" />
+                  </span>
+                  <span className="text-[10px] sm:text-xs font-bold tracking-widest text-[#E39A2E] uppercase">
+                    Get in Touch
+                  </span>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="space-y-2">
+                      <label htmlFor="firstName" className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 block">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        placeholder="James"
+                        className="w-full rounded-none bg-gray-50/80 border-0 border-b-2 border-gray-200 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-400"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="lastName" className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 block">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        placeholder="Smith"
+                        className="w-full rounded-none bg-gray-50/80 border-0 border-b-2 border-gray-200 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-400"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 block">
+                      Email
                     </label>
                     <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      value={formData.firstName}
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
                       onChange={handleChange}
-                      placeholder="James..."
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E39A2E] focus:border-transparent transition-all placeholder:text-gray-400 text-gray-900"
+                      placeholder="name@company.com"
+                      className="w-full rounded-none bg-gray-50/80 border-0 border-b-2 border-gray-200 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-400"
                     />
                   </div>
-                  
-                  <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
-                      Last Name
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 block">
+                      Inquiry Type
                     </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      value={formData.lastName}
+                    <CustomDropdown
+                      name="inquiry"
+                      options={inquiryOptions}
+                      value={formData.inquiry}
                       onChange={handleChange}
-                      placeholder="Smith..."
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E39A2E] focus:border-transparent transition-all placeholder:text-gray-400 text-gray-900"
+                      placeholder="Select inquiry type"
+                      iconOptions={true}
                     />
                   </div>
-                </div>
 
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                    Email
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 block">
+                        Country
+                      </label>
+                      <CustomDropdown
+                        name="country"
+                        options={countryOptions}
+                        value={formData.country}
+                        onChange={handleChange}
+                        placeholder="Select your country"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 block">
+                        Your Role
+                      </label>
+                      <CustomDropdown
+                        name="role"
+                        options={roleOptions}
+                        value={formData.role}
+                        onChange={handleChange}
+                        placeholder="Select your role"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 block">
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      placeholder="Describe your project or question..."
+                      rows={4}
+                      className="w-full rounded-none bg-gray-50/80 border-0 border-b-2 border-gray-200 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors resize-none placeholder:text-gray-400 min-h-[88px] sm:min-h-[100px]"
+                    />
+                  </div>
+
+                  <label className="flex items-start sm:items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-gray-500 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      name="terms"
+                      checked={formData.terms}
+                      onChange={handleChange}
+                      className="accent-[#E39A2E] h-4 w-4 mt-0.5 sm:mt-0 shrink-0 rounded-none cursor-pointer"
+                    />
+                    <span className="group-hover:text-gray-700 transition-colors">I accept the terms & conditions</span>
                   </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="robertapouros@gmail.com"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E39A2E] focus:border-transparent transition-all placeholder:text-gray-400 text-gray-900"
-                  />
-                </div>
 
-                <div>
-                  <label htmlFor="inquiry" className="block text-sm font-medium text-gray-700 mb-2">
-                    Inquiry Type
-                  </label>
-                  <CustomDropdown
-                    options={inquiryOptions}
-                    value={formData.inquiry}
-                    onChange={handleChange}
-                    placeholder="Select inquiry type"
-                    iconOptions={true}
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
-                    Country
-                  </label>
-                  <CustomDropdown
-                    options={countryOptions}
-                    value={formData.country}
-                    onChange={handleChange}
-                    placeholder="Select your country"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
-                    Your Role
-                  </label>
-                  <CustomDropdown
-                    options={roleOptions}
-                    value={formData.role}
-                    onChange={handleChange}
-                    placeholder="Select your role"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder="enter message...."
-                    rows={4}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E39A2E] focus:border-transparent transition-all resize-none placeholder:text-gray-400 text-gray-900"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full px-6 py-3 bg-[#E39A2E] text-white font-semibold rounded-lg hover:bg-[#d18a1f] transition-colors duration-300 cursor-pointer"
-                >
-                  Contact Us
-                </button>
-              </form>
+                  <button
+                    type="submit"
+                    className="group relative w-full inline-flex items-center justify-center gap-2 rounded-none bg-[#E39A2E] px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-gray-900 uppercase tracking-wider transition-all hover:bg-[#d18a1f] hover:shadow-lg hover:shadow-[#E39A2E]/25 cursor-pointer"
+                  >
+                    Submit Request
+                    <FiArrowUpRight className="text-base sm:text-lg transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* What Happens Next Section */}
-      <section className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gray-50/50">
+      <section className="relative py-16 sm:py-20 bg-gray-50/50">
         <div 
           ref={processRef}
-          className={`max-w-7xl mx-auto transition-all duration-700 ease-out ${
+          className={`max-w-[1450px] px-4 sm:px-6 mx-auto transition-all duration-700 ease-out ${
             processVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
@@ -473,30 +516,61 @@ export default function ContactClient() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div 
+      {/* Why Partner With Us - Bento-style cards */}
+      <section className="relative py-16 sm:py-20 bg-gradient-to-b from-white via-gray-50/30 to-white overflow-hidden">
+        {/* Optional subtle accent */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-b from-transparent via-[#E39A2E]/20 to-transparent" />
+
+        <div
           ref={featuresRef}
-          className={`max-w-7xl mx-auto transition-all duration-700 ease-out ${
+          className={`relative max-w-[1450px] px-4 sm:px-6 mx-auto transition-all duration-700 ease-out ${
             featuresVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {features.map((feature, index) => {
-              const IconComponent = feature.icon;
+          <div className="text-center mb-12 sm:mb-14">
+            <p className="text-xs sm:text-sm font-bold tracking-widest text-[#E39A2E] uppercase mb-2">Why work with us</p>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3">Built for partnership</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">What you can expect when you reach out—and why teams choose to build with us.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {whyPartner.map((item, index) => {
+              const IconComponent = item.icon;
               return (
                 <div
-                  key={feature.id}
-                  className={`bg-white border border-gray-200 rounded-xl p-6 lg:p-8 transition-all duration-500 ease-out hover:shadow-md hover:-translate-y-1 ${
+                  key={item.id}
+                  className={`group relative overflow-hidden transition-all duration-500 ease-out ${
                     featuresVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                   }`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
+                  style={{ transitionDelay: `${index * 80}ms` }}
                 >
-                  <div className="w-12 h-12 rounded-lg bg-[#E39A2E]/10 flex items-center justify-center mb-4">
-                    <IconComponent className="w-6 h-6 text-[#E39A2E]" />
+                  <div
+                    className={`relative h-full flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 p-5 sm:p-6 lg:p-8 border border-gray-200/90 transition-all duration-300 ${
+                      item.featured
+                        ? 'bg-gradient-to-br from-amber-50/60 via-white to-gray-50/40 hover:shadow-xl hover:shadow-amber-100/20 hover:border-[#E39A2E]/30'
+                        : 'bg-white hover:shadow-lg hover:shadow-gray-200/60 hover:border-[#E39A2E]/20 hover:-translate-y-0.5'
+                    }`}
+                  >
+                    {/* Corner notches */}
+                    <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#E39A2E]/40" />
+                    <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#E39A2E]/40" />
+                    <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#E39A2E]/40" />
+                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#E39A2E]/40" />
+
+                    {/* Left accent + stat */}
+                    <div className="flex items-center gap-4 sm:gap-6 shrink-0">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-[#E39A2E]/10 flex items-center justify-center group-hover:bg-[#E39A2E]/15 transition-colors">
+                        <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 text-[#E39A2E]" />
+                      </div>
+                      <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#E39A2E] tracking-tight">{item.stat}</span>
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-1.5">{item.title}</h3>
+                      <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{item.description}</p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
                 </div>
               );
             })}

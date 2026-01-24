@@ -14,12 +14,17 @@ const categories = [
   { value: 'Productivity', label: 'Productivity', icon: Zap }
 ];
 
-export default function BlogClient({ initialBlogs = [], initialPagination = { total: 0, pages: 0 } }) {
+export default function BlogClient({
+  initialBlogs = [],
+  initialPagination = { total: 0, pages: 0 },
+  initialCategory = 'All Articles',
+  initialSearch = '',
+}) {
   const [blogs, setBlogs] = useState(initialBlogs);
   const [pagination, setPagination] = useState(initialPagination);
   const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Articles'); // Keep value as 'All Articles' for API compatibility
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [currentPage, setCurrentPage] = useState(1);
 
   const fetchBlogs = async (category = selectedCategory, search = searchQuery, page = 1, append = false) => {
@@ -91,7 +96,7 @@ export default function BlogClient({ initialBlogs = [], initialPagination = { to
         </div>
 
         {/* Header Section */}
-        <section className="relative bg-white pb-16 sm:pb-20 md:pb-24 px-4 sm:px-6 z-10 overflow-hidden pt-28 lg:pt-32">
+        <section className="relative bg-white pb-16 sm:pb-20 md:pb-24 z-10 overflow-hidden pt-28 lg:pt-32">
           {/* Light Background with Visible Shapes */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {/* Very subtle gradient overlay */}
@@ -216,7 +221,7 @@ export default function BlogClient({ initialBlogs = [], initialPagination = { to
 
           <div 
             ref={headerRef}
-            className={`relative max-w-7xl mx-auto text-center mt-8 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`relative max-w-[1450px] px-4 sm:px-6 mx-auto text-center mt-8 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               headerVisible ? 'opacity-100 translate-y-0 scale-100 blur-0' : 'opacity-0 -translate-y-12 scale-105 blur-md'
             }`}
           >
@@ -251,8 +256,8 @@ export default function BlogClient({ initialBlogs = [], initialPagination = { to
         </section>
 
         {/* All Blogs Section */}
-        <section className="relative bg-white py-8 sm:py-12 px-4 sm:px-6 z-10">
-          <div className="max-w-7xl mx-auto">
+        <section className="relative bg-white py-8 sm:py-12 z-10">
+          <div className="max-w-[1450px] px-4 sm:px-6 mx-auto">
             <div 
               ref={filtersRef}
               className={`mb-6 sm:mb-8 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${

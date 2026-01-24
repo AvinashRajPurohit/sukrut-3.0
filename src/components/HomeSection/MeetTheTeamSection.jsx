@@ -70,7 +70,7 @@ export default function MeetTheTeamSection() {
       className="relative w-full bg-gray-100 py-16 lg:py-32"
       aria-labelledby="meet-team-heading"
     >
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
+      <div className="mx-auto max-w-[1450px] px-4 sm:px-6">
         {/* Header Section */}
         <div 
           ref={headerRef}

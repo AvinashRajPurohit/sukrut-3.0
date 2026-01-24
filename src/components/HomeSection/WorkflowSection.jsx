@@ -58,10 +58,51 @@ export default function WorkflowSection() {
           Engineering For <span className="text-gray-400">Real-World Scale.</span>
         </h2>
 
-        {/* HORIZONTAL ACCORDION — on mobile: taller, swipeable, larger tap targets */}
-        <div
-          ref={accordionRef}
-          className={`flex min-w-0 h-[300px] sm:h-[320px] md:h-[400px] lg:h-[500px] xl:h-[600px] gap-2 md:gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-1 md:pb-0 transition-all duration-700 ease-out ${
+        <div ref={accordionRef} className="space-y-0">
+          {/* MOBILE: Vertical stacked cards — scroll down to see each workflow step */}
+          <div
+            className={`md:hidden flex flex-col gap-4 sm:gap-5 transition-all duration-700 ease-out ${
+              accordionVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+            style={{ transitionDelay: "300ms" }}
+          >
+          {workflowTabs.map((item) => (
+            <article
+              key={item.id}
+              className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-[#ECECEC]"
+            >
+              <div className="relative aspect-[4/3] sm:aspect-[16/10]">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 text-white">
+                  <p className="text-lg sm:text-xl font-bold text-[#E39A2E] mb-0.5">
+                    {item.metric}
+                  </p>
+                  <p className="text-[10px] sm:text-xs font-medium text-gray-200 uppercase tracking-wide mb-2">
+                    {item.metricLabel}
+                  </p>
+                  <p className="text-xs sm:text-sm leading-relaxed text-gray-200">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+              <div className="px-4 py-3 sm:px-5 sm:py-3.5 border-t border-gray-200/80">
+                <p className="text-[11px] sm:text-xs font-semibold tracking-wider text-gray-600 uppercase">
+                  {item.title}
+                </p>
+              </div>
+            </article>
+          ))}
+          </div>
+
+          {/* DESKTOP: Horizontal accordion — swipe/expand, auto-play */}
+          <div
+          className={`hidden md:flex min-w-0 h-[400px] lg:h-[500px] xl:h-[600px] gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide transition-all duration-700 ease-out ${
             accordionVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
           style={{ transitionDelay: "300ms" }}
@@ -76,26 +117,26 @@ export default function WorkflowSection() {
                 onMouseEnter={() => setActiveIndex(index)}
                 onClick={() => setActiveIndex(index)}
                 className={`
-                  relative cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl snap-center shrink-0
+                  relative cursor-pointer overflow-hidden rounded-2xl md:rounded-3xl snap-center shrink-0
                   transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)]
-                  ${isActive ? "flex-[5] min-w-0" : "flex-[1] min-w-[40px] sm:min-w-[44px] md:min-w-[56px] bg-[#ECECEC]"}
+                  ${isActive ? "flex-[5] min-w-0" : "flex-[1] min-w-[56px] bg-[#ECECEC]"}
                 `}
               >
-                {/* COLLAPSED STATE (Vertical Text) — larger tap target and text on mobile */}
+                {/* COLLAPSED STATE (Vertical Text) */}
                 <div
                   className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
                     isActive ? "opacity-0 delay-0" : "opacity-100 delay-300"
                   }`}
                 >
                   <span
-                    className="text-[11px] sm:text-xs font-semibold tracking-wider sm:tracking-widest text-gray-700 uppercase whitespace-nowrap"
+                    className="text-xs font-semibold tracking-widest text-gray-700 uppercase whitespace-nowrap"
                     style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
                   >
                     {item.title}
                   </span>
                 </div>
 
-                {/* EXPANDED CONTENT — stronger overlay on mobile for legibility */}
+                {/* EXPANDED CONTENT */}
                 <div
                   className={`absolute inset-0 transition-opacity duration-500 ${
                     isActive ? "opacity-100" : "opacity-0"
@@ -108,23 +149,23 @@ export default function WorkflowSection() {
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/45 to-black/25" />
-                  <div className="relative z-10 flex h-full flex-col justify-end p-4 sm:p-4 md:p-6 lg:p-8 xl:p-10 text-white">
+                  <div className="relative z-10 flex h-full flex-col justify-end p-6 md:p-8 lg:p-10 xl:p-10 text-white">
                     <div
                       className={`transition-all duration-500 ease-out delay-300 ${
                         isActive
                           ? "translate-y-0 opacity-100"
-                          : "translate-y-4 sm:translate-y-8 opacity-0"
+                          : "translate-y-8 opacity-0"
                       }`}
                     >
-                      <div className="mb-2 sm:mb-2 md:mb-4">
-                        <p className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-1 sm:mb-1 md:mb-2 text-[#E39A2E]">
+                      <div className="mb-4">
+                        <p className="text-3xl md:text-4xl xl:text-5xl font-bold mb-2 text-[#E39A2E]">
                           {item.metric}
                         </p>
-                        <p className="text-xs sm:text-xs md:text-sm lg:text-base xl:text-lg font-medium text-gray-100 uppercase tracking-wide">
+                        <p className="text-sm md:text-base xl:text-lg font-medium text-gray-100 uppercase tracking-wide">
                           {item.metricLabel}
                         </p>
                       </div>
-                      <p className="max-w-lg text-sm sm:text-sm md:text-base lg:text-lg leading-relaxed text-gray-200">
+                      <p className="max-w-lg text-base lg:text-lg leading-relaxed text-gray-200">
                         {item.description}
                       </p>
                     </div>
@@ -133,6 +174,7 @@ export default function WorkflowSection() {
               </div>
             );
           })}
+          </div>
         </div>
       </div>
     </section>

@@ -38,7 +38,7 @@ export default function OurValuesSection() {
       className="relative w-full bg-black py-16 lg:py-32"
       aria-labelledby="values-heading"
     >
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
+      <div className="mx-auto max-w-[1450px] px-4 sm:px-6">
         <div 
           ref={containerRef}
           className={`relative bg-[#1A1A1A] border border-[#333333] p-6 sm:p-8 lg:p-12 transition-all duration-700 ease-out ${

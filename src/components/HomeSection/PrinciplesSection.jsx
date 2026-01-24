@@ -20,7 +20,7 @@ export default function PrinciplesSection() {
       className="relative w-full bg-white py-16 lg:py-32"
       aria-labelledby="principles-heading"
     >
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
+      <div className="mx-auto max-w-[1450px] px-4 sm:px-6">
         {/* Header Section */}
         <div 
           ref={headerRef}
