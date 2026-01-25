@@ -63,6 +63,7 @@ html.app-route body {
   padding: 0 !important;
   min-height: 100vh !important;
   height: 100vh !important;
+  height: 100dvh !important;
   overflow: hidden !important;
   background: #0f172a !important;
 }
@@ -77,6 +78,18 @@ html.app-route:not(.dark) body {
 html.app-route.dark,
 html.app-route.dark body {
   background: #0f172a !important; /* slate-900 */
+}
+
+/* App shell: use 100dvh on mobile so height matches visible viewport; 100vh fallback */
+.app-shell {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Sidebar drawer (mobile): height to visible viewport so profile isn't cut; 100vh fallback */
+.sidebar-drawer-h {
+  height: 100vh;
+  height: 100dvh;
 }
 
 /* Global Scrollbar */

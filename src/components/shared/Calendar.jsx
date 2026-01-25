@@ -76,32 +76,32 @@ export default function Calendar({
   const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+    <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 sm:p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <button
           onClick={prevMonth}
-          className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+          className="p-1.5 sm:p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer touch-manipulation"
         >
-          <ChevronLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600 dark:text-slate-400" />
         </button>
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+        <h2 className="text-base sm:text-xl font-bold text-slate-900 dark:text-slate-100 truncate mx-1">
           {format(currentMonth, 'MMMM yyyy')}
         </h2>
         <button
           onClick={nextMonth}
-          className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+          className="p-1.5 sm:p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer touch-manipulation"
         >
-          <ChevronRight className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600 dark:text-slate-400" />
         </button>
       </div>
 
       {/* Day Names */}
-      <div className="grid grid-cols-7 gap-2 mb-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-1 sm:mb-2">
         {dayNames.map((day, index) => (
           <div
             key={day}
-            className={`text-center text-sm font-semibold py-2 ${
+            className={`text-center text-[10px] sm:text-sm font-semibold py-1 sm:py-2 ${
               weekendDays.includes(index)
                 ? 'text-slate-400 dark:text-slate-600'
                 : 'text-slate-600 dark:text-slate-400'
@@ -113,7 +113,7 @@ export default function Calendar({
       </div>
 
       {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2">
         {/* Empty cells for days before month starts */}
         {Array.from({ length: offset }).map((_, index) => (
           <div key={`empty-${index}`} className="aspect-square" />
@@ -161,9 +161,9 @@ export default function Calendar({
               title={status ? status.label : format(day, 'MMM d, yyyy')}
             >
               <div className="flex flex-col items-center justify-center h-full">
-                <span className="text-sm font-medium">{format(day, 'd')}</span>
+                <span className="text-xs sm:text-sm font-medium">{format(day, 'd')}</span>
                 {status && (
-                  <span className="text-xs mt-0.5 truncate w-full px-1">
+                  <span className="text-[10px] sm:text-xs mt-0.5 truncate w-full px-0.5 sm:px-1">
                     {status.label}
                   </span>
                 )}
@@ -174,22 +174,22 @@ export default function Calendar({
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap justify-center gap-4 mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-purple-100 dark:bg-purple-900/20 border-2 border-purple-300 dark:border-purple-700"></div>
-          <span className="text-xs text-slate-600 dark:text-slate-400">Holiday</span>
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-slate-200 dark:border-slate-700">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-purple-100 dark:bg-purple-900/20 border-2 border-purple-300 dark:border-purple-700 shrink-0"></div>
+          <span className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">Holiday</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-red-100 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-700"></div>
-          <span className="text-xs text-slate-600 dark:text-slate-400">Full Day Leave</span>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-red-100 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-700 shrink-0"></div>
+          <span className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400"><span className="sm:hidden">Full</span><span className="hidden sm:inline">Full Day Leave</span></span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-blue-100 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-700"></div>
-          <span className="text-xs text-slate-600 dark:text-slate-400">Half Day Leave</span>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-blue-100 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-700 shrink-0"></div>
+          <span className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400"><span className="sm:hidden">Half</span><span className="hidden sm:inline">Half Day Leave</span></span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-amber-100 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700"></div>
-          <span className="text-xs text-slate-600 dark:text-slate-400">Pending</span>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded bg-amber-100 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 shrink-0"></div>
+          <span className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">Pending</span>
         </div>
       </div>
     </div>

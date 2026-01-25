@@ -21,7 +21,7 @@ export default function AppLayout({ children }) {
   return (
     <ThemeProvider>
       <TokenRefreshHandler />
-      <div className={`h-screen overflow-hidden bg-slate-50 dark:bg-slate-900 ${plusJakartaSans.variable} font-sans`}>
+      <div className={`app-shell overflow-hidden bg-slate-50 dark:bg-slate-900 ${plusJakartaSans.variable} font-sans`}>
         {children}
       </div>
     </ThemeProvider>

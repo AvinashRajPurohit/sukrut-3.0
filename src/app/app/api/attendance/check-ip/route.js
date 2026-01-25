@@ -17,16 +17,19 @@ export async function GET(request) {
     const detectedIP = getClientIP(request);
     const normalizedIP = normalizeIP(detectedIP);
 
-    return NextResponse.json({
-      success: true,
-      isAllowed: ipValidation.valid,
-      currentIP: normalizedIP || detectedIP,
-      detectedIP: detectedIP,
-      normalizedIP: normalizedIP,
-      message: ipValidation.valid 
-        ? 'Your IP address is allowed for punch in/out operations'
-        : ipValidation.message
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        isAllowed: ipValidation.valid,
+        currentIP: normalizedIP || detectedIP,
+        detectedIP: detectedIP,
+        normalizedIP: normalizedIP,
+        message: ipValidation.valid
+          ? 'Your IP address is allowed for punch in/out operations'
+          : ipValidation.message
+      },
+      { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
+    );
   } catch (error) {
     if (error.message === 'Unauthorized') {
       return NextResponse.json(

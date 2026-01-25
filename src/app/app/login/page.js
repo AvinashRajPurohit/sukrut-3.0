@@ -63,7 +63,7 @@ function LoginContent() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-4 relative overflow-hidden">
+    <div className="h-full min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] relative overflow-hidden">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>

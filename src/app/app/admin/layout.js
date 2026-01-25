@@ -22,24 +22,24 @@ function AdminLayoutContent({ children }) {
   const { actions } = useNavbarActions();
 
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="flex h-full bg-slate-50 dark:bg-slate-900">
       <AdminSidebar />
-      <main className="flex-1 overflow-y-auto w-full flex flex-col">
+      <main className="flex-1 min-h-0 overflow-y-auto w-full flex flex-col min-w-0">
         <div className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-          <div className="px-8 flex items-center justify-between" style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', minHeight: 'calc(1.5rem * 2 + 2rem + 0.25rem + 1.25rem)' }}>
-            <div className="flex-1">
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">{pageInfo.title}</h1>
+          <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-5 lg:py-6 flex items-center justify-between gap-3">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 mb-0.5 sm:mb-1 truncate">{pageInfo.title}</h1>
               {pageInfo.subtitle && (
-                <p className="text-sm text-slate-600 dark:text-slate-400">{pageInfo.subtitle}</p>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 hidden sm:block truncate">{pageInfo.subtitle}</p>
               )}
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
               <NotificationBell />
               {actions}
             </div>
           </div>
         </div>
-        <div className="flex-1 p-8">
+        <div className="flex-1 p-4 sm:p-6 lg:p-8 pb-[max(1rem,env(safe-area-inset-bottom))] sm:pb-[max(1.5rem,env(safe-area-inset-bottom))] lg:pb-[max(2rem,env(safe-area-inset-bottom))]">
           {children}
         </div>
       </main>

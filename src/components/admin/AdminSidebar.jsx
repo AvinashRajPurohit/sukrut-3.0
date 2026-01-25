@@ -62,7 +62,7 @@ export default function AdminSidebar() {
         })}
       </nav>
 
-      <div className="p-4 border-t border-slate-200 dark:border-slate-800">
+      <div className="shrink-0 px-4 pt-4 pb-8 lg:pb-4 border-t border-slate-200 dark:border-slate-800">
         <ProfileMenu />
       </div>
     </div>

@@ -294,71 +294,71 @@ export default function UserReportsPage() {
   const totalLeaves = allLeaves.length;
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-4 sm:space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Attendance Records</p>
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{allAttendance.length}</p>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
+        <Card className="p-4 sm:p-6">
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1 truncate">Attendance</p>
+              <p className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100">{allAttendance.length}</p>
             </div>
-            <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/20">
-              <Calendar className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-            </div>
-          </div>
-        </Card>
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Total Hours</p>
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{totalHours.toFixed(1)}h</p>
-            </div>
-            <div className="p-3 rounded-lg bg-emerald-100 dark:bg-emerald-900/20">
-              <Clock className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+            <div className="p-2 sm:p-3 rounded-lg bg-blue-100 dark:bg-blue-900/20 shrink-0">
+              <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
         </Card>
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Completed Days</p>
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{completed}</p>
+        <Card className="p-4 sm:p-6">
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1 truncate">Total Hours</p>
+              <p className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100">{totalHours.toFixed(1)}h</p>
             </div>
-            <div className="p-3 rounded-lg bg-purple-100 dark:bg-purple-900/20">
-              <CheckCircle2 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+            <div className="p-2 sm:p-3 rounded-lg bg-emerald-100 dark:bg-emerald-900/20 shrink-0">
+              <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
           </div>
         </Card>
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Leave Requests</p>
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{totalLeaves}</p>
+        <Card className="p-4 sm:p-6">
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1 truncate">Completed</p>
+              <p className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100">{completed}</p>
             </div>
-            <div className="p-3 rounded-lg bg-amber-100 dark:bg-amber-900/20">
-              <FileText className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+            <div className="p-2 sm:p-3 rounded-lg bg-purple-100 dark:bg-purple-900/20 shrink-0">
+              <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600 dark:text-purple-400" />
+            </div>
+          </div>
+        </Card>
+        <Card className="p-4 sm:p-6">
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1 truncate">Leaves</p>
+              <p className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100">{totalLeaves}</p>
+            </div>
+            <div className="p-2 sm:p-3 rounded-lg bg-amber-100 dark:bg-amber-900/20 shrink-0">
+              <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600 dark:text-amber-400" />
             </div>
           </div>
         </Card>
       </div>
 
       {/* Reports List */}
-      <Card>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">All Records</h2>
-          <div className="flex items-center gap-3">
-            <Button onClick={() => setShowColumnModal(true)} variant="outline" size="sm">
-              <Settings className="w-4 h-4 mr-2" />
-              Columns
+      <Card className="p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-6">
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">All Records</h2>
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={() => setShowColumnModal(true)} variant="outline" size="sm" className="!px-2.5 sm:!px-3">
+              <Settings className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Columns</span>
             </Button>
-            <Button onClick={handleExportPDF} variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
-              Export PDF
+            <Button onClick={handleExportPDF} variant="outline" size="sm" className="!px-2.5 sm:!px-3">
+              <Download className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">PDF</span>
             </Button>
-            <Button onClick={handleExportExcel} variant="outline" size="sm">
-              <FileDown className="w-4 h-4 mr-2" />
-              Export Excel
+            <Button onClick={handleExportExcel} variant="outline" size="sm" className="!px-2.5 sm:!px-3">
+              <FileDown className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Excel</span>
             </Button>
           </div>
         </div>
@@ -391,33 +391,33 @@ export default function UserReportsPage() {
         </Modal>
 
         {displayedRecords.length === 0 ? (
-          <div className="text-center py-12">
-            <Calendar className="w-16 h-16 text-slate-300 dark:text-slate-700 mx-auto mb-4" />
-            <p className="text-slate-600 dark:text-slate-400 text-lg mb-2">No records found</p>
-            <p className="text-sm text-slate-500 dark:text-slate-500">Start punching in or apply for leave to see your records here</p>
+          <div className="text-center py-8 sm:py-12 px-4">
+            <Calendar className="w-12 h-12 sm:w-16 sm:h-16 text-slate-300 dark:text-slate-700 mx-auto mb-3 sm:mb-4" />
+            <p className="text-slate-600 dark:text-slate-400 text-base sm:text-lg mb-2">No records found</p>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-500">Start punching in or apply for leave to see your records here</p>
           </div>
         ) : (
-          <div className="flex flex-col" style={{ maxHeight: 'calc(100vh - 400px)' }}>
+          <div className="flex flex-col max-h-[calc(100vh-280px)] sm:max-h-[calc(100vh-360px)] lg:max-h-[calc(100vh-400px)]">
             {/* Table Container with Single Horizontal Scroll */}
             <div className="flex-1 flex flex-col min-h-0 overflow-x-auto overflow-y-auto">
               <table className="w-full" style={{ minWidth: '1600px' }}>
                 <thead className="sticky top-0 bg-white dark:bg-slate-900 z-10">
                   <tr className="border-b border-slate-200 dark:border-slate-700">
-                    {visibleColumns.date && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'date').minWidth }}>Date</th>}
-                    {visibleColumns.recordType && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'recordType').minWidth }}>Record Type</th>}
-                    {visibleColumns.punchIn && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'punchIn').minWidth }}>Punch In</th>}
-                    {visibleColumns.punchOut && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'punchOut').minWidth }}>Punch Out</th>}
-                    {visibleColumns.hours && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'hours').minWidth }}>Hours</th>}
-                    {visibleColumns.lateReason && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'lateReason').minWidth }}>Late Reason</th>}
-                    {visibleColumns.earlyReason && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'earlyReason').minWidth }}>Early Reason</th>}
-                    {visibleColumns.status && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'status').minWidth }}>Status</th>}
-                    {visibleColumns.leaveType && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'leaveType').minWidth }}>Leave Type</th>}
-                    {visibleColumns.leaveDuration && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'leaveDuration').minWidth }}>Leave Duration</th>}
-                    {visibleColumns.leavePeriod && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'leavePeriod').minWidth }}>Leave Period</th>}
-                    {visibleColumns.leaveReason && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'leaveReason').minWidth }}>Leave Reason</th>}
-                    {visibleColumns.leaveStatus && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'leaveStatus').minWidth }}>Leave Status</th>}
-                    {visibleColumns.reviewedBy && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'reviewedBy').minWidth }}>Reviewed By</th>}
-                    {visibleColumns.rejectionReason && <th className="text-left py-4 px-6 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'rejectionReason').minWidth }}>Rejection Reason</th>}
+                    {visibleColumns.date && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'date').minWidth }}>Date</th>}
+                    {visibleColumns.recordType && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'recordType').minWidth }}>Record Type</th>}
+                    {visibleColumns.punchIn && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'punchIn').minWidth }}>Punch In</th>}
+                    {visibleColumns.punchOut && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'punchOut').minWidth }}>Punch Out</th>}
+                    {visibleColumns.hours && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'hours').minWidth }}>Hours</th>}
+                    {visibleColumns.lateReason && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'lateReason').minWidth }}>Late Reason</th>}
+                    {visibleColumns.earlyReason && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'earlyReason').minWidth }}>Early Reason</th>}
+                    {visibleColumns.status && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'status').minWidth }}>Status</th>}
+                    {visibleColumns.leaveType && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'leaveType').minWidth }}>Leave Type</th>}
+                    {visibleColumns.leaveDuration && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'leaveDuration').minWidth }}>Leave Duration</th>}
+                    {visibleColumns.leavePeriod && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'leavePeriod').minWidth }}>Leave Period</th>}
+                    {visibleColumns.leaveReason && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'leaveReason').minWidth }}>Leave Reason</th>}
+                    {visibleColumns.leaveStatus && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'leaveStatus').minWidth }}>Leave Status</th>}
+                    {visibleColumns.reviewedBy && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'reviewedBy').minWidth }}>Reviewed By</th>}
+                    {visibleColumns.rejectionReason && <th className="text-left py-2 px-3 sm:py-4 sm:px-6 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap" style={{ minWidth: COLUMNS.find(c => c.id === 'rejectionReason').minWidth }}>Rejection Reason</th>}
                   </tr>
                 </thead>
                 <tbody ref={tableBodyRef}>
@@ -433,44 +433,44 @@ export default function UserReportsPage() {
                       return (
                         <tr key={`attendance-${report._id}`} className="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                           {visibleColumns.date && (
-                            <td className="py-4 px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
                               {format(record.date, 'MMM d, yyyy')}
                             </td>
                           )}
                           {visibleColumns.recordType && (
-                            <td className="py-4 px-6">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6">
                               <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 whitespace-nowrap">
                                 Attendance
                               </span>
                             </td>
                           )}
                           {visibleColumns.punchIn && (
-                            <td className="py-4 px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
                               {format(punchIn, 'HH:mm:ss')}
                             </td>
                           )}
                           {visibleColumns.punchOut && (
-                            <td className="py-4 px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
                               {punchOut ? format(punchOut, 'HH:mm:ss') : '-'}
                             </td>
                           )}
                           {visibleColumns.hours && (
-                            <td className="py-4 px-6 text-sm font-medium text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm font-medium text-slate-900 dark:text-slate-100 whitespace-nowrap">
                               {hours !== '-' ? `${hours}h` : '-'}
                             </td>
                           )}
                           {visibleColumns.lateReason && (
-                            <td className="py-4 px-6 text-sm text-amber-600 dark:text-amber-400 wrap-break-word" style={{ maxWidth: '200px' }}>
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm text-amber-600 dark:text-amber-400 wrap-break-word" style={{ maxWidth: '200px' }}>
                               {report.punchInLateReason || '-'}
                             </td>
                           )}
                           {visibleColumns.earlyReason && (
-                            <td className="py-4 px-6 text-sm text-amber-600 dark:text-amber-400 wrap-break-word" style={{ maxWidth: '200px' }}>
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm text-amber-600 dark:text-amber-400 wrap-break-word" style={{ maxWidth: '200px' }}>
                               {report.punchOutEarlyReason || '-'}
                             </td>
                           )}
                           {visibleColumns.status && (
-                            <td className="py-4 px-6">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6">
                               {punchOut ? (
                                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
                                   Completed
@@ -482,13 +482,13 @@ export default function UserReportsPage() {
                               )}
                             </td>
                           )}
-                          {visibleColumns.leaveType && <td className="py-4 px-6">-</td>}
-                          {visibleColumns.leaveDuration && <td className="py-4 px-6">-</td>}
-                          {visibleColumns.leavePeriod && <td className="py-4 px-6">-</td>}
-                          {visibleColumns.leaveReason && <td className="py-4 px-6">-</td>}
-                          {visibleColumns.leaveStatus && <td className="py-4 px-6">-</td>}
-                          {visibleColumns.reviewedBy && <td className="py-4 px-6">-</td>}
-                          {visibleColumns.rejectionReason && <td className="py-4 px-6">-</td>}
+                          {visibleColumns.leaveType && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
+                          {visibleColumns.leaveDuration && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
+                          {visibleColumns.leavePeriod && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
+                          {visibleColumns.leaveReason && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
+                          {visibleColumns.leaveStatus && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
+                          {visibleColumns.reviewedBy && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
+                          {visibleColumns.rejectionReason && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
                         </tr>
                       );
                     } else {
@@ -500,7 +500,7 @@ export default function UserReportsPage() {
                       return (
                         <tr key={`leave-${leave._id}-${format(record.date, 'yyyy-MM-dd')}`} className="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                           {visibleColumns.date && (
-                            <td className="py-4 px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
                               {format(record.date, 'MMM d, yyyy')}
                               {isSingleDay ? null : isStartDate ? (
                                 <span className="block text-xs text-slate-500 dark:text-slate-400 mt-1">Start</span>
@@ -512,54 +512,54 @@ export default function UserReportsPage() {
                             </td>
                           )}
                           {visibleColumns.recordType && (
-                            <td className="py-4 px-6">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6">
                               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getLeaveTypeColor(leave.leaveType)} whitespace-nowrap`}>
                                 {getLeaveTypeLabel(leave.leaveType)}
                               </span>
                             </td>
                           )}
-                          {visibleColumns.punchIn && <td className="py-4 px-6">-</td>}
-                          {visibleColumns.punchOut && <td className="py-4 px-6">-</td>}
-                          {visibleColumns.hours && <td className="py-4 px-6">-</td>}
-                          {visibleColumns.lateReason && <td className="py-4 px-6">-</td>}
-                          {visibleColumns.earlyReason && <td className="py-4 px-6">-</td>}
-                          {visibleColumns.status && <td className="py-4 px-6">-</td>}
+                          {visibleColumns.punchIn && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
+                          {visibleColumns.punchOut && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
+                          {visibleColumns.hours && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
+                          {visibleColumns.lateReason && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
+                          {visibleColumns.earlyReason && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
+                          {visibleColumns.status && <td className="py-2 px-3 sm:py-4 sm:px-6">-</td>}
                           {visibleColumns.leaveType && (
-                            <td className="py-4 px-6">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6">
                               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getLeaveTypeColor(leave.leaveType)} whitespace-nowrap`}>
                                 {getLeaveTypeLabel(leave.leaveType)}
                               </span>
                             </td>
                           )}
                           {visibleColumns.leaveDuration && (
-                            <td className="py-4 px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
                               {leave.type === 'full-day' ? 'Full Day' : `Half Day (${leave.halfDayType === 'first-half' ? 'First Half' : 'Second Half'})`}
                             </td>
                           )}
                           {visibleColumns.leavePeriod && (
-                            <td className="py-4 px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
                               {format(new Date(leave.startDate), 'MMM d')} - {format(new Date(leave.endDate), 'MMM d, yyyy')}
                             </td>
                           )}
                           {visibleColumns.leaveReason && (
-                            <td className="py-4 px-6 text-sm text-slate-600 dark:text-slate-400 wrap-break-word" style={{ maxWidth: '250px' }}>
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm text-slate-600 dark:text-slate-400 wrap-break-word" style={{ maxWidth: '250px' }}>
                               {leave.reason || '-'}
                             </td>
                           )}
                           {visibleColumns.leaveStatus && (
-                            <td className="py-4 px-6">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6">
                               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(leave.status)} whitespace-nowrap`}>
                                 {leave.status.charAt(0).toUpperCase() + leave.status.slice(1)}
                               </span>
                             </td>
                           )}
                           {visibleColumns.reviewedBy && (
-                            <td className="py-4 px-6 text-sm text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm text-slate-600 dark:text-slate-400 whitespace-nowrap">
                               {leave.reviewedBy?.name || '-'}
                             </td>
                           )}
                           {visibleColumns.rejectionReason && (
-                            <td className="py-4 px-6 text-sm text-red-600 dark:text-red-400 wrap-break-word" style={{ maxWidth: '200px' }}>
+                            <td className="py-2 px-3 sm:py-4 sm:px-6 text-sm text-red-600 dark:text-red-400 wrap-break-word" style={{ maxWidth: '200px' }}>
                               {leave.rejectionReason || '-'}
                             </td>
                           )}
@@ -590,36 +590,36 @@ export default function UserReportsPage() {
             
             {/* Summary Section - Fixed at bottom of table container */}
             {displayedRecords.length > 0 && (
-              <div className="shrink-0 border-t-2 border-slate-300 dark:border-slate-600 pt-4 mt-4">
-                <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4">Summary</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 pb-2">
-                <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Late Arrivals</p>
-                  <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{summary.lateArrivals}</p>
-                </div>
-                <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Early Leaves</p>
-                  <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{summary.earlyLeaves}</p>
-                </div>
-                <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Sick Leave</p>
-                  <p className="text-lg font-bold text-red-600 dark:text-red-400">{summary.sickLeave.toFixed(1)} days</p>
-                </div>
-                <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Paid Leave</p>
-                  <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{summary.paidLeave.toFixed(1)} days</p>
-                </div>
-                <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Unpaid Leave</p>
-                  <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{summary.unpaidLeave.toFixed(1)} days</p>
-                </div>
-                <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Work From Home</p>
-                  <p className="text-lg font-bold text-purple-600 dark:text-purple-400">{summary.workFromHome.toFixed(1)} days</p>
+              <div className="shrink-0 border-t-2 border-slate-300 dark:border-slate-600 pt-3 sm:pt-4 mt-3 sm:mt-4">
+                <h3 className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 sm:mb-4">Summary</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4 pb-2">
+                  <div className="p-2 sm:p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1">Late Arrivals</p>
+                    <p className="text-base sm:text-lg font-bold text-amber-600 dark:text-amber-400">{summary.lateArrivals}</p>
+                  </div>
+                  <div className="p-2 sm:p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1">Early Leaves</p>
+                    <p className="text-base sm:text-lg font-bold text-amber-600 dark:text-amber-400">{summary.earlyLeaves}</p>
+                  </div>
+                  <div className="p-2 sm:p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                    <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1">Sick Leave</p>
+                    <p className="text-base sm:text-lg font-bold text-red-600 dark:text-red-400">{summary.sickLeave.toFixed(1)}<span className="sm:hidden">d</span><span className="hidden sm:inline"> days</span></p>
+                  </div>
+                  <div className="p-2 sm:p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1">Paid Leave</p>
+                    <p className="text-base sm:text-lg font-bold text-blue-600 dark:text-blue-400">{summary.paidLeave.toFixed(1)}<span className="sm:hidden">d</span><span className="hidden sm:inline"> days</span></p>
+                  </div>
+                  <div className="p-2 sm:p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1">Unpaid Leave</p>
+                    <p className="text-base sm:text-lg font-bold text-amber-600 dark:text-amber-400">{summary.unpaidLeave.toFixed(1)}<span className="sm:hidden">d</span><span className="hidden sm:inline"> days</span></p>
+                  </div>
+                  <div className="p-2 sm:p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                    <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1"><span className="sm:hidden">WFH</span><span className="hidden sm:inline">Work From Home</span></p>
+                    <p className="text-base sm:text-lg font-bold text-purple-600 dark:text-purple-400">{summary.workFromHome.toFixed(1)}<span className="sm:hidden">d</span><span className="hidden sm:inline"> days</span></p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
           </div>
         )}
       </Card>

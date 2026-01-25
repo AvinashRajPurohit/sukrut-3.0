@@ -196,7 +196,7 @@ export default function UserNotificationBell() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 max-h-[600px] flex flex-col">
+        <div className="absolute right-0 top-full mt-2 w-[min(24rem,calc(100vw-2rem))] max-w-96 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 max-h-[min(600px,calc(100vh-6rem))] flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-2">

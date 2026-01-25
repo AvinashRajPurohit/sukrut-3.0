@@ -66,9 +66,11 @@ export default function LeavesPage() {
       <Button
         variant="outline"
         onClick={() => setShowModal(true)}
+        className="!px-2.5 sm:!px-3"
+        title="Request Leave"
       >
-        <Plus className="w-5 h-5 mr-2" />
-        Request Leave
+        <Plus className="w-5 h-5 sm:mr-2" />
+        <span className="hidden sm:inline">Request Leave</span>
       </Button>
     );
     return () => setActions(null);
@@ -175,7 +177,7 @@ export default function LeavesPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {error && (
         <Alert type="error" message={error} onDismiss={() => setError('')} />
       )}
@@ -184,43 +186,43 @@ export default function LeavesPage() {
       )}
 
       {/* Leave Balances */}
-      <Card>
-        <div className="mb-5">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Leave Balance</h2>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Your available leave days for this period</p>
+      <Card className="p-4 sm:p-6">
+        <div className="mb-4 sm:mb-5">
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">Leave Balance</h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">Your available leave days for this period</p>
         </div>
         {leaveBalances === null ? (
-          <div className="text-center py-8">
+          <div className="text-center py-6 sm:py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#E39A2E] mx-auto"></div>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Loading leave balances...</p>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2">Loading leave balances...</p>
           </div>
         ) : Object.keys(leaveBalances).length === 0 ? (
-          <div className="text-center py-8">
-            <AlertCircle className="w-12 h-12 text-slate-400 dark:text-slate-600 mx-auto mb-2" />
-            <p className="text-sm text-slate-600 dark:text-slate-400">No leave configurations found</p>
+          <div className="text-center py-6 sm:py-8">
+            <AlertCircle className="w-10 h-10 sm:w-12 sm:h-12 text-slate-400 dark:text-slate-600 mx-auto mb-2" />
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">No leave configurations found</p>
             <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">Please contact your administrator</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {leaveBalances.sickLeave && (
-              <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-red-300 dark:hover:border-red-700 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
-                    <Heart className="w-5 h-5 text-red-600 dark:text-red-400" />
+              <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-red-300 dark:hover:border-red-700 transition-colors">
+                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                  <div className="p-1.5 sm:p-2 bg-red-100 dark:bg-red-900/30 rounded-lg shrink-0">
+                    <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 dark:text-red-400" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900 dark:text-slate-100">Sick Leave</h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-500">{leaveBalances.sickLeave.periodLabel}</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm sm:text-base">Sick Leave</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-500 truncate">{leaveBalances.sickLeave.periodLabel}</p>
                   </div>
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div>
-                    <div className="flex items-baseline justify-between mb-1">
-                      <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                    <div className="flex items-baseline justify-between gap-2 mb-1">
+                      <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
                         {leaveBalances.sickLeave.remaining.toFixed(1)}
                       </span>
-                      <span className="text-sm text-slate-600 dark:text-slate-400">of {leaveBalances.sickLeave.limit}</span>
+                      <span className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 shrink-0">of {leaveBalances.sickLeave.limit}</span>
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-500">days remaining</p>
                   </div>
@@ -243,24 +245,24 @@ export default function LeavesPage() {
               </div>
             )}
             {leaveBalances.paidLeave && (
-              <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                    <DollarSign className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                  <div className="p-1.5 sm:p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg shrink-0">
+                    <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900 dark:text-slate-100">Paid Leave</h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-500">{leaveBalances.paidLeave.periodLabel}</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm sm:text-base">Paid Leave</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-500 truncate">{leaveBalances.paidLeave.periodLabel}</p>
                   </div>
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div>
-                    <div className="flex items-baseline justify-between mb-1">
-                      <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                    <div className="flex items-baseline justify-between gap-2 mb-1">
+                      <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
                         {leaveBalances.paidLeave.remaining.toFixed(1)}
                       </span>
-                      <span className="text-sm text-slate-600 dark:text-slate-400">of {leaveBalances.paidLeave.limit}</span>
+                      <span className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 shrink-0">of {leaveBalances.paidLeave.limit}</span>
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-500">days remaining</p>
                   </div>
@@ -283,24 +285,24 @@ export default function LeavesPage() {
               </div>
             )}
             {leaveBalances.workFromHome && (
-              <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-700 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                    <Home className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-700 transition-colors">
+                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                  <div className="p-1.5 sm:p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg shrink-0">
+                    <Home className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900 dark:text-slate-100">Work From Home</h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-500">{leaveBalances.workFromHome.periodLabel}</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm sm:text-base"><span className="sm:hidden">WFH</span><span className="hidden sm:inline">Work From Home</span></h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-500 truncate">{leaveBalances.workFromHome.periodLabel}</p>
                   </div>
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div>
-                    <div className="flex items-baseline justify-between mb-1">
-                      <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                    <div className="flex items-baseline justify-between gap-2 mb-1">
+                      <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
                         {leaveBalances.workFromHome.remaining.toFixed(1)}
                       </span>
-                      <span className="text-sm text-slate-600 dark:text-slate-400">of {leaveBalances.workFromHome.limit}</span>
+                      <span className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 shrink-0">of {leaveBalances.workFromHome.limit}</span>
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-500">days remaining</p>
                   </div>
@@ -327,43 +329,43 @@ export default function LeavesPage() {
       </Card>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Pending</p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{pendingLeaves.length}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6">
+        <Card className="p-4 sm:p-6">
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1">Pending</p>
+              <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">{pendingLeaves.length}</p>
             </div>
-            <div className="p-3 rounded-lg bg-amber-100 dark:bg-amber-900/20">
-              <Clock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
-            </div>
-          </div>
-        </Card>
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Approved</p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{approvedLeaves.length}</p>
-            </div>
-            <div className="p-3 rounded-lg bg-emerald-100 dark:bg-emerald-900/20">
-              <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+            <div className="p-2 sm:p-3 rounded-lg bg-amber-100 dark:bg-amber-900/20 shrink-0">
+              <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600 dark:text-amber-400" />
             </div>
           </div>
         </Card>
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Rejected</p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{rejectedLeaves.length}</p>
+        <Card className="p-4 sm:p-6">
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1">Approved</p>
+              <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">{approvedLeaves.length}</p>
             </div>
-            <div className="p-3 rounded-lg bg-red-100 dark:bg-red-900/20">
-              <XCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+            <div className="p-2 sm:p-3 rounded-lg bg-emerald-100 dark:bg-emerald-900/20 shrink-0">
+              <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600 dark:text-emerald-400" />
+            </div>
+          </div>
+        </Card>
+        <Card className="p-4 sm:p-6 col-span-2 sm:col-span-1">
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-0.5 sm:mb-1">Rejected</p>
+              <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">{rejectedLeaves.length}</p>
+            </div>
+            <div className="p-2 sm:p-3 rounded-lg bg-red-100 dark:bg-red-900/20 shrink-0">
+              <XCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-600 dark:text-red-400" />
             </div>
           </div>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Calendar */}
         <Calendar
           holidays={holidays}
@@ -374,9 +376,9 @@ export default function LeavesPage() {
         />
 
         {/* Leave Requests List */}
-        <Card>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">My Leave Requests</h2>
+        <Card className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-6">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">My Leave Requests</h2>
             <Select
               value={currentYear.toString()}
               onChange={(value) => setCurrentYear(parseInt(value))}
@@ -390,12 +392,12 @@ export default function LeavesPage() {
           </div>
 
           {leaves.length === 0 ? (
-            <div className="text-center py-12">
-              <CalendarIcon className="w-16 h-16 text-slate-300 dark:text-slate-700 mx-auto mb-4" />
-              <p className="text-slate-600 dark:text-slate-400">No leave requests yet</p>
+            <div className="text-center py-8 sm:py-12">
+              <CalendarIcon className="w-12 h-12 sm:w-16 sm:h-16 text-slate-300 dark:text-slate-700 mx-auto mb-3 sm:mb-4" />
+              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">No leave requests yet</p>
             </div>
           ) : (
-            <div className="space-y-3 max-h-[600px] overflow-y-auto">
+            <div className="space-y-2 sm:space-y-3 max-h-[300px] sm:max-h-[600px] overflow-y-auto pb-3 sm:pb-4 min-h-0">
               {leaves.map((leave) => {
                 const startDate = new Date(leave.startDate);
                 const endDate = new Date(leave.endDate);
@@ -404,7 +406,7 @@ export default function LeavesPage() {
                 return (
                   <div
                     key={leave._id}
-                    className={`p-4 rounded-xl border-2 transition-all ${
+                    className={`p-3 sm:p-4 rounded-xl border-2 transition-all ${
                       leave.status === 'approved'
                         ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800'
                         : leave.status === 'rejected'
@@ -414,17 +416,17 @@ export default function LeavesPage() {
                         : 'bg-amber-50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800'
                     }`}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex-1">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="flex-1 min-w-0">
                         {leave.status === 'pending' && (
                           <div className="flex justify-end mb-2">
                             <button
                               onClick={() => handleCancelLeave(leave)}
-                              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors cursor-pointer"
+                              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors cursor-pointer"
                               title="Cancel leave request"
                             >
                               <X className="w-3.5 h-3.5" />
-                              Cancel
+                              <span className="hidden sm:inline">Cancel</span>
                             </button>
                           </div>
                         )}
@@ -442,7 +444,7 @@ export default function LeavesPage() {
                           </span>
                           {leave.leaveType && (
                             <span className="px-2 py-0.5 rounded text-xs font-medium bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
-                              {leaveTypeLabels[leave.leaveType] || leave.leaveType}
+                              {leave.leaveType === 'work-from-home' ? (<><span className="sm:hidden">WFH</span><span className="hidden sm:inline">Work From Home</span></>) : (leaveTypeLabels[leave.leaveType] || leave.leaveType)}
                             </span>
                           )}
                         </div>
@@ -458,7 +460,7 @@ export default function LeavesPage() {
                             : 'Full Day'
                           }
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">{leave.reason}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-500 mt-2 line-clamp-2 sm:line-clamp-none">{leave.reason}</p>
                         {leave.reviewedBy && (
                           <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">
                             Reviewed by {leave.reviewedBy.name} on {format(new Date(leave.reviewedAt), 'MMM d, yyyy')}
@@ -496,7 +498,7 @@ export default function LeavesPage() {
         }}
         title="Request Leave"
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           {error && (
             <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600 dark:text-red-400">
               {error}
@@ -516,7 +518,7 @@ export default function LeavesPage() {
             icon={CalendarIcon}
             required
           />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <DatePicker
               label="Start Date"
               value={formData.startDate}
@@ -568,7 +570,7 @@ export default function LeavesPage() {
             required
             minLength={10}
           />
-          <div className="flex gap-3 pt-4">
+          <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 pt-4">
             <Button
               type="button"
               variant="secondary"

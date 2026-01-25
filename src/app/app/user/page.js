@@ -197,11 +197,11 @@ export default function UserDashboard() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-4 sm:space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:items-stretch">
         {/* Left Column - Main Content */}
-        <div className="lg:col-span-2 flex flex-col space-y-6 h-full">
+        <div className="lg:col-span-2 flex flex-col space-y-4 sm:space-y-6 h-full">
           {/* Punch Card */}
           <div className="shrink-0">
             <PunchCard />
@@ -210,33 +210,33 @@ export default function UserDashboard() {
           {/* Weekly Activity Chart */}
           {recentActivity.length > 0 && (
             <div className="shrink-0">
-              <Card>
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">This Week's Activity</h2>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Your attendance pattern</p>
+              <Card className="p-4 sm:p-6">
+                <div className="flex items-center justify-between mb-4 sm:mb-6 gap-3">
+                  <div className="min-w-0">
+                    <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">This Week&apos;s Activity</h2>
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Your attendance pattern</p>
                   </div>
-                  <div className="p-2 rounded-lg bg-[#E39A2E]/10">
+                  <div className="p-2 rounded-lg bg-[#E39A2E]/10 flex-shrink-0">
                     <BarChart3 className="w-5 h-5 text-[#E39A2E]" />
                   </div>
                 </div>
                 <BarChart
                   data={weeklyData}
                   color="#E39A2E"
-                  height={200}
+                  height={180}
                 />
               </Card>
             </div>
           )}
 
           {/* Leave Details for Current Month - Always Show, flex-grow to fill space */}
-          <Card className="flex-1 flex flex-col min-h-0 h-full">
-            <div className="flex items-center justify-between mb-6 shrink-0">
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Leave Details - {format(new Date(), 'MMMM yyyy')}</h2>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Your leave requests for this month</p>
+          <Card className="flex-1 flex flex-col min-h-0 h-full p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6 shrink-0 gap-3">
+              <div className="min-w-0">
+                <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100 truncate">Leave Details - {format(new Date(), 'MMMM yyyy')}</h2>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Your leave requests for this month</p>
               </div>
-              <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/20">
+              <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/20 flex-shrink-0">
                 <Calendar className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               </div>
             </div>
@@ -253,15 +253,15 @@ export default function UserDashboard() {
                   return (
                     <div 
                       key={index} 
-                      className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
+                      className="p-3 sm:p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all"
                     >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h3 className="font-semibold text-slate-900 dark:text-slate-100">
+                      <div className="flex items-start justify-between gap-2 mb-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm sm:text-base">
                               {leaveTypeLabels[leave.leaveType] || leave.leaveType}
                             </h3>
-                            <span className={`px-2 py-1 rounded text-xs font-medium ${statusColor.bg} ${statusColor.text} flex items-center gap-1`}>
+                            <span className={`px-2 py-1 rounded text-xs font-medium ${statusColor.bg} ${statusColor.text} flex items-center gap-1 flex-shrink-0`}>
                               <StatusIcon className="w-3 h-3" />
                               {leave.status.charAt(0).toUpperCase() + leave.status.slice(1)}
                             </span>
@@ -311,12 +311,12 @@ export default function UserDashboard() {
         </div>
 
         {/* Right Sidebar */}
-        <div className="flex flex-col space-y-6 h-full">
+        <div className="flex flex-col space-y-4 sm:space-y-6 h-full">
           {/* This Month Stats */}
-          <Card className="shrink-0">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">This Month</h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+          <Card className="shrink-0 p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3 sm:mb-4">This Month</h2>
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 gap-2">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/20">
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -358,8 +358,8 @@ export default function UserDashboard() {
           </Card>
 
           {/* Leave Statistics */}
-          <Card className="shrink-0">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Leave Statistics</h2>
+          <Card className="shrink-0 p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3 sm:mb-4">Leave Statistics</h2>
             <div className="space-y-3">
               <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
                 <div className="flex items-center gap-3">
@@ -399,8 +399,8 @@ export default function UserDashboard() {
 
           {/* Leave Balances */}
           {leaveBalances && Object.keys(leaveBalances).length > 0 && (
-            <Card className="shrink-0">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Leave Balances</h2>
+            <Card className="shrink-0 p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3 sm:mb-4">Leave Balances</h2>
               <div className="space-y-3">
                 {Object.entries(leaveBalances).map(([leaveType, balance]) => {
                   if (!balance || balance.limit === null || balance.limit === undefined) return null;
@@ -441,7 +441,7 @@ export default function UserDashboard() {
 
           {/* Early Leave Configuration Info */}
           {attendanceConfig && attendanceConfig.earlyLeaveThresholdMinutes > 0 && (
-            <Card className="shrink-0">
+            <Card className="shrink-0 p-4 sm:p-6">
               <div className="flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-orange-100 dark:bg-orange-900/20 shrink-0">
                   <AlertCircle className="w-5 h-5 text-orange-600 dark:text-orange-400" />
@@ -458,8 +458,8 @@ export default function UserDashboard() {
 
           {/* Recent Activity */}
           {recentActivity.length > 0 && (
-            <Card className="shrink-0">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Recent Activity</h2>
+            <Card className="shrink-0 p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3 sm:mb-4">Recent Activity</h2>
               <div className="space-y-3">
                 {recentActivity.map((record, index) => {
                   const punchIn = new Date(record.punchInTime);
@@ -497,39 +497,39 @@ export default function UserDashboard() {
           )}
 
           {/* Quick Access */}
-          <Card className="shrink-0 mt-auto">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Quick Access</h2>
-            <div className="space-y-3">
+          <Card className="shrink-0 mt-auto p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3 sm:mb-4">Quick Access</h2>
+            <div className="space-y-2 sm:space-y-3">
               <Link 
                 href="/app/user/reports"
-                className="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-[#E39A2E]/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group cursor-pointer"
+                className="flex items-center justify-between p-3 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-[#E39A2E]/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group cursor-pointer gap-3"
               >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[#E39A2E]/10 group-hover:bg-[#E39A2E]/20 transition-colors">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  <div className="p-2 rounded-lg bg-[#E39A2E]/10 group-hover:bg-[#E39A2E]/20 transition-colors flex-shrink-0">
                     <FileText className="w-5 h-5 text-[#E39A2E]" />
                   </div>
-                  <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-100">View Reports</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Attendance history</p>
+                  <div className="min-w-0">
+                    <p className="font-medium text-slate-900 dark:text-slate-100 text-sm sm:text-base">View Reports</p>
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 truncate">Attendance history</p>
                   </div>
                 </div>
-                <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-[#E39A2E] group-hover:translate-x-1 transition-all" />
+                <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-[#E39A2E] group-hover:translate-x-1 transition-all flex-shrink-0" />
               </Link>
               
               <Link 
                 href="/app/user/leaves"
-                className="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group cursor-pointer"
+                className="flex items-center justify-between p-3 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group cursor-pointer gap-3"
               >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/20 group-hover:bg-indigo-200 dark:group-hover:bg-indigo-900/30 transition-colors">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/20 group-hover:bg-indigo-200 dark:group-hover:bg-indigo-900/30 transition-colors flex-shrink-0">
                     <Calendar className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
-                  <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-100">Leave Requests</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Manage your leaves</p>
+                  <div className="min-w-0">
+                    <p className="font-medium text-slate-900 dark:text-slate-100 text-sm sm:text-base">Leave Requests</p>
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 truncate">Manage your leaves</p>
                   </div>
                 </div>
-                <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
+                <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 group-hover:translate-x-1 transition-all flex-shrink-0" />
               </Link>
             </div>
           </Card>

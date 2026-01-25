@@ -99,7 +99,7 @@ export default function Header() {
           </div>
 
           {/* Right Section: Ultra Premium CTA */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             {/* Desktop Ultra Premium CTA */}
             <Link
               href="/contact"
@@ -126,6 +126,15 @@ export default function Header() {
                 </span>
               </span>
               <ArrowRight className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:translate-x-1.5 group-hover:scale-110" />
+            </Link>
+
+            {/* Workplace Login - Desktop, final nav link */}
+            <Link
+              href="/app/login"
+              prefetch={true}
+              className="hidden sm:flex text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Workplace Login
             </Link>
 
             {/* Mobile CTA - same label as desktop */}
@@ -193,6 +202,22 @@ export default function Header() {
                 </Link>
               );
             })}
+            {/* Workplace Login - last/final nav link in mobile menu */}
+            <Link
+              href="/app/login"
+              prefetch={true}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`
+                group relative flex items-center min-h-[48px] px-5 py-3.5
+                text-[15px] font-semibold rounded-xl
+                transition-all duration-300 ease-out
+                ${isMobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-3 opacity-0'}
+                text-gray-700 active:bg-gray-50 border border-transparent
+              `}
+              style={{ fontFamily: 'var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif', letterSpacing: '0.02em', transitionDelay: isMobileMenuOpen ? `${menuData.items.length * 50}ms` : '0ms' }}
+            >
+              <span className="relative">Workplace Login</span>
+            </Link>
           </div>
         </nav>
       </div>
