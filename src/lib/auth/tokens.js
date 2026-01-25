@@ -3,9 +3,9 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key-change-in-production';
 
-// Access token: configurable from .env (default: 15 minutes)
-// Format: '15m', '1h', '30m', etc.
-const ACCESS_TOKEN_EXPIRY = process.env.ACCESS_TOKEN_EXPIRY || '15m';
+// Access token: configurable from .env (default: 24 hours)
+// Format: '15m', '1h', '24h', '1d', etc.
+const ACCESS_TOKEN_EXPIRY = process.env.ACCESS_TOKEN_EXPIRY || '24h';
 
 // Refresh token: configurable from .env (default: 24 hours)
 // Format: '24h', '1d', '7d', etc.

@@ -5,7 +5,7 @@ import { requireAdmin } from '@/lib/auth/middleware';
 import { z } from 'zod';
 
 const weekendSchema = z.object({
-  weekendDays: z.array(z.number().min(0).max(6)).min(1, 'At least one weekend day is required')
+  weekendDays: z.array(z.number().min(0).max(6))
 });
 
 export async function GET(request) {
@@ -64,7 +64,7 @@ export async function PUT(request) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: error.errors[0].message },
+        { error: error.issues?.[0]?.message ?? 'Validation failed' },
         { status: 400 }
       );
     }

@@ -3,7 +3,7 @@ import connectDB from '@/lib/db/connection';
 import User from '@/lib/db/models/User';
 import RefreshToken from '@/lib/db/models/RefreshToken';
 import { hashPassword, comparePassword } from '@/lib/auth/password';
-import { generateAccessToken, generateRefreshToken, REFRESH_TOKEN_EXPIRY, expirationToSeconds, getExpirationDate } from '@/lib/auth/tokens';
+import { generateAccessToken, generateRefreshToken, REFRESH_TOKEN_EXPIRY, ACCESS_TOKEN_EXPIRY, expirationToSeconds, getExpirationDate } from '@/lib/auth/tokens';
 import { getClientIP } from '@/lib/utils/ip-validation';
 import { z } from 'zod';
 
@@ -94,7 +94,7 @@ export async function POST(request) {
     });
 
     // Set access token cookie (uses ACCESS_TOKEN_EXPIRY from .env)
-    const accessTokenMaxAge = expirationToSeconds(process.env.ACCESS_TOKEN_EXPIRY || '15m');
+    const accessTokenMaxAge = expirationToSeconds(ACCESS_TOKEN_EXPIRY);
     response.cookies.set('accessToken', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

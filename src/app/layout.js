@@ -63,7 +63,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className={plusJakartaSans.className}>
+      <body className={plusJakartaSans.className} suppressHydrationWarning>
         <ConditionalHeader />
         {children}
         <ConditionalFooter />

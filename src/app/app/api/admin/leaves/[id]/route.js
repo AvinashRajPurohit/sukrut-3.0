@@ -151,7 +151,7 @@ export async function PUT(request, { params }) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: error.errors[0].message },
+        { error: error.issues?.[0]?.message ?? 'Validation failed' },
         { status: 400 }
       );
     }

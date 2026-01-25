@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import Button from '@/components/shared/Button';
 import Card from '@/components/shared/Card';
 import Modal from '@/components/shared/Modal';
@@ -8,6 +9,8 @@ import Input from '@/components/shared/Input';
 import { format } from 'date-fns';
 import { Clock, LogIn, LogOut, CheckCircle2, Calendar } from 'lucide-react';
 import Alert from '@/components/shared/Alert';
+
+const FaceCamera = dynamic(() => import('@/components/user/FaceCamera'), { ssr: false });
 
 export default function PunchCard() {
   const [status, setStatus] = useState(null);
@@ -21,6 +24,13 @@ export default function PunchCard() {
   const [ipStatus, setIpStatus] = useState({ isAllowed: true, currentIP: null, message: null });
   const [punchError, setPunchError] = useState('');
   const [punchSuccess, setPunchSuccess] = useState('');
+  const [showFaceModal, setShowFaceModal] = useState(false);
+  const [faceModalMode, setFaceModalMode] = useState('verify');
+  const [facePunchType, setFacePunchType] = useState('in');
+  const [pendingPunchDescriptor, setPendingPunchDescriptor] = useState(null);
+  const [faceRetryTrigger, setFaceRetryTrigger] = useState(0);
+  const [faceVerificationError, setFaceVerificationError] = useState(null);
+  const [faceModalSuccess, setFaceModalSuccess] = useState(null);
 
   useEffect(() => {
     fetchStatus();
@@ -61,27 +71,57 @@ export default function PunchCard() {
     }
   };
 
-  const handlePunchIn = async (needsReason = false, reasonText = '') => {
+  const closeFaceModal = () => {
+    setShowFaceModal(false);
+    setFaceVerificationError(null);
+    setFaceModalSuccess(null);
+  };
+
+  const doPunchIn = async (descriptor, reasonText = '') => {
+    setFaceVerificationError(null);
     setPunchLoading(true);
     try {
       const res = await fetch('/app/api/attendance/punch-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(needsReason ? { reason: reasonText } : {})
+        body: JSON.stringify({
+          faceDescriptor: descriptor,
+          ...(reasonText ? { reason: reasonText } : {})
+        })
       });
-
       const data = await res.json();
 
       if (!res.ok) {
         if (data.requiresReason) {
+          setPendingPunchDescriptor(descriptor);
           setReasonType('late');
           setShowReasonModal(true);
+          setShowFaceModal(false);
           setPunchLoading(false);
           return;
         }
-        // Handle IP validation error with better UX
+        if (data.faceNotRegistered) {
+          setShowFaceModal(true);
+          setFaceModalMode('register');
+          setFacePunchType('in');
+          setPunchLoading(false);
+          return;
+        }
+        if (data.requiresFaceVerification) {
+          setShowFaceModal(true);
+          setFaceModalMode('verify');
+          setFacePunchType('in');
+          setPunchLoading(false);
+          return;
+        }
+        if (res.status === 403 && data.error === 'Face verification failed') {
+          setFaceVerificationError('Face didn\'t match. Please look at the camera to try again.');
+          setFaceRetryTrigger((t) => t + 1);
+          setPunchLoading(false);
+          return;
+        }
         if (data.requiresAllowedIP) {
-          setPunchError(`${data.error}. Your current IP: ${data.currentIP || 'Unknown'}. Please contact your administrator to add your IP address to the allowed list, or connect to an allowed network.`);
+          setPunchError(`${data.error}. Your current IP: ${data.currentIP || 'Unknown'}. Please contact your administrator.`);
         } else {
           setPunchError(data.error || 'Failed to punch in');
         }
@@ -90,13 +130,20 @@ export default function PunchCard() {
         return;
       }
 
+      setFaceVerificationError(null);
+      setFaceModalSuccess('Punched in successfully!');
       setPunchSuccess('Punched in successfully!');
       await fetchStatus();
       await checkIPStatus();
       setShowReasonModal(false);
       setReason('');
       setReasonError('');
+      setPendingPunchDescriptor(null);
       setTimeout(() => setPunchSuccess(''), 3000);
+      setTimeout(() => {
+        setShowFaceModal(false);
+        setFaceModalSuccess(null);
+      }, 1800);
     } catch (error) {
       console.error('Error punching in:', error);
       setPunchError('An error occurred. Please try again.');
@@ -106,27 +153,51 @@ export default function PunchCard() {
     }
   };
 
-  const handlePunchOut = async (needsReason = false, reasonText = '') => {
+  const doPunchOut = async (descriptor, reasonText = '') => {
+    setFaceVerificationError(null);
     setPunchLoading(true);
     try {
       const res = await fetch('/app/api/attendance/punch-out', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(needsReason ? { reason: reasonText } : {})
+        body: JSON.stringify({
+          faceDescriptor: descriptor,
+          ...(reasonText ? { reason: reasonText } : {})
+        })
       });
-
       const data = await res.json();
 
       if (!res.ok) {
         if (data.requiresReason) {
+          setPendingPunchDescriptor(descriptor);
           setReasonType('early');
           setShowReasonModal(true);
+          setShowFaceModal(false);
           setPunchLoading(false);
           return;
         }
-        // Handle IP validation error with better UX
+        if (data.faceNotRegistered) {
+          setShowFaceModal(true);
+          setFaceModalMode('register');
+          setFacePunchType('out');
+          setPunchLoading(false);
+          return;
+        }
+        if (data.requiresFaceVerification) {
+          setShowFaceModal(true);
+          setFaceModalMode('verify');
+          setFacePunchType('out');
+          setPunchLoading(false);
+          return;
+        }
+        if (res.status === 403 && data.error === 'Face verification failed') {
+          setFaceVerificationError('Face didn\'t match. Please look at the camera to try again.');
+          setFaceRetryTrigger((t) => t + 1);
+          setPunchLoading(false);
+          return;
+        }
         if (data.requiresAllowedIP) {
-          setPunchError(`${data.error}. Your current IP: ${data.currentIP || 'Unknown'}. Please contact your administrator to add your IP address to the allowed list, or connect to an allowed network.`);
+          setPunchError(`${data.error}. Your current IP: ${data.currentIP || 'Unknown'}. Please contact your administrator.`);
         } else {
           setPunchError(data.error || 'Failed to punch out');
         }
@@ -135,13 +206,20 @@ export default function PunchCard() {
         return;
       }
 
+      setFaceVerificationError(null);
+      setFaceModalSuccess('Punched out successfully!');
       setPunchSuccess('Punched out successfully!');
       await fetchStatus();
       await checkIPStatus();
       setShowReasonModal(false);
       setReason('');
       setReasonError('');
+      setPendingPunchDescriptor(null);
       setTimeout(() => setPunchSuccess(''), 3000);
+      setTimeout(() => {
+        setShowFaceModal(false);
+        setFaceModalSuccess(null);
+      }, 1800);
     } catch (error) {
       console.error('Error punching out:', error);
       setPunchError('An error occurred. Please try again.');
@@ -149,6 +227,78 @@ export default function PunchCard() {
     } finally {
       setPunchLoading(false);
     }
+  };
+
+  const handlePunchIn = async (needsReason = false, reasonText = '') => {
+    if (needsReason && reasonText) {
+      doPunchIn(pendingPunchDescriptor, reasonText);
+      return;
+    }
+
+    try {
+      const faceRes = await fetch('/app/api/user/face/status');
+      const faceData = await faceRes.json();
+      if (!faceData.registered) {
+        setPunchError('');
+        setShowFaceModal(true);
+        setFaceModalMode('register');
+        setFacePunchType('in');
+        return;
+      }
+      setPunchError('');
+      setShowFaceModal(true);
+      setFaceModalMode('verify');
+      setFacePunchType('in');
+    } catch (e) {
+      setPunchError('Could not check face status. Please try again.');
+      setTimeout(() => setPunchError(''), 5000);
+    }
+  };
+
+  const handlePunchOut = async (needsReason = false, reasonText = '') => {
+    if (needsReason && reasonText) {
+      doPunchOut(pendingPunchDescriptor, reasonText);
+      return;
+    }
+
+    try {
+      const faceRes = await fetch('/app/api/user/face/status');
+      const faceData = await faceRes.json();
+      if (!faceData.registered) {
+        setPunchError('');
+        setShowFaceModal(true);
+        setFaceModalMode('register');
+        setFacePunchType('out');
+        return;
+      }
+      setPunchError('');
+      setShowFaceModal(true);
+      setFaceModalMode('verify');
+      setFacePunchType('out');
+    } catch (e) {
+      setPunchError('Could not check face status. Please try again.');
+      setTimeout(() => setPunchError(''), 5000);
+    }
+  };
+
+  const handleFaceVerifySuccess = (descriptor) => {
+    // Don't close modal here; doPunchIn/doPunchOut close on success. On 403 (face mismatch) we keep it open so FaceCamera can auto-retry after retryTrigger bumps.
+    if (facePunchType === 'in') {
+      doPunchIn(descriptor);
+    } else {
+      doPunchOut(descriptor);
+    }
+  };
+
+  const handleFaceRegisterSuccess = () => {
+    setShowFaceModal(false);
+    setPunchSuccess('Face registered. You can now punch in.');
+    setTimeout(() => setPunchSuccess(''), 4000);
+  };
+
+  const handleFaceError = (msg) => {
+    setPunchError(msg || 'Face verification failed');
+    setTimeout(() => setPunchError(''), 5000);
   };
 
   const submitReason = () => {
@@ -387,6 +537,7 @@ export default function PunchCard() {
           setShowReasonModal(false);
           setReason('');
           setReasonError('');
+          setPendingPunchDescriptor(null);
         }}
         title={reasonType === 'late' ? 'Late Punch-In Reason' : 'Early Punch-Out Reason'}
         size="md"
@@ -394,7 +545,7 @@ export default function PunchCard() {
         <div className="space-y-4">
           <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
             <p className="text-sm text-amber-800 dark:text-amber-300">
-              {reasonType === 'late' 
+              {reasonType === 'late'
                 ? 'You are punching in late. Please provide a reason for your late arrival (minimum 10 characters).'
                 : 'You are leaving early. Please provide a reason for leaving early (minimum 10 characters).'}
             </p>
@@ -419,6 +570,7 @@ export default function PunchCard() {
                 setShowReasonModal(false);
                 setReason('');
                 setReasonError('');
+                setPendingPunchDescriptor(null);
               }}
             >
               Cancel
@@ -432,6 +584,30 @@ export default function PunchCard() {
             </Button>
           </div>
         </div>
+      </Modal>
+
+      <Modal
+        isOpen={showFaceModal}
+        onClose={closeFaceModal}
+        title={
+          faceModalMode === 'register'
+            ? 'Register your face'
+            : `Verify your face to punch ${facePunchType === 'in' ? 'in' : 'out'}`
+        }
+        size="md"
+      >
+        {showFaceModal && (
+          <FaceCamera
+            mode={faceModalMode}
+            onRegisterSuccess={handleFaceRegisterSuccess}
+            onVerifySuccess={handleFaceVerifySuccess}
+            onError={handleFaceError}
+            onClose={closeFaceModal}
+            retryTrigger={faceRetryTrigger}
+            verificationError={faceVerificationError}
+            successMessage={faceModalSuccess}
+          />
+        )}
       </Modal>
     </>
   );

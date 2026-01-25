@@ -5,6 +5,7 @@ import AttendanceConfig from '@/lib/db/models/AttendanceConfig';
 import User from '@/lib/db/models/User';
 import { requireAuth } from '@/lib/auth/middleware';
 import { validateIPForPunch, getClientIP } from '@/lib/utils/ip-validation';
+import { verifyFaceDescriptor } from '@/lib/utils/face-verification';
 import { isEarlyPunchOut } from '@/lib/utils/time-validation';
 import { canPunchOnDate } from '@/lib/utils/attendance-validation';
 import { createAdminNotification } from '@/lib/utils/notifications';
@@ -16,6 +17,28 @@ export async function POST(request) {
     await connectDB();
 
     const user = await requireAuth();
+
+    // Get request body once (before any validation that might need it)
+    const body = await request.json().catch(() => ({}));
+
+    // Face verification: must have registered face and provide descriptor
+    const userDoc = await User.findById(user.id).select('faceDescriptor').lean();
+    if (!userDoc?.faceDescriptor || !Array.isArray(userDoc.faceDescriptor) || userDoc.faceDescriptor.length !== 128) {
+      return NextResponse.json(
+        { error: 'Face not registered. Please register your face first.', faceNotRegistered: true },
+        { status: 400 }
+      );
+    }
+    if (!body.faceDescriptor || !Array.isArray(body.faceDescriptor) || body.faceDescriptor.length !== 128) {
+      return NextResponse.json(
+        { error: 'Face verification required', requiresFaceVerification: true },
+        { status: 400 }
+      );
+    }
+    const faceCheck = verifyFaceDescriptor(userDoc.faceDescriptor, body.faceDescriptor);
+    if (!faceCheck.ok) {
+      return NextResponse.json({ error: 'Face verification failed' }, { status: 403 });
+    }
 
     // Validate IP for punch in/out (strict - only configured IPs allowed)
     const ipValidation = await validateIPForPunch(request);
@@ -33,9 +56,6 @@ export async function POST(request) {
     const clientIP = ipValidation.ip;
     const now = new Date();
     const today = startOfDay(now);
-
-    // Get request body once (before any validation that might need it)
-    const body = await request.json().catch(() => ({}));
 
     // Check if user can punch out today (holidays, weekends, leaves)
     const punchValidation = await canPunchOnDate(user.id, today);

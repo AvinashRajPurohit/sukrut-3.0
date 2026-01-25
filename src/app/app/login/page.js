@@ -21,7 +21,10 @@ function LoginContent() {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          const redirect = searchParams.get('redirect') || (data.user.role === 'admin' ? '/app/admin' : '/app/user');
+          let redirect = searchParams.get('redirect') || (data.user.role === 'admin' ? '/app/admin' : '/app/user');
+          // Ensure redirect matches role: don't send user to admin or admin to user
+          if (redirect.startsWith('/app/admin') && data.user.role !== 'admin') redirect = '/app/user';
+          if (redirect.startsWith('/app/user') && data.user.role === 'admin') redirect = '/app/admin';
           router.push(redirect);
         }
       })
@@ -48,7 +51,10 @@ function LoginContent() {
         return;
       }
 
-      const redirect = searchParams.get('redirect') || (data.user.role === 'admin' ? '/app/admin' : '/app/user');
+      let redirect = searchParams.get('redirect') || (data.user.role === 'admin' ? '/app/admin' : '/app/user');
+      // Ensure redirect matches role: don't send user to admin or admin to user
+      if (redirect.startsWith('/app/admin') && data.user.role !== 'admin') redirect = '/app/user';
+      if (redirect.startsWith('/app/user') && data.user.role === 'admin') redirect = '/app/admin';
       router.push(redirect);
     } catch (err) {
       setError('An error occurred. Please try again.');
