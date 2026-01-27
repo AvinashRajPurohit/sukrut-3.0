@@ -24,7 +24,7 @@ export default function FocusPoints({ data, active, onChange }) {
             key={item.id}
             onClick={() => onChange(item.id)}
             className={`
-              group relative w-full text-left px-4 py-5 sm:px-6 sm:py-8 rounded-lg
+              group relative w-full text-left px-4 py-5 sm:px-6 sm:py-8 
               transition-all duration-500 ease-out cursor-pointer
               ${isActive
                 ? "bg-[#3A3225] border border-[#E39A2E] shadow-lg shadow-[#E39A2E]/20"
@@ -34,7 +34,7 @@ export default function FocusPoints({ data, active, onChange }) {
             {/* 🔥 ACTIVE LEFT LINE with smooth transition */}
             <span 
               className={`
-                absolute left-0 top-0 h-full w-1 bg-[#E39A2E] rounded-r-full
+                absolute left-0 top-0 h-full w-1 bg-[#E39A2E] 
                 transition-all duration-500 ease-out
                 ${isActive ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}
               `}

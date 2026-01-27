@@ -32,34 +32,52 @@ export function CustomMockup() {
   const pointerRef = useRef(null);
   const contentRef = useRef(null);
   const tabRef = useRef(null);
+  const pointerX = useRef(null);
+const isAnimating = useRef(false);
 
   /* AUTO CYCLE */
-  useEffect(() => {
-    const t = setInterval(() => {
-      setClicking(true);
-      setTimeout(() => {
-        setStep((s) => (s + 1) % TABS.length);
-        setClicking(false);
-      }, 250);
-    }, 2000); // Thoda time badhaya taaki content dikhe
+ useEffect(() => {
+  const t = setInterval(() => {
+    if (isAnimating.current) return;
 
-    return () => clearInterval(t);
-  }, []);
+    isAnimating.current = true;
+    setClicking(true);
+
+    setStep((s) => (s + 1) % TABS.length);
+
+    setTimeout(() => {
+      setClicking(false);
+      isAnimating.current = false;
+    }, 450); // MUST match GSAP duration
+  }, 2200);
+
+  return () => clearInterval(t);
+}, []);
 
   /* POINTER ANIMATION */
-  useEffect(() => {
-    if (!pointerRef.current) return;
-    // Approx width per tab (130px) + spacing
-    const xPos = step * 135 + 30;
+useEffect(() => {
+  if (!pointerRef.current) return;
+  if (window.innerWidth < 768) return;
 
-    gsap.to(pointerRef.current, {
-      x: xPos,
-      y: clicking ? -4 : 0,
-      scale: clicking ? 0.9 : 1,
-      duration: 0.5,
-      ease: "power2.out",
+  if (!pointerX.current) {
+    pointerX.current = gsap.quickTo(pointerRef.current, "x", {
+      duration: 0.45,
+      ease: "power3.out",
     });
-  }, [step, clicking]);
+  }
+
+  const xPos = step * 135 + 30;
+  pointerX.current(xPos);
+
+  gsap.to(pointerRef.current, {
+    y: clicking ? -4 : 0,
+    scale: clicking ? 0.9 : 1,
+    duration: 0.25,
+    ease: "power2.out",
+  });
+}, [step, clicking]);
+
+
 
   /* CONTENT TRANSITION */
   useEffect(() => {
@@ -110,8 +128,19 @@ export function CustomMockup() {
         </div>
 
         {/* NAVIGATION TABS - scroll on mobile */}
-        <div className="relative px-2 sm:px-4 md:px-6 py-2 sm:py-3 border-b border-gray-100 bg-white z-20 min-w-0">
+        <div className="hidden md:block relative px-2 sm:px-4 md:px-6 py-2 sm:py-3 border-b border-gray-100 bg-white z-20 min-w-0">
           <div className="flex justify-center overflow-x-auto scrollbar-hide">
+             {/* POINTER */}
+              <div 
+                ref={pointerRef}
+                className="absolute top-6 sm:top-8 left-32 z-50 pointer-events-none drop-shadow-md"
+              >
+                <FaHandPointer 
+                  size={20}
+                  className="sm:w-6 sm:h-6 text-gray-800"
+                  style={{ stroke: "white", strokeWidth: "20px", transformOrigin: "top left" }} 
+                />
+              </div>
             <div ref={tabRef} className="relative flex gap-1 sm:gap-2 p-1 bg-gray-50 rounded-lg sm:rounded-xl border border-gray-100">
               {TABS.map((tab, i) => {
                 const isActive = step === i;
@@ -128,22 +157,38 @@ export function CustomMockup() {
                     <span className="truncate">{tab.label}</span>
                   </div>
                 );
+                
               })}
-
-              {/* POINTER */}
-              <div 
-                ref={pointerRef}
-                className="absolute top-6 sm:top-8 left-0 z-50 pointer-events-none drop-shadow-md"
-              >
-                <FaHandPointer 
-                  size={20}
-                  className="sm:w-6 sm:h-6 text-gray-800"
-                  style={{ stroke: "white", strokeWidth: "20px", transformOrigin: "top left" }} 
-                />
-              </div>
             </div>
           </div>
         </div>
+        {/* MOBILE TABS */}
+<div className="md:hidden px-3 py-2 border-b border-gray-100 bg-white">
+  <div className="flex items-center justify-between bg-gray-50 rounded-xl p-1">
+    {TABS.map((tab, i) => {
+      const Icon = tab.icon;
+      const isActive = step === i;
+
+      return (
+        <button
+          key={tab.label}
+          onClick={() => setStep(i)}
+          className={`
+            flex-1 flex items-center justify-center py-2 rounded-lg transition-all duration-300
+            ${isActive ? "bg-white shadow text-gray-900" : "text-gray-400"}
+          `}
+        >
+          <Icon
+            className={`w-4 h-4 ${
+              isActive ? "text-[#E39A2E]" : "text-gray-400"
+            }`}
+          />
+        </button>
+      );
+    })}
+  </div>
+</div>
+
 
         {/* MAIN CONTENT AREA */}
         <div className="flex-1 bg-[#FAFAFA] p-3 sm:p-5 md:p-8 relative overflow-hidden min-h-0">

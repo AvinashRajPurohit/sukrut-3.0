@@ -96,11 +96,11 @@ export default function OrbitCircles({ points }) {
               top="24px"
               text="Product Vision"
             />
-            <Label className="orbit-animate" right="42px" top="100px" text="Technical Feasibility" />
-            <Label className="orbit-animate" right="-20px" top="248px" text="Scalability & Performance" />
+            <Label className="orbit-animate" right="44px" top="100px" text="Technical Feasibility" />
+            <Label className="orbit-animate" right="-40px" top="248px" text="Scalability & Performance" />
             <Label className="orbit-animate" right="200px" top="180px" text="Reliability & Performance" />
-            <Label className="orbit-animate" left="300px" bottom="62px" text="Clean Code & Modern Frameworks" />
-            <Label className="orbit-animate" left="-5px" bottom="100px" text="Deployment, Support & Growth" />
+            <Label className="orbit-animate" left="300px" bottom="177px" text="Clean Code & Modern Frameworks" />
+            <Label className="orbit-animate" left="66px" bottom="250px" text="Deployment, Support & Growth" />
           </div>
         </div>
       </div>

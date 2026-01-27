@@ -23,77 +23,117 @@ const pages = ["home", "features", "docs", "live"];
 export function ProductEngineeringMockup() {
   const [page, setPage] = useState(0);
   const [clicking, setClicking] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  const pointerX = useRef(null);
 
   const pointerRef = useRef(null);
   const navRef = useRef(null);
   const contentRef = useRef(null);
 
-  /* AUTO PAGE CYCLE */
+  /* ---------- HYDRATION SAFE MOUNT ---------- */
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  /* ---------- RESPONSIVE CHECK (CLIENT ONLY) ---------- */
+  useEffect(() => {
+    if (!isMounted) return;
+
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [isMounted]);
+
+  /* ---------- AUTO PAGE CYCLE ---------- */
+  useEffect(() => {
+    if (!isMounted) return;
+
     const t = setInterval(() => {
       setClicking(true);
       setTimeout(() => {
         setPage((p) => (p + 1) % pages.length);
         setClicking(false);
-      }, 250); 
-    }, 2000); 
+      }, 250);
+    }, 2000);
 
     return () => clearInterval(t);
-  }, []);
+  }, [isMounted]);
 
-  /* HAND POINTER ANIMATION - Smoother */
-  useEffect(() => {
-    if (!pointerRef.current) return;
+  /* ---------- POINTER ANIMATION (DESKTOP ONLY) ---------- */
+ useEffect(() => {
+  if (!pointerRef.current || isMobile) return;
 
-    // Calculate approximate position based on tab width (assuming ~120px per tab including gap)
-    const xPos = page * 120 + 20;
-
-    gsap.to(pointerRef.current, {
-      x: xPos,
-      y: clicking ? -4 : 0, // Click effect - move up slightly
-      scale: clicking ? 0.9 : 1,
-      duration: 0.5,
-      ease: "power2.out", // Smoother ease
+  // Create updater once
+  if (!pointerX.current) {
+    pointerX.current = gsap.quickTo(pointerRef.current, "x", {
+      duration: 0.45,
+      ease: "power3.out",
     });
-  }, [page, clicking]);
+  }
 
-  /* NAV MICRO ANIMATION - Subtle Bounce */
+  const xPos = page * 120 + 20;
+
+  pointerX.current(xPos);
+
+  gsap.to(pointerRef.current, {
+    y: clicking ? -4 : 0,
+    scale: clicking ? 0.9 : 1,
+    duration: 0.25,
+    ease: "power2.out",
+  });
+}, [page, clicking, isMobile]);
+
+
+  /* ---------- NAV MICRO ANIMATION ---------- */
   useEffect(() => {
     if (!navRef.current) return;
 
-    gsap.fromTo(
-      navRef.current.children,
-      { y: -2, opacity: 0.8 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.3,
-        stagger: 0.05,
-        ease: "back.out(1.5)",
-      }
-    );
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        navRef.current.children,
+        { y: -2, opacity: 0.8 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.3,
+          stagger: 0.05,
+          ease: "back.out(1.5)",
+        }
+      );
+    });
+
+    return () => ctx.revert();
   }, [page]);
 
-  /* PAGE CONTENT ANIMATION - Fade Up */
+  /* ---------- CONTENT FADE ---------- */
   useEffect(() => {
     if (!contentRef.current) return;
 
-    // Target direct children for cleaner animation
-    const items = contentRef.current.children;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        contentRef.current.children,
+        { opacity: 0, y: 15, filter: "blur(4px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "power2.out",
+        }
+      );
+    });
 
-    gsap.fromTo(
-      items,
-      { opacity: 0, y: 15, filter: "blur(4px)" },
-      {
-        opacity: 1,
-        y: 0,
-        filter: "blur(0px)",
-        duration: 0.5,
-        stagger: 0.1,
-        ease: "power2.out",
-      }
-    );
+    return () => ctx.revert();
   }, [page]);
+
+  /* ---------- PREVENT HYDRATION MISMATCH ---------- */
+  if (!isMounted) return null;
+
 
   return (
     <div className="w-full max-w-[900px] min-w-0 h-[360px] sm:h-[420px] md:h-[500px] mx-auto p-0">
@@ -117,7 +157,7 @@ export function ProductEngineeringMockup() {
         </div>
 
         {/* NAVBAR - scrollable on mobile */}
-        <div className="relative z-20 flex items-center justify-between gap-1 sm:gap-2 px-1 sm:px-2 py-1.5 sm:py-2 border-b border-gray-100 bg-white min-w-0">
+        <div className="hidden md:flex relative z-20 flex items-center justify-between gap-1 sm:gap-2 px-1 sm:px-2 py-1.5 sm:py-2 border-b border-gray-100 bg-white min-w-0">
           {/* LOGO - shrink on mobile */}
           <Image
             src="/sukrut_light_mode_logo.png"
@@ -126,6 +166,21 @@ export function ProductEngineeringMockup() {
             height={30}
             className="opacity-90 hover:opacity-100 transition-opacity w-12 h-6 sm:w-14 sm:h-7 md:w-[70px] md:h-[30px] object-contain object-left flex-shrink-0"
           />
+
+                        <div 
+                ref={pointerRef}
+                className="absolute top-6 sm:top-8 left-44 z-50 pointer-events-none drop-shadow-lg"
+              >
+                <FaHandPointer 
+                  size={20}
+                  className="sm:w-6 sm:h-6 text-gray-800"
+                  style={{ 
+                    stroke: "white", 
+                    strokeWidth: "20px",
+                    transformOrigin: "top left"
+                  }} 
+                />
+              </div>
 
           {/* CENTER NAV - overflow-x-auto on mobile */}
           <div className="flex-1 flex justify-center min-w-0 overflow-hidden">
@@ -168,21 +223,6 @@ export function ProductEngineeringMockup() {
                 );
               })}
 
-              {/* HAND POINTER - Floating */}
-              <div 
-                ref={pointerRef}
-                className="absolute top-6 sm:top-8 left-0 z-50 pointer-events-none drop-shadow-lg"
-              >
-                <FaHandPointer 
-                  size={20}
-                  className="sm:w-6 sm:h-6 text-gray-800"
-                  style={{ 
-                    stroke: "white", 
-                    strokeWidth: "20px",
-                    transformOrigin: "top left"
-                  }} 
-                />
-              </div>
             </div>
           </div>
 
@@ -194,6 +234,34 @@ export function ProductEngineeringMockup() {
            Contact
           </button>
         </div>
+{/* MOBILE NAVBAR */}
+{isMobile && (
+  <div className="relative z-20 flex items-center justify-center gap-4 px-3 py-2 border-b border-gray-100 bg-white">
+
+    {/* ICON NAV */}
+    {[
+      { icon: FiHome },
+      { icon: FiGrid },
+      { icon: FiBookOpen },
+      { icon: FiUploadCloud },
+    ].map((item, i) => {
+      const Icon = item.icon;
+      const isActive = page === i;
+
+      return (
+        <button
+          key={i}
+          onClick={() => setPage(i)}
+          className={`h-10 w-10 flex items-center justify-center rounded-lg transition-all
+            ${isActive ? "bg-orange-100 text-[#E39A2E]" : "text-gray-400"}
+          `}
+        >
+          <Icon size={18} />
+        </button>
+      );
+    })}
+  </div>
+)}
 
         {/* CONTENT AREA */}
         <div className="flex-1 overflow-hidden bg-gray-50/30 p-3 sm:p-5 md:p-8 relative min-h-0">

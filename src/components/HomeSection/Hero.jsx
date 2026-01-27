@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import heroData from "@/components/data/hero.json";
@@ -8,6 +8,10 @@ import HeroMockup from "../Mockups/HeroMockup";
 import { FiArrowUpRight, FiCheck, FiTrendingUp, FiUsers, FiAward, FiZap } from "react-icons/fi";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import ActivityMockup from "../Mockups/ActivityMockup";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -20,6 +24,72 @@ export default function Hero() {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const [mounted, setMounted] = useState(false);
+
+useEffect(() => {
+  setMounted(true);
+}, []);
+
+useEffect(() => {
+  if (!mounted) return;
+
+  const ctx = gsap.context(() => {
+    // 🔒 Lock initial state (VERY IMPORTANT)
+    gsap.set(contentRef.current, { opacity: 1 });
+    gsap.set(mockupRef.current, {
+      opacity: 0,
+      x: 60,
+      scale: 0.96,
+    });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#hero-heading",
+        start: "top 75%",
+        once: true,
+      },
+    });
+
+    // 1️⃣ ActivityMockup – FIRST
+    tl.from(".activity-mockup", {
+      opacity: 0,
+      y: 80,
+      scale: 0.95,
+      duration: 0.9,
+      ease: "power3.out",
+    });
+
+    // 2️⃣ LEFT CONTENT
+    tl.from(
+      contentRef.current,
+      {
+        opacity: 0,
+        x: -60,
+        duration: 0.8,
+        ease: "power3.out",
+      },
+      "-=0.4"
+    );
+
+    // 3️⃣ RIGHT MOCKUP (NO FLICKER)
+    tl.to(
+      mockupRef.current,
+      {
+        opacity: 1,
+        x: 0,
+        scale: 1,
+        duration: 1,
+        ease: "power3.out",
+      },
+      "-=0.6"
+    );
+  });
+
+  return () => ctx.revert();
+}, [mounted]);
+
+
 
   const navMapping = {
     "Home": "hero",
@@ -266,8 +336,12 @@ export default function Hero() {
           }`}
           style={{ transitionDelay: '200ms' }}
         >
-          <div className="pointer-events-none absolute bottom-0 left-0 w-full h-40 
-                          bg-gradient-to-t from-white to-transparent z-20" />
+          <div
+  className={`pointer-events-none absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white to-transparent z-20 transition-opacity duration-500 ${
+    mounted && contentVisible ? "opacity-100" : "opacity-0"
+  }`}
+/>
+
           <HeroMockup />
         </div>
        <ActivityMockup />

@@ -56,7 +56,7 @@ export default function WhyClientsSection() {
             </span>
             
             {/* Text */}
-            <span className="text-xs font-bold tracking-widest text-[#E39A2E] ">
+            <span className="text-xs font-bold tracking-widest text-[#E39A2E] uppercase ">
               {data.badge}
             </span>
           </div>

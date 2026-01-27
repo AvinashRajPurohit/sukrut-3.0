@@ -43,7 +43,7 @@ export default function WorkflowSection() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E39A2E] opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E39A2E]" />
             </span>
-            <span className="text-[10px] sm:text-xs font-bold tracking-widest text-[#E39A2E]">
+            <span className="text-[10px] sm:text-xs font-bold tracking-widest text-[#E39A2E] uppercase">
               Our Workflow
             </span>
           </div>
@@ -59,46 +59,81 @@ export default function WorkflowSection() {
         </h2>
 
         <div ref={accordionRef} className="space-y-0">
-          {/* MOBILE: Vertical stacked cards — scroll down to see each workflow step */}
-          <div
-            className={`md:hidden flex flex-col gap-4 sm:gap-5 transition-all duration-700 ease-out ${
-              accordionVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-            style={{ transitionDelay: "300ms" }}
-          >
-          {workflowTabs.map((item) => (
-            <article
-              key={item.id}
-              className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-[#ECECEC]"
+         {/* MOBILE: Vertical Accordion (Desktop-like UI) */}
+<div
+  className={`md:hidden flex flex-col gap-3 transition-all duration-700 ease-out ${
+    accordionVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+  }`}
+  style={{ transitionDelay: "300ms" }}
+  onTouchStart={() => setIsHovered(true)}
+  onTouchEnd={() => setIsHovered(false)}
+>
+  {workflowTabs.map((item, index) => {
+    const isActive = activeIndex === index;
+
+    return (
+      <div
+        key={item.id}
+        onClick={() => setActiveIndex(index)}
+        className={`
+          relative overflow-hidden rounded-xl cursor-pointer
+          transition-[height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
+          ${isActive ? "h-[360px]" : "h-[80px] bg-[#ECECEC]"}
+        `}
+        style={{ willChange: "height" }}
+      >
+        {/* COLLAPSED STATE */}
+        {!isActive && (
+          <div className="absolute inset-0 flex items-center px-4">
+            <p className="text-xs font-semibold tracking-widest text-gray-700 uppercase">
+              {item.title}
+            </p>
+          </div>
+        )}
+
+        {/* EXPANDED CONTENT */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-500 ${
+            isActive ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            className="object-cover"
+            priority={index === 0}
+          />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/45 to-black/25" />
+
+          <div className="relative z-10 flex h-full flex-col justify-end p-4 text-white">
+            <div
+              className={`transition-all duration-500 ease-out delay-300 ${
+                isActive
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-6 opacity-0"
+              }`}
             >
-              <div className="relative aspect-[4/3] sm:aspect-[16/10]">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 text-white">
-                  <p className="text-lg sm:text-xl font-bold text-[#E39A2E] mb-0.5">
-                    {item.metric}
-                  </p>
-                  <p className="text-[10px] sm:text-xs font-medium text-gray-200 uppercase tracking-wide mb-2">
-                    {item.metricLabel}
-                  </p>
-                  <p className="text-xs sm:text-sm leading-relaxed text-gray-200">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-              <div className="px-4 py-3 sm:px-5 sm:py-3.5 border-t border-gray-200/80">
-                <p className="text-[11px] sm:text-xs font-semibold tracking-wider text-gray-600 uppercase">
-                  {item.title}
+              <div className="mb-3">
+                <p className="text-2xl font-bold text-[#E39A2E] mb-1">
+                  {item.metric}
+                </p>
+                <p className="text-[11px] font-medium text-gray-200 uppercase tracking-wide">
+                  {item.metricLabel}
                 </p>
               </div>
-            </article>
-          ))}
+              <p className="text-sm leading-relaxed text-gray-200">
+                {item.description}
+              </p>
+            </div>
           </div>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
 
           {/* DESKTOP: Horizontal accordion — swipe/expand, auto-play */}
           <div

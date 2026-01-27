@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import {
   FiCloud,
@@ -30,55 +30,71 @@ export function CloudMockup() {
   const contentRef = useRef(null);
   const progressBarRef = useRef(null);
   const barsRef = useRef([]);
+const flowLock = useRef(false);
+const timelineRef = useRef(null);
 
   /* --- FIXED: AUTO FLOW CONTROL --- */
-  useEffect(() => {
-    if (isHovered) return;
+ useEffect(() => {
+  if (isHovered) return;
+  if (flowLock.current) return;
 
-    // GSAP Context ensures proper cleanup in React Strict Mode
-    const ctx = gsap.context(() => {
-      gsap.fromTo(progressBarRef.current, 
-        { width: "0%" }, 
-        { 
-          width: "100%", 
-          duration: 2.0, // FAST: Reduced from 3.5s to 2.0s
-          ease: "linear", 
-          onComplete: () => {
-            // Using callback to ensure we get the latest state safely
-            setStage((prev) => (prev + 1) % TABS.length);
-          }
-        }
-      );
-    });
+  flowLock.current = true;
 
-    return () => ctx.revert(); // This kills the animation completely on unmount/update
-  }, [stage, isHovered]);
+  // Kill old timeline explicitly
+  timelineRef.current?.kill();
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      flowLock.current = false;
+      setStage((prev) => (prev + 1) % TABS.length);
+    },
+  });
+
+  tl.set(progressBarRef.current, { width: "0%" });
+  tl.to(progressBarRef.current, {
+    width: "100%",
+    duration: 2,
+    ease: "linear",
+  });
+
+  timelineRef.current = tl;
+
+  return () => {
+    tl.kill();
+    flowLock.current = false;
+  };
+}, [stage, isHovered]);
+
 
   /* --- CONTENT TRANSITIONS (Faster) --- */
-  useEffect(() => {
-    if (!contentRef.current) return;
-    
-    gsap.fromTo(
-      contentRef.current.children,
-      { opacity: 0, y: 15, scale: 0.98 },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.3, // FAST: Reduced from 0.5s
-        stagger: 0.05, // FAST: Reduced stagger
-        ease: "power2.out",
-        clearProps: "all"
-      }
-    );
-  }, [stage]);
+useLayoutEffect(() => {
+  if (!contentRef.current) return;
+
+  gsap.killTweensOf(contentRef.current.children);
+
+  gsap.fromTo(
+    contentRef.current.children,
+    { opacity: 0, y: 10 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.25,
+      stagger: 0.04,
+      ease: "power2.out",
+      overwrite: "auto",
+    }
+  );
+}, [stage]);
+
 
   /* --- SCALING BAR ANIMATION (Faster) --- */
   useEffect(() => {
     if (stage !== 1) return;
     
     // Reset bars first to ensure re-animation works
-    gsap.set(barsRef.current, { width: "0%" });
+    gsap.killTweensOf(barsRef.current);
+gsap.set(barsRef.current, { width: "0%" });
+
 
     gsap.to(barsRef.current, {
         width: (i, el) => el.dataset.value,
@@ -170,7 +186,7 @@ export function CloudMockup() {
               <div ref={contentRef} className="h-full w-full relative z-10 flex flex-col">
                  
                  {/* STAGE 0: ARCHITECTURE */}
-                 {stage === 0 && (
+                 <div className={stage === 0 ? "block" : "hidden"}>
                     <div className="h-full flex flex-col items-center justify-center py-2">
                        <div className="mb-3 sm:mb-5 md:mb-8 text-center">
                           <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900">Infrastructure Topology</h3>
@@ -197,10 +213,10 @@ export function CloudMockup() {
                           </div>
                        </div>
                     </div>
-                 )}
+                  </div>
 
                  {/* STAGE 1: AUTO SCALING */}
-                 {stage === 1 && (
+                <div className={stage === 1 ? "block" : "hidden"}>
                     <div className="h-full flex flex-col justify-center py-2">
                        <div className="flex justify-between items-end mb-3 sm:mb-6 gap-2">
                           <div className="min-w-0">
@@ -238,10 +254,10 @@ export function CloudMockup() {
                           ))}
                        </div>
                     </div>
-                 )}
+                  </div>
 
                  {/* STAGE 2: MONITORING */}
-                 {stage === 2 && (
+                 <div className={stage === 2 ? "block" : "hidden"}>
                     <div className="h-full flex flex-col py-2">
                        <div className="mb-3 sm:mb-6 flex justify-between items-center gap-2">
                           <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900">System Health</h3>
@@ -255,10 +271,10 @@ export function CloudMockup() {
                           <HealthCard title="CPU Load" value="34%" status="Normal" trend="-5%" color="purple" icon={<FiCpu />} />
                        </div>
                     </div>
-                 )}
+                  </div>
 
                  {/* STAGE 3: STATUS */}
-                 {stage === 3 && (
+                 <div className={stage === 3 ? "block" : "hidden"}>
                     <div className="h-full flex flex-col items-center justify-center text-center py-2">
                        <div className="relative mb-4 sm:mb-6 md:mb-8">
                           <div className="absolute inset-0 border-2 sm:border-4 border-green-100 rounded-full animate-ping opacity-20" />
@@ -294,7 +310,7 @@ export function CloudMockup() {
                           </div>
                        </div>
                     </div>
-                 )}
+                  </div>
 
               </div>
            </div>

@@ -71,16 +71,16 @@
         "name": "Vipul Rajpurohit",
         "role": "Head of Product",
         "image": "/about/team/vipul-rajpurohit.jpg",
-        "linkedin": "#",
-        "bio": "Vipul is the Head of Product at Sukrut, driving product strategy and innovation. With extensive experience in product management and user experience design, she ensures that our solutions meet the highest standards of quality and usability. Her expertise in translating business needs into technical solutions has been crucial to our success."
+        "linkedin": "https://www.linkedin.com/in/vipul-rajpurohit-920a05211/",
+        "bio": "Vipul Rajpurohit is the CEO of Sukrut Associates, where he leads the company’s strategic direction with a strong focus on business growth, investments, and long-term value creation. He oversees key decision-making, drives expansion initiatives, and ensures sustainable development across the organization."
       },
       {
         "id": 2,
         "name": "Deepak Rajpurohit",
         "role": "Chief Executive Officer",
         "image": "/about/team/deepak-rajpurohit.jpg",
-        "linkedin": "#",
-        "bio": "Deepak is the Chief Executive Officer of Sukrut, a leading software engineering company building scalable solutions for real-world challenges. With over a decade of experience leading technology innovation at global tech companies, he is a recognized expert regularly advising businesses and organizations. He has been instrumental in building robust systems that power business growth and digital transformation."
+        "linkedin": "https://www.linkedin.com/in/drsukrut/",
+        "bio": "Deepak Rajpurohit is the CTO with over 9 years of experience in software engineering and solution architecture. He specializes in designing scalable, high-performance systems, solving complex technical challenges, and leading end-to-end architecture decisions. His approach emphasizes clean architecture, system reliability, and value-driven technology delivery aligned with business goals."
       },
       {
         "id": 3,
@@ -154,6 +154,7 @@
         "linkedin": "https://www.linkedin.com/in/jasper-ritesh-ariel-b58a35246/",
         "bio": "Jasper Ritesh Ariel is a Front-end Developer specializing in React.js and Tailwind CSS, with a strong focus on building responsive, user-friendly, and scalable web interfaces. He is passionate about translating designs into high-quality code, optimizing performance, and delivering seamless user experiences."
       },
+     
       {
         "id": 13,
         "name": "Vishal Kumawat",
@@ -201,6 +202,14 @@
         "image": "/about/team/Dhruv_Pratap_Singh.jpeg",
         "linkedin": "https://www.linkedin.com/in/dhruv-pratap-singh-ranawat-05b7aa25a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
         "bio": "Dhruv Pratap Singh is a MERN Stack Developer with strong experience building scalable, production-ready web applications. He focuses on clean architecture, efficient APIs, and delivering high-quality, maintainable solutions aligned with business requirements."
+      },
+       {
+        "id": 18,
+        "name": "Vikas Prajapat",
+        "role": "Front-end Developer",
+        "image": "/about/team/Vikas_Prajapat.jpeg",
+        "linkedin": "https://www.linkedin.com/in/vikas-prajapat/",
+        "bio": "Vikas is a Frontend Developer and UI/UX Engineer specializing in building modern, responsive, and user-centric web applications. With hands-on experience in React.js, Next.js, Tailwind CSS, and Figma. He is passionate about translating designs into high-quality code, optimizing performance, delivering seamless user experiences ,focusing on clean interfaces, smooth interactions, and scalable design systems. "
       }
     ]
   },
