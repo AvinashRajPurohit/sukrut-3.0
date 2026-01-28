@@ -187,15 +187,115 @@ export default function ContactClient() {
   });
 
   const [learnMoreOpen, setLearnMoreOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [errors, setErrors] = useState({});
   const [heroRef, heroVisible] = useScrollAnimation();
   const [formRef, formVisible] = useScrollAnimation({ threshold: 0.1 });
   const [processRef, processVisible] = useScrollAnimation({ threshold: 0.1 });
   const [featuresRef, featuresVisible] = useScrollAnimation({ threshold: 0.1 });
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'First name is required';
+    }
+    
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'Last name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Invalid email address';
+    }
+    
+    if (!formData.country) {
+      newErrors.country = 'Country is required';
+    }
+    
+    if (!formData.role) {
+      newErrors.role = 'Role is required';
+    }
+    
+    if (!formData.inquiry) {
+      newErrors.inquiry = 'Inquiry type is required';
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+    
+    if (!formData.terms) {
+      newErrors.terms = 'You must accept the terms and conditions';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+    setSubmitError('');
+    setSubmitSuccess(false);
+    
+    // Client-side validation
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle validation errors
+        if (data.details && Array.isArray(data.details)) {
+          const errorMessages = data.details.map((detail) => detail.message).join(', ');
+          setSubmitError(errorMessages);
+        } else {
+          setSubmitError(data.error || 'Failed to submit form. Please try again.');
+        }
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Success
+      setSubmitSuccess(true);
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        country: '',
+        role: '',
+        inquiry: '',
+        message: '',
+        terms: false,
+      });
+      setIsSubmitting(false);
+
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setSubmitSuccess(false);
+      }, 5000);
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmitError('Network error. Please check your connection and try again.');
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -204,6 +304,13 @@ export default function ContactClient() {
       ...formData,
       [name]: type === 'checkbox' ? checked : value,
     });
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: '',
+      });
+    }
   };
 
   return (
@@ -354,8 +461,13 @@ export default function ContactClient() {
                         value={formData.firstName}
                         onChange={handleChange}
                         placeholder="James"
-                        className="w-full rounded-none bg-gray-50/80 border-0 border-b-2 border-gray-200 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-400"
+                        className={`w-full rounded-none bg-gray-50/80 border-0 border-b-2 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-400 ${
+                          errors.firstName ? 'border-red-500' : 'border-gray-200'
+                        }`}
                       />
+                      {errors.firstName && (
+                        <p className="text-xs text-red-600 mt-1">{errors.firstName}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="lastName" className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 block">
@@ -368,8 +480,13 @@ export default function ContactClient() {
                         value={formData.lastName}
                         onChange={handleChange}
                         placeholder="Smith"
-                        className="w-full rounded-none bg-gray-50/80 border-0 border-b-2 border-gray-200 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-400"
+                        className={`w-full rounded-none bg-gray-50/80 border-0 border-b-2 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-400 ${
+                          errors.lastName ? 'border-red-500' : 'border-gray-200'
+                        }`}
                       />
+                      {errors.lastName && (
+                        <p className="text-xs text-red-600 mt-1">{errors.lastName}</p>
+                      )}
                     </div>
                   </div>
 
@@ -384,22 +501,32 @@ export default function ContactClient() {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="name@company.com"
-                      className="w-full rounded-none bg-gray-50/80 border-0 border-b-2 border-gray-200 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-400"
+                      className={`w-full rounded-none bg-gray-50/80 border-0 border-b-2 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-400 ${
+                        errors.email ? 'border-red-500' : 'border-gray-200'
+                      }`}
                     />
+                    {errors.email && (
+                      <p className="text-xs text-red-600 mt-1">{errors.email}</p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
                     <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 block">
                       Inquiry Type
                     </label>
-                    <CustomDropdown
-                      name="inquiry"
-                      options={inquiryOptions}
-                      value={formData.inquiry}
-                      onChange={handleChange}
-                      placeholder="Select inquiry type"
-                      iconOptions={true}
-                    />
+                    <div className={errors.inquiry ? 'border-b-2 border-red-500' : ''}>
+                      <CustomDropdown
+                        name="inquiry"
+                        options={inquiryOptions}
+                        value={formData.inquiry}
+                        onChange={handleChange}
+                        placeholder="Select inquiry type"
+                        iconOptions={true}
+                      />
+                    </div>
+                    {errors.inquiry && (
+                      <p className="text-xs text-red-600 mt-1">{errors.inquiry}</p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
@@ -407,25 +534,35 @@ export default function ContactClient() {
                       <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 block">
                         Country
                       </label>
-                      <CustomDropdown
-                        name="country"
-                        options={countryOptions}
-                        value={formData.country}
-                        onChange={handleChange}
-                        placeholder="Select your country"
-                      />
+                      <div className={errors.country ? 'border-b-2 border-red-500' : ''}>
+                        <CustomDropdown
+                          name="country"
+                          options={countryOptions}
+                          value={formData.country}
+                          onChange={handleChange}
+                          placeholder="Select your country"
+                        />
+                      </div>
+                      {errors.country && (
+                        <p className="text-xs text-red-600 mt-1">{errors.country}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 block">
                         Your Role
                       </label>
-                      <CustomDropdown
-                        name="role"
-                        options={roleOptions}
-                        value={formData.role}
-                        onChange={handleChange}
-                        placeholder="Select your role"
-                      />
+                      <div className={errors.role ? 'border-b-2 border-red-500' : ''}>
+                        <CustomDropdown
+                          name="role"
+                          options={roleOptions}
+                          value={formData.role}
+                          onChange={handleChange}
+                          placeholder="Select your role"
+                        />
+                      </div>
+                      {errors.role && (
+                        <p className="text-xs text-red-600 mt-1">{errors.role}</p>
+                      )}
                     </div>
                   </div>
 
@@ -440,27 +577,67 @@ export default function ContactClient() {
                       onChange={handleChange}
                       placeholder="Describe your project or question..."
                       rows={4}
-                      className="w-full rounded-none bg-gray-50/80 border-0 border-b-2 border-gray-200 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors resize-none placeholder:text-gray-400 min-h-[88px] sm:min-h-[100px]"
+                      className={`w-full rounded-none bg-gray-50/80 border-0 border-b-2 px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-900 outline-none focus:border-[#E39A2E] transition-colors resize-none placeholder:text-gray-400 min-h-[88px] sm:min-h-[100px] ${
+                        errors.message ? 'border-red-500' : 'border-gray-200'
+                      }`}
                     />
+                    {errors.message && (
+                      <p className="text-xs text-red-600 mt-1">{errors.message}</p>
+                    )}
                   </div>
 
-                  <label className="flex items-start sm:items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-gray-500 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      name="terms"
-                      checked={formData.terms}
-                      onChange={handleChange}
-                      className="accent-[#E39A2E] h-4 w-4 mt-0.5 sm:mt-0 shrink-0 rounded-none cursor-pointer"
-                    />
-                    <span className="group-hover:text-gray-700 transition-colors">I accept the terms & conditions</span>
-                  </label>
+                  <div>
+                    <label className="flex items-start sm:items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-gray-500 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        name="terms"
+                        checked={formData.terms}
+                        onChange={handleChange}
+                        className={`accent-[#E39A2E] h-4 w-4 mt-0.5 sm:mt-0 shrink-0 rounded-none cursor-pointer ${
+                          errors.terms ? 'ring-2 ring-red-500' : ''
+                        }`}
+                      />
+                      <span className="group-hover:text-gray-700 transition-colors">I accept the terms & conditions</span>
+                    </label>
+                    {errors.terms && (
+                      <p className="text-xs text-red-600 mt-1 ml-6">{errors.terms}</p>
+                    )}
+                  </div>
+
+                  {/* Success Message */}
+                  {submitSuccess && (
+                    <div className="p-4 bg-green-50 border border-green-200 rounded-none text-sm text-green-800">
+                      <p className="font-semibold">Thank you for your submission!</p>
+                      <p className="mt-1">We've received your message and will get back to you within 24 hours.</p>
+                    </div>
+                  )}
+
+                  {/* Error Message */}
+                  {submitError && (
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-none text-sm text-red-800">
+                      <p className="font-semibold">Error submitting form</p>
+                      <p className="mt-1">{submitError}</p>
+                    </div>
+                  )}
 
                   <button
                     type="submit"
-                    className="group relative w-full inline-flex items-center justify-center gap-2 rounded-none bg-[#E39A2E] px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-gray-900 uppercase tracking-wider transition-all hover:bg-[#d18a1f] hover:shadow-lg hover:shadow-[#E39A2E]/25 cursor-pointer"
+                    disabled={isSubmitting}
+                    className={`group relative w-full inline-flex items-center justify-center gap-2 rounded-none bg-[#E39A2E] px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-gray-900 uppercase tracking-wider transition-all hover:bg-[#d18a1f] hover:shadow-lg hover:shadow-[#E39A2E]/25 ${
+                      isSubmitting ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer'
+                    }`}
                   >
-                    Submit Request
-                    <FiArrowUpRight className="text-base sm:text-lg transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    {isSubmitting ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        Submit Request
+                        <FiArrowUpRight className="text-base sm:text-lg transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      </>
+                    )}
                   </button>
                 </form>
               </div>

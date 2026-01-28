@@ -1,11 +1,252 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { HiOutlineMail, HiOutlinePhone } from "react-icons/hi";
 import { FiArrowUpRight } from "react-icons/fi";
+import { MessageCircle, Headphones, ShoppingCart, Lightbulb, CreditCard, MoreHorizontal, RefreshCw } from "lucide-react";
+
+const inquiryOptions = [
+  { value: 'general', label: 'General Inquiry', icon: MessageCircle },
+  { value: 'support', label: 'Technical Support', icon: Headphones },
+  { value: 'sales', label: 'Sales Question', icon: ShoppingCart },
+  { value: 'feature', label: 'Feature Request', icon: Lightbulb },
+  { value: 'billing', label: 'Billing Issue', icon: CreditCard },
+  { value: 'other', label: 'Other', icon: MoreHorizontal },
+];
+
+const roleOptions = [
+  { value: 'ceo', label: 'CEO / Founder' },
+  { value: 'cto', label: 'CTO / Technical Lead' },
+  { value: 'manager', label: 'Project Manager' },
+  { value: 'developer', label: 'Developer' },
+  { value: 'other', label: 'Other' },
+];
+
+const countryOptions = [
+  { value: 'usa', label: 'USA' },
+  { value: 'uk', label: 'United Kingdom' },
+  { value: 'canada', label: 'Canada' },
+  { value: 'india', label: 'India' },
+  { value: 'australia', label: 'Australia' },
+];
+
+function CustomDropdown({ options, value, onChange, placeholder, iconOptions = false, name }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  const selectedOption = options.find(opt => opt.value === value);
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-full rounded-none bg-black/20 border-0 border-b-2 px-3 sm:px-4 py-3 sm:py-4 text-sm text-left flex items-center justify-between text-white outline-none transition-colors cursor-pointer ${
+          isOpen ? 'border-[#E39A2E]' : 'border-white/20 hover:border-white/30'
+        }`}
+      >
+        <span className={value ? 'text-white' : 'text-gray-600'}>
+          {selectedOption ? (
+            iconOptions ? (
+              <span className="flex items-center gap-2">
+                {selectedOption.icon && <selectedOption.icon className="w-4 h-4 text-gray-400" />}
+                {selectedOption.label}
+              </span>
+            ) : selectedOption.label
+          ) : placeholder}
+        </span>
+        <svg
+          className={`w-5 h-5 text-gray-400 transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="absolute z-50 w-full mt-0.5 bg-gray-900 border border-white/20 rounded-none shadow-xl overflow-hidden">
+          {options.map((option) => {
+            const IconComponent = option.icon;
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => {
+                  onChange({ target: { name, value: option.value } });
+                  setIsOpen(false);
+                }}
+                className={`w-full px-3 sm:px-4 py-3 text-left hover:bg-[#E39A2E]/10 transition-colors flex items-center gap-3 cursor-pointer text-sm ${
+                  value === option.value ? 'bg-[#E39A2E]/20 text-[#E39A2E]' : 'text-white'
+                }`}
+              >
+                {iconOptions && IconComponent && (
+                  <IconComponent className="w-4 h-4 shrink-0" />
+                )}
+                <span>{option.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function ContactFooterSection() {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    country: '',
+    role: '',
+    inquiry: '',
+    message: '',
+    terms: false,
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'First name is required';
+    }
+    
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'Last name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Invalid email address';
+    }
+    
+    if (!formData.country) {
+      newErrors.country = 'Country is required';
+    }
+    
+    if (!formData.role) {
+      newErrors.role = 'Role is required';
+    }
+    
+    if (!formData.inquiry) {
+      newErrors.inquiry = 'Inquiry type is required';
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+    
+    if (!formData.terms) {
+      newErrors.terms = 'You must accept the terms and conditions';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value,
+    });
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: '',
+      });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitError('');
+    setSubmitSuccess(false);
+    
+    // Client-side validation
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle validation errors
+        if (data.details && Array.isArray(data.details)) {
+          const errorMessages = data.details.map((detail) => detail.message).join(', ');
+          setSubmitError(errorMessages);
+        } else {
+          setSubmitError(data.error || 'Failed to submit form. Please try again.');
+        }
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Success
+      setSubmitSuccess(true);
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        country: '',
+        role: '',
+        inquiry: '',
+        message: '',
+        terms: false,
+      });
+      setIsSubmitting(false);
+
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setSubmitSuccess(false);
+      }, 5000);
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmitError('Network error. Please check your connection and try again.');
+      setIsSubmitting(false);
+    }
+  };
   return (
     <section className="relative pb-6 sm:pb-4 text-white overflow-hidden">
       
@@ -85,14 +326,40 @@ export default function ContactFooterSection() {
           <div className="absolute bottom-0 left-0 w-3 h-3 sm:w-4 sm:h-4 border-b-2 border-l-2 border-[#E39A2E]/50" />
           <div className="absolute bottom-0 right-0 w-3 h-3 sm:w-4 sm:h-4 border-b-2 border-r-2 border-[#E39A2E]/50" />
 
-          <form className="space-y-4 sm:space-y-6">
-            <div className="space-y-2">
-              <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Name</label>
-              <input
-                type="text"
-                className="w-full rounded-none bg-black/20 border-b border-white/20 px-3 sm:px-4 py-3 sm:py-4 text-sm text-white outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-600"
-                placeholder="Enter full name"
-              />
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div className="space-y-2">
+                <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">First Name</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  placeholder="James"
+                  className={`w-full rounded-none bg-black/20 border-0 border-b-2 px-3 sm:px-4 py-3 sm:py-4 text-sm text-white outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-600 ${
+                    errors.firstName ? 'border-red-500' : 'border-white/20'
+                  }`}
+                />
+                {errors.firstName && (
+                  <p className="text-xs text-red-400 mt-1">{errors.firstName}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Last Name</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  placeholder="Smith"
+                  className={`w-full rounded-none bg-black/20 border-0 border-b-2 px-3 sm:px-4 py-3 sm:py-4 text-sm text-white outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-600 ${
+                    errors.lastName ? 'border-red-500' : 'border-white/20'
+                  }`}
+                />
+                {errors.lastName && (
+                  <p className="text-xs text-red-400 mt-1">{errors.lastName}</p>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
@@ -100,40 +367,150 @@ export default function ContactFooterSection() {
                 <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Email</label>
                 <input
                   type="email"
-                  className="w-full rounded-none bg-black/20 border-b border-white/20 px-3 sm:px-4 py-3 sm:py-4 text-sm text-white outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-600"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder="name@company.com"
+                  className={`w-full rounded-none bg-black/20 border-0 border-b-2 px-3 sm:px-4 py-3 sm:py-4 text-sm text-white outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-600 ${
+                    errors.email ? 'border-red-500' : 'border-white/20'
+                  }`}
                 />
+                {errors.email && (
+                  <p className="text-xs text-red-400 mt-1">{errors.email}</p>
+                )}
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Phone</label>
+                <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Phone (Optional)</label>
                 <input
                   type="text"
-                  className="w-full rounded-none bg-black/20 border-b border-white/20 px-3 sm:px-4 py-3 sm:py-4 text-sm text-white outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-600"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
                   placeholder="+91"
+                  className="w-full rounded-none bg-black/20 border-0 border-b-2 border-white/20 px-3 sm:px-4 py-3 sm:py-4 text-sm text-white outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-600"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Brief</label>
-              <textarea
-                rows={4}
-                className="w-full rounded-none bg-black/20 border-b border-white/20 px-3 sm:px-4 py-3 sm:py-4 text-sm text-white outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-600 resize-none min-h-[88px] sm:min-h-[100px]"
-                placeholder="Describe your project requirements..."
-              />
+              <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Inquiry Type</label>
+              <div className={errors.inquiry ? 'border-b-2 border-red-500' : ''}>
+                <CustomDropdown
+                  name="inquiry"
+                  options={inquiryOptions}
+                  value={formData.inquiry}
+                  onChange={handleChange}
+                  placeholder="Select inquiry type"
+                  iconOptions={true}
+                />
+              </div>
+              {errors.inquiry && (
+                <p className="text-xs text-red-400 mt-1">{errors.inquiry}</p>
+              )}
             </div>
 
-            <label className="flex items-start sm:items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-gray-400 cursor-pointer group">
-              <input type="checkbox" className="accent-[#E39A2E] h-4 w-4 mt-0.5 sm:mt-0 shrink-0 rounded-none cursor-pointer" />
-              <span className="group-hover:text-white transition-colors">I accept the terms & conditions</span>
-            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div className="space-y-2">
+                <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Country</label>
+                <div className={errors.country ? 'border-b-2 border-red-500' : ''}>
+                  <CustomDropdown
+                    name="country"
+                    options={countryOptions}
+                    value={formData.country}
+                    onChange={handleChange}
+                    placeholder="Select your country"
+                  />
+                </div>
+                {errors.country && (
+                  <p className="text-xs text-red-400 mt-1">{errors.country}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Your Role</label>
+                <div className={errors.role ? 'border-b-2 border-red-500' : ''}>
+                  <CustomDropdown
+                    name="role"
+                    options={roleOptions}
+                    value={formData.role}
+                    onChange={handleChange}
+                    placeholder="Select your role"
+                  />
+                </div>
+                {errors.role && (
+                  <p className="text-xs text-red-400 mt-1">{errors.role}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Message</label>
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                rows={4}
+                placeholder="Describe your project requirements..."
+                className={`w-full rounded-none bg-black/20 border-0 border-b-2 px-3 sm:px-4 py-3 sm:py-4 text-sm text-white outline-none focus:border-[#E39A2E] transition-colors placeholder:text-gray-600 resize-none min-h-[88px] sm:min-h-[100px] ${
+                  errors.message ? 'border-red-500' : 'border-white/20'
+                }`}
+              />
+              {errors.message && (
+                <p className="text-xs text-red-400 mt-1">{errors.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="flex items-start sm:items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-gray-400 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  name="terms"
+                  checked={formData.terms}
+                  onChange={handleChange}
+                  className={`accent-[#E39A2E] h-4 w-4 mt-0.5 sm:mt-0 shrink-0 rounded-none cursor-pointer ${
+                    errors.terms ? 'ring-2 ring-red-500' : ''
+                  }`}
+                />
+                <span className="group-hover:text-white transition-colors">I accept the terms & conditions</span>
+              </label>
+              {errors.terms && (
+                <p className="text-xs text-red-400 mt-1 ml-6">{errors.terms}</p>
+              )}
+            </div>
+
+            {/* Success Message */}
+            {submitSuccess && (
+              <div className="p-4 bg-green-900/30 border border-green-500/50 rounded-none text-sm text-green-300">
+                <p className="font-semibold">Thank you for your submission!</p>
+                <p className="mt-1">We've received your message and will get back to you within 24 hours.</p>
+              </div>
+            )}
+
+            {/* Error Message */}
+            {submitError && (
+              <div className="p-4 bg-red-900/30 border border-red-500/50 rounded-none text-sm text-red-300">
+                <p className="font-semibold">Error submitting form</p>
+                <p className="mt-1">{submitError}</p>
+              </div>
+            )}
 
             <button
               type="submit"
-              className="group relative w-full inline-flex items-center justify-center gap-2 bg-[#E39A2E] px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-black uppercase tracking-wider transition-all hover:bg-white cursor-pointer"
+              disabled={isSubmitting}
+              className={`group relative w-full inline-flex items-center justify-center gap-2 bg-[#E39A2E] px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-black uppercase tracking-wider transition-all hover:bg-white cursor-pointer ${
+                isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
             >
-              Initialize Request
-              <FiArrowUpRight className="text-base sm:text-lg transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              {isSubmitting ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  Initialize Request
+                  <FiArrowUpRight className="text-base sm:text-lg transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </>
+              )}
             </button>
           </form>
         </div>
